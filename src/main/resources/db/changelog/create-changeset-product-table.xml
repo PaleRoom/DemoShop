@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <!-- Здесь мы позже напишем скрипт -->
+    <changeSet id="create_table_products" author="Nicolas">
+        <createTable tableName="products">
+            <column name="id" type="uuid"  >
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+
+            <column name="product_name" type="varchar(64)" >
+                <constraints nullable="false" unique="true" />
+            </column>
+
+            <column name="product_description" type="varchar">
+            </column>
+
+            <column name="product_category" type="varchar(64)">
+            </column>
+
+            <column name="product_price" type="double">
+            </column>
+
+            <column name="product_amount" type="bigint">
+            </column>
+
+            <column name="amount_update" type="datetime">
+
+            </column>
+
+
+        </createTable>
+
+    </changeSet>
+</databaseChangeLog>
