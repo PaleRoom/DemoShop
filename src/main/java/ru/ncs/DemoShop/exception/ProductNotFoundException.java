@@ -1,5 +1,4 @@
-package ru.ncs.DemoShop.util;
+package ru.ncs.DemoShop.exception;
 
 public class ProductNotFoundException extends RuntimeException{
-
 }
