@@ -1,20 +1,20 @@
 package ru.ncs.DemoShop.service.data;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 import ru.ncs.DemoShop.model.ProductCategoryEnum;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
+@Value
 @Builder
 public class ProductDTO {
-    private UUID id;
-    private String name;
-    private String description;
-    private ProductCategoryEnum category;
-    private double price;
-    private int amount;
-    private LocalDateTime amountUpdatedAt;
+    UUID id;
+    String name;
+    String description;
+    ProductCategoryEnum category;
+    double price;
+    int amount;
+    LocalDateTime amountUpdatedAt;
 }

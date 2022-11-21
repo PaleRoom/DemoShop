@@ -1,30 +1,27 @@
 package ru.ncs.DemoShop.controller.request;
 
-import lombok.Data;
+import lombok.Value;
 import ru.ncs.DemoShop.model.ProductCategoryEnum;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
-@Data
+@Value
 public class CreateProductRequest {
+    @NotBlank(message = "product name should  not be Empty")
+    String name;
 
-    @NotEmpty(message = "product name should  not be Empty")
-    private String name;
-
-    @NotEmpty(message = "product description should not be Empty")
-    private String description;
+    @NotBlank(message = "product description should not be Empty")
+    String description;
 
     @Enumerated(EnumType.STRING)
-    private ProductCategoryEnum category;
+    ProductCategoryEnum category;
 
     @Positive(message = "Price should be at least 0 or higher")
-    private double price;
+    double price;
 
     @Positive(message = "Amount should be at least 0 or higher")
-    private int amount;
-
-
+    int amount;
 }

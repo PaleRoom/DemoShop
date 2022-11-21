@@ -2,12 +2,12 @@ package ru.ncs.DemoShop.service;
 
 
 import lombok.AllArgsConstructor;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ncs.DemoShop.exception.ProductNotCreatedException;
 import ru.ncs.DemoShop.exception.ProductNotFoundException;
 import ru.ncs.DemoShop.exception.ProductNotUpdatedException;
-import ru.ncs.DemoShop.interfaces.ProductService;
 import ru.ncs.DemoShop.model.Product;
 import ru.ncs.DemoShop.repository.ProductRepository;
 import ru.ncs.DemoShop.service.data.ProductDTO;
@@ -15,43 +15,45 @@ import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 @Transactional(readOnly = true)
-
+@AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final DatabaseConverterImpl databaseConvertServiceImpl;
+
+    private final ConversionService conversionService;
 
     @Override
     public List<ProductDTO> findAll() {
-        return productRepository.findAll().stream().map(this.databaseConvertServiceImpl::convertToProductDTO)
-                .collect(Collectors.toList());
+        List<Product> list = productRepository.findAll();
+        List<ProductDTO> listDTO = new ArrayList<>();
+        for (Product product : list) {
+            listDTO.add(conversionService.convert(product, ProductDTO.class));
+        }
+        return listDTO;
     }
 
     @Override
     public ProductDTO findOne(UUID id) {
         Optional<Product> foundProduct = productRepository.findById(id);
-
-        return databaseConvertServiceImpl.convertToProductDTO(foundProduct.orElseThrow(ProductNotFoundException::new));
+        return conversionService.convert(foundProduct.orElseThrow(ProductNotFoundException::new), ProductDTO.class);
     }
 
     @Override
     public ProductDTO findOneByName(String name) {
         Optional<Product> foundProduct = productRepository.findByName(name);
-        return databaseConvertServiceImpl.convertToProductDTO(foundProduct.orElseThrow(ProductNotFoundException::new));
+        return conversionService.convert(foundProduct.orElseThrow(ProductNotFoundException::new), ProductDTO.class);
     }
 
     @Override
     @Transactional
     public UUID save(ImmutableCreateProductRequest request) {
-
-        Product product = databaseConvertServiceImpl.convertToProduct(request);
+        Product product = conversionService.convert(request, Product.class);
         try {
             if (findOneByName(product.getName()) != null) {
                 throw new ProductNotCreatedException("This Product is already exists!");
@@ -63,10 +65,12 @@ public class ProductServiceImpl implements ProductService {
         return product.getId();
     }
 
+    @Override
     @Transactional
-    public ProductDTO update(ImmutableUpdateProductRequest immutableUpdateProductRequest) {
+    public ProductDTO update(ImmutableUpdateProductRequest request, UUID id) {
 
-        Product product = databaseConvertServiceImpl.convertToProduct(immutableUpdateProductRequest);
+        Product product = conversionService.convert(request, Product.class);
+        product.setId(id);
         try {
             UUID Pr1 = findOneByName(product.getName()).getId();
             UUID Pr2 = product.getId();
@@ -80,9 +84,10 @@ public class ProductServiceImpl implements ProductService {
             product.setAmountUpdatedAt(LocalDateTime.now());
         }
         productRepository.save(product);
-        return databaseConvertServiceImpl.convertToProductDTO(product);
+        return conversionService.convert(product, ProductDTO.class);
     }
 
+    @Override
     @Transactional
     public void delete(UUID id) {
         productRepository.deleteById(id);

@@ -1,18 +1,18 @@
 package ru.ncs.DemoShop.service.immutable;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 import ru.ncs.DemoShop.model.ProductCategoryEnum;
 
 import java.util.UUID;
 
-@Data
+@Value
 @Builder
 public class ImmutableUpdateProductRequest {
-    private UUID id;
-    private String name;
-    private String description;
-    private ProductCategoryEnum category;
-    private double price;
-    private int amount;
+    UUID id;
+    String name;
+    String description;
+    ProductCategoryEnum category;
+    double price;
+    int amount;
 }

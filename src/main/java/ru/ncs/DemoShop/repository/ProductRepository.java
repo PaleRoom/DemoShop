@@ -2,7 +2,6 @@ package ru.ncs.DemoShop.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.ncs.DemoShop.model.Product;
-
 import java.util.Optional;
 import java.util.UUID;
 

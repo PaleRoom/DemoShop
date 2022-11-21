@@ -9,13 +9,13 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Getter
+@Setter
+@Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "products")
-    @Getter
-        @Setter
-            @NoArgsConstructor
-                @AllArgsConstructor
-                    @ToString
-                        @Builder
 public class Product {
     @Id
     @Column(name = "id", columnDefinition = "BINARY(16)", updatable = false, nullable = false)

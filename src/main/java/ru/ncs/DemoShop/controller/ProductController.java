@@ -1,9 +1,10 @@
-package ru.ncs.DemoShop.interfaces;
+package ru.ncs.DemoShop.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import ru.ncs.DemoShop.controller.request.CreateProductRequest;
 import ru.ncs.DemoShop.controller.request.UpdateProductRequest;
+import ru.ncs.DemoShop.controller.response.GetListResponse;
 import ru.ncs.DemoShop.controller.response.GetProductResponse;
 
 import javax.validation.Valid;
@@ -15,7 +16,7 @@ import java.util.UUID;
 public interface ProductController {
 
     @GetMapping
-    List<GetProductResponse> getProducts();
+    GetListResponse getProducts();
 
     @GetMapping("/{id}")
     GetProductResponse getProduct(@PathVariable("id") UUID id);

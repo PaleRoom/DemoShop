@@ -3,14 +3,15 @@ package ru.ncs.DemoShop.service.immutable;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Value;
 import ru.ncs.DemoShop.model.ProductCategoryEnum;
 
-@Data
+@Value
 @Builder
 public class ImmutableCreateProductRequest {
-    private String name;
-    private String description;
-    private ProductCategoryEnum category;
-    private double price;
-    private int amount;
+     String name;
+    String description;
+    ProductCategoryEnum category;
+    double price;
+    int amount;
 }
