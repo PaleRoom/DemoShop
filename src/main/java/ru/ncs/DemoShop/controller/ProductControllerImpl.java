@@ -57,5 +57,6 @@ public class ProductControllerImpl implements ProductController {
             throw new ProductNotFoundException();
         }
         productServiceImpl.delete(id);
+
     }
 }
