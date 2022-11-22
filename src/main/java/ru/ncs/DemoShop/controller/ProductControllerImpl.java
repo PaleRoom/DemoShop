@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.ncs.DemoShop.controller.converter.ConvertToImmutableUpdateProductRequest;
 import ru.ncs.DemoShop.controller.request.CreateProductRequest;
 import ru.ncs.DemoShop.controller.request.UpdateProductRequest;
 import ru.ncs.DemoShop.controller.response.GetListResponse;
@@ -24,8 +23,6 @@ import java.util.UUID;
 public class ProductControllerImpl implements ProductController {
     private final ProductServiceImpl productServiceImpl;
     private final ConversionService conversionService;
-    private final ConvertToImmutableUpdateProductRequest  convertToImmutableUpdateProductRequest;
-
 
     @Override
     @GetMapping
@@ -48,8 +45,8 @@ public class ProductControllerImpl implements ProductController {
 
     @Override
     public UUID updateProduct(@PathVariable("id") UUID id, @RequestBody @Valid UpdateProductRequest updateProductRequest) {
-        ImmutableUpdateProductRequest immutableUpdateProductRequest = 
-               conversionService.convert(updateProductRequest, ImmutableUpdateProductRequest.class);
+        ImmutableUpdateProductRequest immutableUpdateProductRequest =
+                conversionService.convert(updateProductRequest, ImmutableUpdateProductRequest.class);
 
         return productServiceImpl.update(immutableUpdateProductRequest, id).getId();
     }
