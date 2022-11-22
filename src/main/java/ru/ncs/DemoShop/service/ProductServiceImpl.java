@@ -10,7 +10,6 @@ import ru.ncs.DemoShop.exception.ProductNotFoundException;
 import ru.ncs.DemoShop.exception.ProductNotUpdatedException;
 import ru.ncs.DemoShop.model.Product;
 import ru.ncs.DemoShop.repository.ProductRepository;
-import ru.ncs.DemoShop.service.aop.LogExecutionTime;
 import ru.ncs.DemoShop.service.data.ProductDTO;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
@@ -30,7 +29,6 @@ public class ProductServiceImpl implements ProductService {
     private final ConversionService conversionService;
 
     @Override
-    @LogExecutionTime
     public List<ProductDTO> findAll() {
         List<Product> list = productRepository.findAll();
         List<ProductDTO> listDTO = new ArrayList<>();
