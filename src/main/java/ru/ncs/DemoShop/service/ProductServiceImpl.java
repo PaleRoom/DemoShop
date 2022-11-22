@@ -95,12 +95,4 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(id);
     }
 
-    @Transactional
-    public void increasePrice(double mod) {
-        List<Product> sourceList = productRepository.findAll();
-        for (Product product : sourceList) {
-            product.setPrice(product.getPrice() * mod);
-        }
-        productRepository.saveAll(sourceList);
-    }
 }
