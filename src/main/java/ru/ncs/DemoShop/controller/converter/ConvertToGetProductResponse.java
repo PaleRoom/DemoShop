@@ -17,6 +17,7 @@ final class ConvertToGetProductResponse implements Converter<ProductDTO, GetProd
                 .description(productDTO.getDescription())
                 .name(productDTO.getName())
                 .price(productDTO.getPrice())
+                .availability(productDTO.isAvailability())
                 .build();
     }
 }

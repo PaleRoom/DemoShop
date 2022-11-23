@@ -3,6 +3,7 @@ package ru.ncs.DemoShop.controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import ru.ncs.DemoShop.controller.request.CreateProductRequest;
+import ru.ncs.DemoShop.controller.request.SearchProductRequest;
 import ru.ncs.DemoShop.controller.request.UpdateProductRequest;
 import ru.ncs.DemoShop.controller.response.GetListResponse;
 import ru.ncs.DemoShop.controller.response.GetProductResponse;
@@ -31,4 +32,6 @@ public interface ProductController {
     @DeleteMapping("/{id}")
     void deleteProduct(@PathVariable("id") UUID id);
 
+    @PostMapping("/search")
+    GetListResponse searchProducts(SearchProductRequest searchProductRequest);
 }

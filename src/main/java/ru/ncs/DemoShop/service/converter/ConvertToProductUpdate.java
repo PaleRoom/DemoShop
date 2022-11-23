@@ -16,6 +16,7 @@ public class ConvertToProductUpdate implements Converter<ImmutableUpdateProductR
         product.setCategory(source.getCategory());
         product.setPrice(source.getPrice());
         product.setDescription(source.getDescription());
+        product.setAvailability(source.isAvailability());
         return product;
     }
 }

@@ -22,6 +22,5 @@ final class ConvertToResponseList implements Converter<List<ProductDTO>, List<Ge
             list.add(conversionService.convert(product, GetProductResponse.class));
         }
         return list;
-
     }
 }

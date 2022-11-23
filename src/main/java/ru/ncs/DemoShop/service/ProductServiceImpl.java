@@ -2,7 +2,12 @@ package ru.ncs.DemoShop.service;
 
 
 import lombok.AllArgsConstructor;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ncs.DemoShop.exception.ProductNotCreatedException;
@@ -10,10 +15,13 @@ import ru.ncs.DemoShop.exception.ProductNotFoundException;
 import ru.ncs.DemoShop.exception.ProductNotUpdatedException;
 import ru.ncs.DemoShop.model.Product;
 import ru.ncs.DemoShop.repository.ProductRepository;
+import ru.ncs.DemoShop.repository.specification.ProductSpecification;
 import ru.ncs.DemoShop.service.data.ProductDTO;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
+import ru.ncs.DemoShop.service.immutable.ImmutableSearchProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +35,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     private final ConversionService conversionService;
+    //private final ProductSpecification productSpecification;
 
     @Override
     public List<ProductDTO> findAll() {
@@ -92,4 +101,23 @@ public class ProductServiceImpl implements ProductService {
     public void delete(UUID id) {
         productRepository.deleteById(id);
     }
+
+    public List<ProductDTO> searchProducts(ImmutableSearchProductRequest request)  {
+
+        Specification<Product> specs = Specification.where(ProductSpecification.lessPrice(request.getPrice()))
+                .and(ProductSpecification.likeName(request.getName()))
+                .and(ProductSpecification.greaterThanOrEqualToAmount(request.getAmount()))
+                .and(ProductSpecification.isAvailable(request.getAvailability()));
+        System.out.println(specs);
+        List<Product> foundList = productRepository.findAll(specs);
+        System.out.println(foundList);
+        List<ProductDTO> listDTO = new ArrayList<>();
+        for (Product product : foundList) {
+            listDTO.add(conversionService.convert(product, ProductDTO.class));
+        }
+        return listDTO;
+    }
+
+
+
 }

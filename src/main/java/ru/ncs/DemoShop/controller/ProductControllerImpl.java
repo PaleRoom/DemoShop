@@ -5,12 +5,14 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.ncs.DemoShop.controller.request.CreateProductRequest;
+import ru.ncs.DemoShop.controller.request.SearchProductRequest;
 import ru.ncs.DemoShop.controller.request.UpdateProductRequest;
 import ru.ncs.DemoShop.controller.response.GetListResponse;
 import ru.ncs.DemoShop.controller.response.GetProductResponse;
 import ru.ncs.DemoShop.exception.ProductNotFoundException;
 import ru.ncs.DemoShop.service.ProductServiceImpl;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
+import ru.ncs.DemoShop.service.immutable.ImmutableSearchProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 
 import javax.validation.Valid;
@@ -23,6 +25,8 @@ import java.util.UUID;
 public class ProductControllerImpl implements ProductController {
     private final ProductServiceImpl productServiceImpl;
     private final ConversionService conversionService;
+
+    private final SearchedToPDFsaver searchedToPDFsaver;
 
     @Override
     @GetMapping
@@ -57,5 +61,17 @@ public class ProductControllerImpl implements ProductController {
             throw new ProductNotFoundException();
         }
         productServiceImpl.delete(id);
+    }
+
+    @Override
+    public GetListResponse searchProducts(@RequestBody  SearchProductRequest searchProductRequest) {
+        System.out.println(searchProductRequest);
+        ImmutableSearchProductRequest immutableSearchProductRequest =
+                conversionService.convert(searchProductRequest, ImmutableSearchProductRequest.class);
+        System.out.println(immutableSearchProductRequest);
+        List<GetProductResponse> list = conversionService.convert(productServiceImpl.searchProducts(immutableSearchProductRequest), List.class);
+        GetListResponse responseList = conversionService.convert(list, GetListResponse.class);
+      // searchedToPDFsaver.saveSearchedToPdf(responseList);
+        return responseList;
     }
 }

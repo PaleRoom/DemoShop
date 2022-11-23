@@ -17,6 +17,8 @@ public class GetProductResponse {
     private ProductCategoryEnum category;
     private double price;
     private int amount;
+    private boolean availability;
+
 
     @JsonFormat
             (shape = JsonFormat.Shape.STRING, pattern = "yyyy/MMMM/d HH:mm:ss")

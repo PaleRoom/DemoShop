@@ -3,9 +3,12 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <!-- Здесь мы позже напишем скрипт -->
+    <property name="now" value="now()" dbms="postgresql"/>
 
-    <include file="create-changeset-product-table.xml" relativeToChangelogFile="true"/>
-    <include file="add-availability-column.xml" relativeToChangelogFile="true"/>
-    <!-- <include file="insert-changeset-product-table.xml" relativeToChangelogFile="true"/> -->
-
+    <changeSet id="add-availability-column" author="Nicolas">
+        <addColumn tableName="products">
+            <column name="availability" type="boolean"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

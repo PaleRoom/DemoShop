@@ -15,6 +15,7 @@ public class ConvertToProductCreate implements Converter<ImmutableCreateProductR
         product.setCategory(source.getCategory());
         product.setPrice(source.getPrice());
         product.setDescription(source.getDescription());
+        product.setAvailability(source.isAvailability());
         return product;
 
     }
