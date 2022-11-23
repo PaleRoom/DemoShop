@@ -11,11 +11,14 @@ import ru.ncs.DemoShop.controller.response.GetListResponse;
 import ru.ncs.DemoShop.controller.response.GetProductResponse;
 import ru.ncs.DemoShop.exception.ProductNotFoundException;
 import ru.ncs.DemoShop.service.ProductServiceImpl;
+import ru.ncs.DemoShop.service.data.ProductDTO;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableSearchProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -64,14 +67,26 @@ public class ProductControllerImpl implements ProductController {
     }
 
     @Override
-    public GetListResponse searchProducts(@RequestBody  SearchProductRequest searchProductRequest) {
+    public GetListResponse searchProducts(@RequestBody SearchProductRequest searchProductRequest) throws IOException {
         System.out.println(searchProductRequest);
+
         ImmutableSearchProductRequest immutableSearchProductRequest =
                 conversionService.convert(searchProductRequest, ImmutableSearchProductRequest.class);
         System.out.println(immutableSearchProductRequest);
-        List<GetProductResponse> list = conversionService.convert(productServiceImpl.searchProducts(immutableSearchProductRequest), List.class);
-        GetListResponse responseList = conversionService.convert(list, GetListResponse.class);
-      // searchedToPDFsaver.saveSearchedToPdf(responseList);
+
+        List<GetProductResponse> listGPR = new ArrayList<>();
+        List<ProductDTO> ListDTO = productServiceImpl.searchProducts(immutableSearchProductRequest);
+        for (ProductDTO product : ListDTO) {
+            listGPR.add(conversionService.convert(product, GetProductResponse.class));
+        }
+
+        System.out.println("GET PRODUCT RESPONSE  " + listGPR);
+
+        GetListResponse responseList = conversionService.convert(listGPR, GetListResponse.class);
+
+        System.out.println("GET RESPONSE LIST  " + responseList);
+
+        searchedToPDFsaver.saveSearchedToPdf(responseList);
         return responseList;
     }
 }

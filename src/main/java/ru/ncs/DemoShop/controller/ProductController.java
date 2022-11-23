@@ -9,6 +9,7 @@ import ru.ncs.DemoShop.controller.response.GetListResponse;
 import ru.ncs.DemoShop.controller.response.GetProductResponse;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,5 +34,5 @@ public interface ProductController {
     void deleteProduct(@PathVariable("id") UUID id);
 
     @PostMapping("/search")
-    GetListResponse searchProducts(SearchProductRequest searchProductRequest);
+    GetListResponse searchProducts(SearchProductRequest searchProductRequest) throws IOException;
 }

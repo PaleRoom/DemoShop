@@ -108,9 +108,9 @@ public class ProductServiceImpl implements ProductService {
                 .and(ProductSpecification.likeName(request.getName()))
                 .and(ProductSpecification.greaterThanOrEqualToAmount(request.getAmount()))
                 .and(ProductSpecification.isAvailable(request.getAvailability()));
-        System.out.println(specs);
+
         List<Product> foundList = productRepository.findAll(specs);
-        System.out.println(foundList);
+
         List<ProductDTO> listDTO = new ArrayList<>();
         for (Product product : foundList) {
             listDTO.add(conversionService.convert(product, ProductDTO.class));
