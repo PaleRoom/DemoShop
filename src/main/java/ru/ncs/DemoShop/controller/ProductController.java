@@ -33,6 +33,4 @@ public interface ProductController {
     @DeleteMapping("/{id}")
     void deleteProduct(@PathVariable("id") UUID id);
 
-    @PostMapping("/search")
-    GetListResponse searchProducts(SearchProductRequest searchProductRequest) throws IOException;
 }

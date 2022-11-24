@@ -29,8 +29,6 @@ public class ProductControllerImpl implements ProductController {
     private final ProductServiceImpl productServiceImpl;
     private final ConversionService conversionService;
 
-    private final SearchedToPDFsaver searchedToPDFsaver;
-
     @Override
     @GetMapping
     public GetListResponse getProducts() {
@@ -69,21 +67,5 @@ public class ProductControllerImpl implements ProductController {
             throw new ProductNotFoundException();
         }
         productServiceImpl.delete(id);
-    }
-
-    @Override
-    public GetListResponse searchProducts(@RequestBody SearchProductRequest searchProductRequest) throws IOException {
-        System.out.println(searchProductRequest);
-        ImmutableSearchProductRequest immutableSearchProductRequest =
-                conversionService.convert(searchProductRequest, ImmutableSearchProductRequest.class);
-        List<ProductDTO> ListDTO = productServiceImpl.searchProducts(immutableSearchProductRequest);
-
-        List<GetProductResponse> listGPR = new ArrayList<>();
-        for (ProductDTO product : ListDTO) {
-            listGPR.add(conversionService.convert(product, GetProductResponse.class));
-        }
-        GetListResponse responseList = conversionService.convert(listGPR, GetListResponse.class);
-        searchedToPDFsaver.saveSearchedToPdf(responseList);
-        return responseList;
     }
 }

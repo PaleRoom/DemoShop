@@ -100,22 +100,4 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(id);
     }
 
-    public List<ProductDTO> searchProducts(ImmutableSearchProductRequest request)  {
-
-        Specification<Product> specs = Specification.where(ProductSpecification.lessPrice(request.getPrice()))
-                .and(ProductSpecification.likeName(request.getName()))
-                .and(ProductSpecification.greaterThanOrEqualToAmount(request.getAmount()))
-                .and(ProductSpecification.isAvailable(request.getAvailability()));
-
-        List<Product> foundList = productRepository.findAll(specs);
-
-        List<ProductDTO> listDTO = new ArrayList<>();
-        for (Product product : foundList) {
-            listDTO.add(conversionService.convert(product, ProductDTO.class));
-        }
-        return listDTO;
-    }
-
-
-
 }
