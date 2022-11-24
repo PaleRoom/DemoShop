@@ -21,7 +21,7 @@ public interface ProductController {
     GetListResponse getProducts();
 
     @GetMapping("/{id}")
-    GetProductResponse getProduct(@PathVariable("id") UUID id);
+    GetProductResponse getOneProduct(@PathVariable("id") UUID id);
 
     @PostMapping
     UUID create(@RequestBody @Valid CreateProductRequest createProductRequest);

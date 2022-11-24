@@ -7,5 +7,5 @@ import java.util.List;
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
     public List<Product> searchProduct(String name, int amount, double price, boolean availability){
 
-    return null;}
+        return null;}
 }

@@ -33,9 +33,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-
     private final ConversionService conversionService;
-    //private final ProductSpecification productSpecification;
 
     @Override
     public List<ProductDTO> findAll() {

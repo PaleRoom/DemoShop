@@ -34,12 +34,17 @@ public class ProductControllerImpl implements ProductController {
     @Override
     @GetMapping
     public GetListResponse getProducts() {
-        List<GetProductResponse> list = conversionService.convert(productServiceImpl.findAll(), List.class);
-        return conversionService.convert(list, GetListResponse.class);
+        List<ProductDTO> ListDTO = productServiceImpl.findAll();
+        List<GetProductResponse> listGPR = new ArrayList<>();
+        for (ProductDTO product : ListDTO) {
+            listGPR.add(conversionService.convert(product, GetProductResponse.class));
+        }
+        GetListResponse responseList = conversionService.convert(listGPR, GetListResponse.class);
+        return responseList;
     }
 
     @Override
-    public GetProductResponse getProduct(@PathVariable("id") UUID id) {
+    public GetProductResponse getOneProduct(@PathVariable("id") UUID id) {
         return conversionService.convert(productServiceImpl.findOne(id), GetProductResponse.class);
     }
 
@@ -69,23 +74,15 @@ public class ProductControllerImpl implements ProductController {
     @Override
     public GetListResponse searchProducts(@RequestBody SearchProductRequest searchProductRequest) throws IOException {
         System.out.println(searchProductRequest);
-
         ImmutableSearchProductRequest immutableSearchProductRequest =
                 conversionService.convert(searchProductRequest, ImmutableSearchProductRequest.class);
-        System.out.println(immutableSearchProductRequest);
+        List<ProductDTO> ListDTO = productServiceImpl.searchProducts(immutableSearchProductRequest);
 
         List<GetProductResponse> listGPR = new ArrayList<>();
-        List<ProductDTO> ListDTO = productServiceImpl.searchProducts(immutableSearchProductRequest);
         for (ProductDTO product : ListDTO) {
             listGPR.add(conversionService.convert(product, GetProductResponse.class));
         }
-
-        System.out.println("GET PRODUCT RESPONSE  " + listGPR);
-
         GetListResponse responseList = conversionService.convert(listGPR, GetListResponse.class);
-
-        System.out.println("GET RESPONSE LIST  " + responseList);
-
         searchedToPDFsaver.saveSearchedToPdf(responseList);
         return responseList;
     }
