@@ -15,8 +15,7 @@ public class PriceIncreaseScheduler {
     }
 
     @Scheduled(fixedDelayString = "${app.scheduling.period}", initialDelay = 10000)
-    public void increasePrices() {
-
+    public void increasePrices() throws InterruptedException {
         productServiceImpl.increasePrice(mod);
     }
 }

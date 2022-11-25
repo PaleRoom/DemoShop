@@ -3,6 +3,7 @@ package ru.ncs.DemoShop.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ncs.DemoShop.exception.ProductNotCreatedException;
@@ -14,6 +15,7 @@ import ru.ncs.DemoShop.service.data.ProductDTO;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 
+import javax.persistence.LockModeType;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
@@ -67,10 +69,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+
     public ProductDTO update(ImmutableUpdateProductRequest request, UUID id) {
 
         Product product = conversionService.convert(request, Product.class);
         product.setId(id);
+
         try {
             UUID Pr1 = findOneByName(product.getName()).getId();
             UUID Pr2 = product.getId();
@@ -82,8 +86,10 @@ public class ProductServiceImpl implements ProductService {
 
         if (productRepository.findById(product.getId()).get().getAmount() != product.getAmount()) {
             product.setAmountUpdatedAt(LocalDateTime.now());
-        }
+        } else product.setAmountUpdatedAt(productRepository.findById(id).get().getAmountUpdatedAt());
         productRepository.save(product);
+        System.out.println("One product is UPDATED");
+        System.out.println(product.getAmountUpdatedAt());
         return conversionService.convert(product, ProductDTO.class);
     }
 
@@ -94,11 +100,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Transactional
-    public void increasePrice(double mod) {
+
+    public void increasePrice(double mod) throws InterruptedException {
         List<Product> sourceList = productRepository.findAll();
         for (Product product : sourceList) {
             product.setPrice(product.getPrice() * mod);
         }
+        System.out.println("INCREASING IS SLEEPING NOW");
+        Thread.sleep(30000);
         productRepository.saveAll(sourceList);
+        System.out.println("PRICES INCREASED!!!!!!!!!!!!");
     }
 }
