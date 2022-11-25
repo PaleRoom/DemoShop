@@ -28,7 +28,7 @@ import java.util.UUID;
 public class ProductControllerImpl implements ProductController {
     private final ProductServiceImpl productServiceImpl;
     private final ConversionService conversionService;
-
+    private final SearchedToXlsSaver searchedToXlsSaver;
     private final SearchedToPDFsaver searchedToPDFsaver;
 
     @Override
@@ -82,8 +82,10 @@ public class ProductControllerImpl implements ProductController {
         for (ProductDTO product : ListDTO) {
             listGPR.add(conversionService.convert(product, GetProductResponse.class));
         }
+
         GetListResponse responseList = conversionService.convert(listGPR, GetListResponse.class);
         searchedToPDFsaver.saveSearchedToPdf(responseList);
+        searchedToXlsSaver.SaveSearchedToXls(responseList);
         return responseList;
     }
 }
