@@ -13,11 +13,8 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public interface ProductService {
     ProductDTO findOne(UUID id);
-
     ProductDTO findOneByName(String name);
-
     List<ProductDTO> findAll();
-
     @Transactional
      UUID save(ImmutableCreateProductRequest immutableCreateProductRequest);
     @Transactional
