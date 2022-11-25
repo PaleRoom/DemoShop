@@ -41,7 +41,7 @@ public class GetProductAdvice implements ResponseBodyAdvice<GetProductResponse> 
         }
 
         return GetProductResponse.builder()
-                .name(body.getName()+" - ну это просто волшебство!")
+                .name(body.getName()+": Тест REST Advice controller - ну это просто волшебство!")
                 .availability(body.isAvailability())
                 .description(body.getDescription())
                 .amount(body.getAmount())
