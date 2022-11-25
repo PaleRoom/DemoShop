@@ -3,7 +3,6 @@ package ru.ncs.DemoShop.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ncs.DemoShop.exception.ProductNotCreatedException;
@@ -15,7 +14,6 @@ import ru.ncs.DemoShop.service.data.ProductDTO;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 
-import javax.persistence.LockModeType;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +25,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-
     private final ConversionService conversionService;
-
     @Override
     public List<ProductDTO> findAll() {
         List<Product> list = productRepository.findAll();
@@ -69,7 +65,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-
     public ProductDTO update(ImmutableUpdateProductRequest request, UUID id) {
 
         Product product = conversionService.convert(request, Product.class);
@@ -100,7 +95,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Transactional
-
     public void increasePrice(double mod) throws InterruptedException {
         List<Product> sourceList = productRepository.findAll();
         for (Product product : sourceList) {
