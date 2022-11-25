@@ -28,7 +28,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "    {\r\n        \"name\": \"RAZR Mouse\",\r\n        \"description\": \"Yet another mouse\",\r\n        \"category\": \"PERIPHERY\",\r\n        \"price\": 110.0,\r\n        \"amount\": 150\r\n    }",
+					"raw": "    {\r\n        \"name\": \"RAZR Mouse\",\r\n        \"description\": \"Yet another mouse\",\r\n        \"category\": \"PERIPHERY\",\r\n        \"price\": 110.0,\r\n        \"amount\": 150,\r\n        \"availability\": true\r\n    }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -69,7 +69,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": \"{{id}}\",\r\n    \"name\": \"RAZR Mouse\",\r\n    \"description\": \"Yet another mouse\",\r\n    \"category\": \"PERIPHERY\",\r\n    \"price\": 1100.0,\r\n    \"amount\": 15,\r\n    \"amountUpdatedAt\": \"2022/ноября/15 15:59:51\"\r\n\r\n}",
+					"raw": "{\r\n    \"id\": \"{{id}}\",\r\n    \"name\": \"RAZR Mouse\",\r\n    \"description\": \"Yet another mouse\",\r\n    \"category\": \"PERIPHERY\",\r\n    \"price\": 1100.0,\r\n    \"amount\": 150,\r\n    \"availability\": true,\r\n    \"amountUpdatedAt\": \"2022/ноября/15 15:59:51\"\r\n\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -111,7 +111,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "    {\r\n        \"name\": \"RAZR Mouse\",\r\n        \"description\": \"Yet another mouse\",\r\n        \"category\": \"PERIPHERY\",\r\n        \"price\": 110.0,\r\n        \"amount\": 150\r\n    }\r\n",
+					"raw": "    {\r\n        \"name\": \"RAZR Mouse\",\r\n        \"description\": \"Yet another mouse\",\r\n        \"category\": \"PERIPHERY\",\r\n        \"price\": 110.0,\r\n        \"amount\": 150,\r\n        \"availability\": false\r\n    }\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -154,7 +154,50 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "    {\r\n        \"name\": \"Logitech G15\",\r\n        \"description\": \"Yet another keyboard\",\r\n        \"category\": \"PERIPHERY\",\r\n        \"price\": 95.0,\r\n        \"amount\": 1050\r\n    }",
+					"raw": "    {\r\n        \"name\": \"Logitech G15\",\r\n        \"description\": \"Yet another keyboard\",\r\n        \"category\": \"PERIPHERY\",\r\n        \"price\": 95.0,\r\n        \"amount\": 1050,\r\n        \"availability\": false\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:7070/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7070",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a Third Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set('id3', jsonData);\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"name\": \"RAZR mouse 2\",\r\n        \"description\": \"Yet another mouse\",\r\n        \"category\": \"PERIPHERY\",\r\n        \"price\": 100.0,\r\n        \"amount\":560 ,\r\n        \"availability\": true\r\n    }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -195,7 +238,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": \"{{id}}\",\r\n    \"name\": \"Logitech G15\",\r\n    \"description\": \"Yet another keyboard\",\r\n    \"category\": \"PERIPHERY\",\r\n    \"price\": 1250.0,\r\n    \"amount\": 140\r\n}",
+					"raw": "{\r\n    \"id\": \"{{id}}\",\r\n    \"name\": \"Logitech G15\",\r\n    \"description\": \"Yet another keyboard\",\r\n    \"category\": \"PERIPHERY\",\r\n    \"price\": 1250.0,\r\n    \"amount\": 140,\r\n    \"availability\": true\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -212,6 +255,50 @@
 					"path": [
 						"products",
 						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search for Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set('id', jsonData);\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"name\": \"RAZR\",\r\n        \"price\": 110.0,\r\n        \"amount\": 150,\r\n        \"availability\": true\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:7070/products/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7070",
+					"path": [
+						"products",
+						"search"
 					]
 				}
 			},
@@ -235,12 +322,14 @@
 							"      pm.expect(jsonData.products[0].category).to.eql(\"PERIPHERY\");\r",
 							"       pm.expect(jsonData.products[0].price).to.eql(1100.0);\r",
 							"        pm.expect(jsonData.products[0].amount).to.eql(15);\r",
+							"        pm.expect(jsonData.products[0].availability).to.eql(true);\r",
 							"    pm.expect(jsonData.products[1].id).to.eql(pm.variables.get('id2'));\r",
 							"    pm.expect(jsonData.products[1].name).to.eql(\"Logitech G15\");\r",
 							"     pm.expect(jsonData.products[1].description).to.eql(\"Yet another keyboard\");\r",
 							"      pm.expect(jsonData.products[1].category).to.eql(\"PERIPHERY\");\r",
 							"       pm.expect(jsonData.products[1].price).to.eql(95.0);\r",
 							"        pm.expect(jsonData.products[1].amount).to.eql(1050);\r",
+							"        pm.expect(jsonData.products[1].availability).to.eql(false);\r",
 							"});\r",
 							"\r",
 							""
@@ -283,6 +372,7 @@
 							"     pm.expect(jsonData.description).to.eql(\"Yet another mouse\");\r",
 							"      pm.expect(jsonData.category).to.eql(\"PERIPHERY\");\r",
 							"       pm.expect(jsonData.price).to.eql(1100.0);\r",
+							"         pm.expect(jsonData.availability).to.eql(true);\r",
 							"        pm.expect(jsonData.amount).to.eql(15);\r",
 							"});\r",
 							""
@@ -370,6 +460,39 @@
 					"path": [
 						"products",
 						"{{id2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Third Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:7070/products/{{id3}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7070",
+					"path": [
+						"products",
+						"{{id3}}"
 					]
 				}
 			},
