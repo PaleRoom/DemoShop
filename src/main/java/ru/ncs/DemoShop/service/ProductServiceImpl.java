@@ -26,6 +26,7 @@ import java.util.UUID;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ConversionService conversionService;
+
     @Override
     public List<ProductDTO> findAll() {
         List<Product> list = productRepository.findAll();
@@ -37,12 +38,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ProductDTO findOne(UUID id) {
         Optional<Product> foundProduct = productRepository.findById(id);
         return conversionService.convert(foundProduct.orElseThrow(ProductNotFoundException::new), ProductDTO.class);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ProductDTO findOneByName(String name) {
         Optional<Product> foundProduct = productRepository.findByName(name);
         return conversionService.convert(foundProduct.orElseThrow(ProductNotFoundException::new), ProductDTO.class);
@@ -79,12 +82,10 @@ public class ProductServiceImpl implements ProductService {
         } catch (ProductNotFoundException ignored) {
         }
 
-        if (productRepository.findById(product.getId()).get().getAmount() != product.getAmount()) {
-            product.setAmountUpdatedAt(LocalDateTime.now());
-        } else product.setAmountUpdatedAt(productRepository.findById(id).get().getAmountUpdatedAt());
+//        if (productRepository.findById(product.getId()).get().getAmount() != product.getAmount()) {
+//            product.setAmountUpdatedAt(LocalDateTime.now());
+//        } else product.setAmountUpdatedAt(productRepository.findById(id).get().getAmountUpdatedAt());
         productRepository.save(product);
-        System.out.println("One product is UPDATED");
-        System.out.println(product.getAmountUpdatedAt());
         return conversionService.convert(product, ProductDTO.class);
     }
 
@@ -100,9 +101,8 @@ public class ProductServiceImpl implements ProductService {
         for (Product product : sourceList) {
             product.setPrice(product.getPrice() * mod);
         }
-        System.out.println("INCREASING IS SLEEPING NOW");
-        Thread.sleep(30000);
+        Thread.sleep(30000);    //for Lock-testing purposes
         productRepository.saveAll(sourceList);
-        System.out.println("PRICES INCREASED!!!!!!!!!!!!");
+
     }
 }

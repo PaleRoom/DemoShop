@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <!-- Здесь мы позже напишем скрипт -->
+    <changeSet id="create_on_update_procedure" author="Nicolas">
+        <createProcedure>
+            CREATE FUNCTION change_update_time() RETURNS TRIGGER
+                LANGUAGE plpgsql
+                AS $$
+            BEGIN
+                UPDATE products SET OLD.amount_update
+            :=NOW();
+            RETURN OLD ;
+            END;
+                $$;
+        </createProcedure>
+    </changeSet>
+
+    <changeSet id="create_on_update_trigger" author="Nicolas">
+        <sql>
+            CREATE TRIGGER updated_time AFTER UPDATE ON products
+                FOR  EACH ROW EXECUTE PROCEDURE change_update_time();
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>
+

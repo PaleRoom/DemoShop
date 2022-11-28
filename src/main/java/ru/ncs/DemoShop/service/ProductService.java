@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@Transactional
 public interface ProductService {
     ProductDTO findOne(UUID id);
 
@@ -24,4 +23,6 @@ public interface ProductService {
      ProductDTO update(ImmutableUpdateProductRequest request, UUID id);
     @Transactional
      void delete(UUID id);
+    @Transactional
+    void increasePrice(double mod) throws InterruptedException;
 }

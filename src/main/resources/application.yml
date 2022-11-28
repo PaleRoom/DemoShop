@@ -23,6 +23,6 @@ springdoc:
 
 app:
   scheduling:
-    period: 15000
-    enabled: true
+    period: 15000  #15sec scheduler freq. period
+    enabled: false
     priceModificator: 1.1
