@@ -1,5 +1,8 @@
 package ru.ncs.DemoShop.controller;
 
+import java.util.List;
+import java.util.UUID;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
@@ -17,10 +20,6 @@ import ru.ncs.DemoShop.exception.ProductNotFoundException;
 import ru.ncs.DemoShop.service.ProductService;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
-
-import javax.validation.Valid;
-import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/products")
