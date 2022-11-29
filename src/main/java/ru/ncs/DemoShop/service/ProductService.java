@@ -2,6 +2,7 @@ package ru.ncs.DemoShop.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.ncs.DemoShop.model.Product;
 import ru.ncs.DemoShop.service.data.ProductDTO;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
@@ -12,8 +13,12 @@ import java.util.UUID;
 @Service
 public interface ProductService {
     ProductDTO findOne(UUID id);
+    Product findOneEnt(UUID id);
+
 
     ProductDTO findOneByName(String name);
+
+    UUID findIdByName(String name);
 
     List<ProductDTO> findAll();
 

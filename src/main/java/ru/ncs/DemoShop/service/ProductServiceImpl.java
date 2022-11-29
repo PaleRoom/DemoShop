@@ -14,6 +14,7 @@ import ru.ncs.DemoShop.service.data.ProductDTO;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 
+import javax.persistence.Version;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +47,22 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
+    public Product findOneEnt(UUID id) {
+        Optional<Product> foundProduct = productRepository.findById(id);
+        return foundProduct.orElseThrow(ProductNotFoundException::new);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public ProductDTO findOneByName(String name) {
         Optional<Product> foundProduct = productRepository.findByName(name);
         return conversionService.convert(foundProduct.orElseThrow(ProductNotFoundException::new), ProductDTO.class);
+    }
+
+    @Version
+    @Transactional(readOnly = true)
+    public UUID findIdByName(String name) {
+        return productRepository.findIdByName(name).orElseThrow(ProductNotFoundException::new);
     }
 
     @Override
@@ -70,21 +84,23 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public ProductDTO update(ImmutableUpdateProductRequest request, UUID id) {
 
-        Product product = conversionService.convert(request, Product.class);
-        product.setId(id);
-
-        try {
-            UUID Pr1 = findOneByName(product.getName()).getId();
-            UUID Pr2 = product.getId();
-            if (!Pr1.equals(Pr2)) {
-                throw new ProductNotUpdatedException("Product with this name is already exists");
+        Product product = findOneEnt(id);
+        if (request.getName() != null) {
+            try {
+                if (!(findIdByName(request.getName()).equals(id))) {
+                    throw new ProductNotUpdatedException("Product with this name is already exists");
+                }
+            } catch (ProductNotFoundException ignored) {
             }
-        } catch (ProductNotFoundException ignored) {
+            product.setName(request.getName());
         }
 
-//        if (productRepository.findById(product.getId()).get().getAmount() != product.getAmount()) {
-//            product.setAmountUpdatedAt(LocalDateTime.now());
-//        } else product.setAmountUpdatedAt(productRepository.findById(id).get().getAmountUpdatedAt());
+        if (request.getDescription() != null) product.setDescription(request.getDescription());
+        if (request.getCategory() != null) product.setCategory(request.getCategory());
+        if (request.getPrice() != null) product.setPrice(request.getPrice());
+        if (request.getAmount() != null) product.setAmount(request.getAmount());
+        if (request.getDescription() != null) product.setDescription(request.getDescription());
+
         productRepository.save(product);
         return conversionService.convert(product, ProductDTO.class);
     }

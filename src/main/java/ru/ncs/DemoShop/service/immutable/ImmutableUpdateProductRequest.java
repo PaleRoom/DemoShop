@@ -13,6 +13,6 @@ public class ImmutableUpdateProductRequest {
     String name;
     String description;
     ProductCategoryEnum category;
-    double price;
-    int amount;
+    Double price;
+    Integer amount;
 }
