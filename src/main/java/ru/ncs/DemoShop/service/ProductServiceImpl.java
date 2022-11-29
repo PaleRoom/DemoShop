@@ -2,6 +2,7 @@ package ru.ncs.DemoShop.service;
 
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Slf4j
 @Transactional
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -77,6 +79,7 @@ public class ProductServiceImpl implements ProductService {
         }
         product.setAmountUpdatedAt(LocalDateTime.now());
         productRepository.save(product);
+        log.info("Product saved");
         return product.getId();
     }
 
@@ -102,6 +105,7 @@ public class ProductServiceImpl implements ProductService {
         if (request.getDescription() != null) product.setDescription(request.getDescription());
 
         productRepository.save(product);
+        log.info("Product updated");
         return conversionService.convert(product, ProductDTO.class);
     }
 
@@ -117,8 +121,9 @@ public class ProductServiceImpl implements ProductService {
         for (Product product : sourceList) {
             product.setPrice(product.getPrice() * mod);
         }
-        Thread.sleep(30000);    //for Lock-testing purposes
+        log.debug("Sleep for {}s due to a Lock-test with modificator {}", 30, mod);//for Lock-testing purposes
+        Thread.sleep(30000);
         productRepository.saveAll(sourceList);
-
+        log.info("Price increased");
     }
 }

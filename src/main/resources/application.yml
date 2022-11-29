@@ -24,5 +24,11 @@ springdoc:
 app:
   scheduling:
     period: 15000  #15sec scheduler freq. period
-    enabled: false
+    enabled: true
     priceModificator: 1.1
+
+logging:
+    file.name: DemoShop.log
+    level:
+      org.springframework.web: DEBUG
+      ru.ncs.DemoShop: DEBUG
