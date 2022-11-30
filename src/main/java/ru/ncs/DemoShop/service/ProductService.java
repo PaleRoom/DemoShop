@@ -13,8 +13,6 @@ import java.util.UUID;
 @Service
 public interface ProductService {
     ProductDTO findOne(UUID id);
-    Product findOneEnt(UUID id);
-
 
     ProductDTO findOneByName(String name);
 
