@@ -1,16 +1,14 @@
 package ru.ncs.DemoShop.service;
 
-
-import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import ru.ncs.DemoShop.exception.ProductNotCreatedException;
 import ru.ncs.DemoShop.exception.ProductNotFoundException;
 import ru.ncs.DemoShop.exception.ProductNotUniqueException;
-import ru.ncs.DemoShop.exception.ProductNotUpdatedException;
 import ru.ncs.DemoShop.model.Product;
 import ru.ncs.DemoShop.repository.ProductRepository;
 import ru.ncs.DemoShop.service.data.ProductDTO;
@@ -20,6 +18,7 @@ import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -45,11 +44,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO findOne(UUID id) {
         Optional<Product> foundProduct = productRepository.findById(id);
-        return conversionService.convert(foundProduct.orElseThrow(ProductNotFoundException::new), ProductDTO.class);
+        return conversionService.convert(foundProduct.orElseThrow(() ->
+                new ProductNotFoundException("Product with id not found: " + id.toString())), ProductDTO.class);
     }
 
     @Override
     public ProductDTO findOneByName(String name) {
+        Assert.hasText(name, "name must not be blank");
+
         Optional<Product> foundProduct = productRepository.findByName(name);
         return conversionService.convert(foundProduct.orElseThrow(ProductNotFoundException::new), ProductDTO.class);
     }
@@ -97,8 +99,6 @@ public class ProductServiceImpl implements ProductService {
         log.debug("Product updated, ID: {}", id);
         return conversionService.convert(product, ProductDTO.class);
     }
-
-
 
     @Override
     @Transactional
