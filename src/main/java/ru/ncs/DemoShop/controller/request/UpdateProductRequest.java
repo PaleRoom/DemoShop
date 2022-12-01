@@ -9,7 +9,6 @@ import javax.validation.constraints.Positive;
 
 @Value
 public class UpdateProductRequest {
-
     String name;
     String description;
 
