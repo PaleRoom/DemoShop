@@ -26,3 +26,9 @@ app:
     period: 15000
     enabled: false
     priceModificator: 1.1
+
+logging:
+  file.name: DemoShop.log
+  level:
+    org.springframework.web: DEBUG
+    ru.ncs.DemoShop: DEBUG
