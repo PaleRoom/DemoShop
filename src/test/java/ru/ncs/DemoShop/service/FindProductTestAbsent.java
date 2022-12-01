@@ -17,10 +17,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class FindProductTestAbsent {
+
     @InjectMocks
-    private ProductServiceImpl productService;
+    private ProductServiceImpl underTest;
+
     @Mock
     private ProductRepository productRepository;
+
     @Mock
     private ConversionService conversionService;
 
@@ -36,10 +39,6 @@ public class FindProductTestAbsent {
                 .when(productRepository)
                 .findById(id);
 
-        Mockito.doThrow(new ProductNotFoundException())
-                .when(conversionService)
-                .convert(null, ProductDTO.class);
-
-        Assertions.assertThrows(ProductNotFoundException.class, () -> productService.findOne(id));
+        Assertions.assertThrows(ProductNotFoundException.class, () -> underTest.findOne(id));
     }
 }

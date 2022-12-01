@@ -153,6 +153,13 @@ public class ProductServiceImplTest extends AbstractUnitTest {
                 .hasMessageContaining("name must not be blank");
     }
 
+
+    //todo update
+    //дана цена 899.99 в ImmutableUpdateProductRequest и продукт в репо с цено 1200.50,
+    //то при вызове апдейт
+    //в репо засейвится продукт с ценой 899.99
+
+
     static Stream<String> nullEmptyBlankStrings() {
         return Stream.of(null,
                 Strings.EMPTY,
