@@ -20,8 +20,10 @@ public interface ProductService {
 
     @Transactional
      UUID save(ImmutableCreateProductRequest immutableCreateProductRequest);
+
     @Transactional
      ProductDTO update(ImmutableUpdateProductRequest request, UUID id);
+
     @Transactional
      void delete(UUID id);
 }

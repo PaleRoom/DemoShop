@@ -22,8 +22,10 @@ import static ru.ncs.DemoShop.model.ProductCategoryEnum.PERIPHERY;
 public class FindOneTest {
     @InjectMocks
     private ProductServiceImpl productService;
+
     @Mock
     private ProductRepository productRepository;
+
     @Mock
     private ConversionService conversionService;
 
@@ -36,7 +38,7 @@ public class FindOneTest {
     public void findProductTest() {
         UUID id = UUID.fromString("f8f35c84-dbb4-4fa2-9c75-689bbf03246e");
         LocalDateTime time = LocalDateTime.now();
-        Product mockProduct = new Product(id, "Test", "d", PERIPHERY, 1, 1, time);
+        Product mockProduct = new Product(id, "Test", "d", PERIPHERY, 1.0, 1, time,true);
 
         ProductDTO mockDTO = ProductDTO.builder()
                 .id(mockProduct.getId())
@@ -46,6 +48,7 @@ public class FindOneTest {
                 .description(mockProduct.getDescription())
                 .name(mockProduct.getName())
                 .price(mockProduct.getPrice())
+                .availability(mockProduct.isAvailability())
                 .build();
 
         Mockito.doReturn(Optional.of(mockProduct))

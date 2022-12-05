@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import ru.ncs.DemoShop.exception.ProductNotCreatedException;
 import ru.ncs.DemoShop.exception.ProductNotFoundException;
 import ru.ncs.DemoShop.exception.ProductNotUniqueException;
@@ -45,11 +46,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO findOne(UUID id) {
         Optional<Product> foundProduct = productRepository.findById(id);
-        return conversionService.convert(foundProduct.orElseThrow(ProductNotFoundException::new), ProductDTO.class);
+        return conversionService.convert(foundProduct.orElseThrow(() ->
+                new ProductNotFoundException("Product with id not found: " + id.toString())), ProductDTO.class);
     }
 
     @Override
     public ProductDTO findOneByName(String name) {
+        Assert.hasText(name, "name must not be blank");
         Optional<Product> foundProduct = productRepository.findByName(name);
         return conversionService.convert(foundProduct.orElseThrow(ProductNotFoundException::new), ProductDTO.class);
     }
@@ -71,7 +74,9 @@ public class ProductServiceImpl implements ProductService {
 
 
     private boolean checkUnique(final String name, final UUID id) {
-        final boolean check = productRepository.findIdByName(name).map(entId -> Objects.equals(entId, id)).orElse(true);
+
+        final boolean check = productRepository.findIdByName(name).map(entId ->
+                Objects.equals(entId, id)).orElse(true);
         if (!check) {
             throw new ProductNotUniqueException("Name must be unique");
         }
@@ -82,8 +87,10 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public ProductDTO update(ImmutableUpdateProductRequest request, UUID id) {
 
-        Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+        Product product = productRepository.findById(id).orElseThrow(() ->
+                new ProductNotFoundException("Product with id not found: " + id.toString()));
         if (request.getName() != null && checkUnique(request.getName(), id)) {
+
             product.setName(request.getName());
         }
 
@@ -91,13 +98,12 @@ public class ProductServiceImpl implements ProductService {
         if (request.getCategory() != null) product.setCategory(request.getCategory());
         if (request.getPrice() != null) product.setPrice(request.getPrice());
         if (request.getAmount() != null) product.setAmount(request.getAmount());
-        if (request.getDescription() != null) product.setDescription(request.getDescription());
+        if (request.getAvailability() != null) product.setAvailability(request.getAvailability());
 
         productRepository.save(product);
         log.debug("Product updated, ID: {}", id);
         return conversionService.convert(product, ProductDTO.class);
     }
-
 
 
     @Override
