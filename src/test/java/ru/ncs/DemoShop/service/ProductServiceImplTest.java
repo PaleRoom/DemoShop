@@ -94,7 +94,6 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         verifyNoMoreInteractions(productRepositoryMock);
     }
 
-
     //2. если репо вернул пустой опшнл, то искл
     @Test
     @DisplayName("Given empty optional " +
@@ -505,7 +504,6 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         assertEquals(actual.getAmount(), imReqStub.getAmount());
     }
 
-
     @Test
     @DisplayName("Given no Availability " +
             "when call Update " +
@@ -582,7 +580,6 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         verify(conversionServiceMock).convert(captor.capture(), any());
 
     }
-
     @Test
     @DisplayName("Given converter returns ProductDto " +
             "when call update " +
@@ -601,7 +598,6 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         assertAll(() -> assertNotNull(actual),
                 () -> assertThat(actual).isEqualTo(productDTOStub));
     }
-
     static Stream<String> nullEmptyBlankStrings() {
         return Stream.of(null,
                 Strings.EMPTY,
