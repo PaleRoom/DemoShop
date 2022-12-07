@@ -20,3 +20,4 @@ spring:
 springdoc:
   api-docs:
     path: /api-docs
+
