@@ -9,7 +9,6 @@ import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 
 @Service
-@Transactional(readOnly = true)
 public interface ProductService {
     ProductDTO findOne(UUID id);
 
