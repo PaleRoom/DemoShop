@@ -5,8 +5,6 @@ import org.springframework.stereotype.Component;
 import ru.ncs.DemoShop.controller.request.UpdateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 
-import java.util.UUID;
-
 @Component
 public class ConvertToImmutableUpdateProductRequest implements Converter<UpdateProductRequest, ImmutableUpdateProductRequest> {
     @Override
