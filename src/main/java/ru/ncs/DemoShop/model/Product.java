@@ -54,5 +54,8 @@ public class Product {
     @Column(name = "amount_update", nullable = false)
     private LocalDateTime amountUpdatedAt;
 
+    @Column(name = "availability", nullable = false)
+    private boolean availability;
+
 
 }
