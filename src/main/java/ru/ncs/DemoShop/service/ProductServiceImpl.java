@@ -14,19 +14,21 @@ import ru.ncs.DemoShop.exception.ProductNotUniqueException;
 import ru.ncs.DemoShop.exception.ProductNotUpdatedException;
 import ru.ncs.DemoShop.model.Product;
 import ru.ncs.DemoShop.repository.ProductRepository;
+import ru.ncs.DemoShop.service.aop.LogExecutionTime;
 import ru.ncs.DemoShop.service.data.ProductDTO;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 
+import javax.persistence.Version;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Slf4j
 @Service
-@Transactional(readOnly = true)
+@Slf4j
+@Transactional
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
@@ -34,6 +36,7 @@ public class ProductServiceImpl implements ProductService {
     private final ConversionService conversionService;
 
     @Override
+    @LogExecutionTime
     public List<ProductDTO> findAll() {
         List<Product> list = productRepository.findAll();
         List<ProductDTO> listDTO = new ArrayList<>();
@@ -44,6 +47,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ProductDTO findOne(UUID id) {
         Optional<Product> foundProduct = productRepository.findById(id);
         return conversionService.convert(foundProduct.orElseThrow(() ->
@@ -51,10 +55,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ProductDTO findOneByName(String name) {
         Assert.hasText(name, "name must not be blank");
         Optional<Product> foundProduct = productRepository.findByName(name);
         return conversionService.convert(foundProduct.orElseThrow(ProductNotFoundException::new), ProductDTO.class);
+    }
+
+    @Version
+    @Transactional(readOnly = true)
+    public UUID findIdByName(String name) {
+        return productRepository.findIdByName(name).orElseThrow(ProductNotFoundException::new);
     }
 
     @Override
@@ -69,7 +80,17 @@ public class ProductServiceImpl implements ProductService {
         }
         product.setAmountUpdatedAt(LocalDateTime.now());
         productRepository.save(product);
+        log.info("Product saved");
         return product.getId();
+    }
+
+
+    private boolean checkUnique(final String name, final UUID id) {
+        final boolean check = productRepository.findIdByName(name).map(entId -> Objects.equals(entId, id)).orElse(true);
+        if (!check) {
+            throw new ProductNotUniqueException("Name must be unique");
+        }
+        return true;
     }
 
 
@@ -90,7 +111,6 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(id).orElseThrow(() ->
                 new ProductNotFoundException("Product with id not found: " + id.toString()));
         if (request.getName() != null && checkUnique(request.getName(), id)) {
-
             product.setName(request.getName());
         }
 
@@ -105,10 +125,21 @@ public class ProductServiceImpl implements ProductService {
         return conversionService.convert(product, ProductDTO.class);
     }
 
-
     @Override
     @Transactional
     public void delete(UUID id) {
         productRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void increasePrice(double mod) throws InterruptedException {
+        List<Product> sourceList = productRepository.findAll();
+        for (Product product : sourceList) {
+            product.setPrice(product.getPrice() * mod);
+        }
+        log.debug("Sleep for {}s due to a Lock-test with modificator {}", 30, mod);//for Lock-testing purposes
+        Thread.sleep(30000);
+        productRepository.saveAll(sourceList);
+        log.info("Price increased");
     }
 }

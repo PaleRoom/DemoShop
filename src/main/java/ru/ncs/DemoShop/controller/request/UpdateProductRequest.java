@@ -19,6 +19,4 @@ public class UpdateProductRequest {
 
     @Positive(message = "Amount should be at least 0 or higher")
     Integer amount;
-
-    Boolean availability;
 }
