@@ -2,7 +2,6 @@ package ru.ncs.DemoShop.service.immutable;
 
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Value;
 import ru.ncs.DemoShop.model.ProductCategoryEnum;
 
@@ -15,5 +14,4 @@ public class ImmutableCreateProductRequest {
     double price;
     int amount;
     boolean availability;
-
 }

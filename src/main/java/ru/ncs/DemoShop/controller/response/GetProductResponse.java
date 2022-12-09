@@ -19,7 +19,6 @@ public class GetProductResponse {
     private int amount;
     private boolean availability;
 
-
     @JsonFormat
             (shape = JsonFormat.Shape.STRING, pattern = "yyyy/MMMM/d HH:mm:ss")
     private LocalDateTime amountUpdatedAt;
