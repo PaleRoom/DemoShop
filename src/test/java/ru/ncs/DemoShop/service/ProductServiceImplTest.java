@@ -76,49 +76,37 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         underTest = new ProductServiceImpl(productRepositoryMock, conversionServiceMock);
     }
 
-    //1. id передался в репо
-    //GIVEN WHEN THEN
     @Test
     @DisplayName("Given Id " +
             "when call findOne " +
             "then productRepository invoked with expected Id")
     void givenId_whenFindOne_thenProductRepositoryInvokedWithTheId() {
-        //GIVEN
         final UUID idStub = UUID.randomUUID();
 
-        //WHEN
         underTest.findOne(idStub);
 
-        //THEN
         verify(productRepositoryMock, times(1)).findById(idStub);
         verifyNoMoreInteractions(productRepositoryMock);
     }
 
-    //2. если репо вернул пустой опшнл, то искл
     @Test
     @DisplayName("Given empty optional " +
             "when call findOne " +
             "then throw productNotFoundException")
     void givenEmptyOptional_whenFindOne_thenThrowException() {
-        //GIVEN
         final UUID idStub = UUID.randomUUID();
         when(productRepositoryMock.findById(any())).thenReturn(Optional.empty());
 
-        //WHEN
-        //THEN
         assertThatThrownBy(() -> underTest.findOne(idStub))
                 .isInstanceOf(ProductNotFoundException.class)
                 .hasMessageContaining(idStub.toString());
     }
 
-    //3. если репо вернул непустой опшнл, то объект из опшнл передается в конвертер
     @Test
     @DisplayName("Given optional with product " +
             "when call findOne " +
             "then converter invoked with the product")
     void givenNotEmptyOptional_whenFindOne_thenThrowException() {
-        //WHEN
-        //THEN
         underTest.findOne(UUID.randomUUID());
 
         verify(conversionServiceMock).convert(eq(productStub), eq(ProductDTO.class));
@@ -130,56 +118,37 @@ public class ProductServiceImplTest extends AbstractUnitTest {
             "then converter invoked with the product")
     void givenOptionalWithProduct_whenFindOne_thenThrowException() {
         ArgumentCaptor<Product> captor = ArgumentCaptor.forClass(Product.class);
-//        doReturn(ProductDTO.builder().build()).when(conversionServiceMock).convert(captor.capture(), any());
-//        when(conversionServiceMock.convert(captor.capture(), any())).thenReturn(ProductDTO.builder().build());
-
-        //WHEN
         underTest.findOne(UUID.randomUUID());
-
-        //THEN
         verify(conversionServiceMock).convert(captor.capture(), any());
 
         final Product actual = captor.getValue();
         Assertions.assertEquals(actual, productStub);
     }
 
-
-    //4. из findOne возвращается то, что возвращает конвертер
     @Test
     @DisplayName("Given converter returns ProductDto " +
             "when call findOne " +
             "then return the ProductDto")
     void givenProductDto_whenFindOne_thenReturnProductDto() {
-        //GIVEN
         final ProductDTO productDTOStub = ProductDTO.builder().build();
         when(conversionServiceMock.convert(any(), any())).thenReturn(productDTOStub);
 
-        //WHEN
         final ProductDTO actual = underTest.findOne(UUID.randomUUID());
 
-        //THEN
         assertAll(() -> assertNotNull(actual),
                 () -> assertThat(actual).isEqualTo(productDTOStub));
     }
 
     @ParameterizedTest
-    // @ValueSource(strings = {"", "  ", "   ", "\n", "\t"})
     @MethodSource("nullEmptyBlankStrings")
     @DisplayName("Given converter returns not proper ProductDto " +
             "when call findOneByName " +
             "then throw Exception")
     void givenNotProperProductDto_whenFindOneByName_thenThrowException(String value) {
-        //WHEN
         assertThatThrownBy(() -> underTest.findOneByName(value))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("name must not be blank");
     }
-
-
-    //todo update
-    //дана цена 899.99 в ImmutableUpdateProductRequest и продукт в репо с цено 1200.50,
-    //то при вызове апдейт
-    //в репо засейвится продукт с ценой 899.99
 
     @Test
     @DisplayName("Given id "
@@ -187,12 +156,9 @@ public class ProductServiceImplTest extends AbstractUnitTest {
             + "then productRepository invoked with expected id")
     void givenId_whenUpdate_thenProductRepositoryInvokedWithTheId() {
         final UUID idStub = UUID.randomUUID();
-        // when(productRepositoryMock.findById(any())).thenReturn();
         when(productRepositoryMock.findIdByName(any())).thenReturn(Optional.of(idStub));
         underTest.update(imReqStub, idStub);
-
         verify(productRepositoryMock, times(1)).findById(idStub);
-        // verifyNoMoreInteractions(productRepositoryMock);
     }
 
     @Test
@@ -200,13 +166,9 @@ public class ProductServiceImplTest extends AbstractUnitTest {
             "when call update " +
             "then throw productNotFoundException")
     void givenEmptyOptional_whenUpdate_thenThrowException() {
-        //GIVEN
         final UUID idStub = UUID.randomUUID();
         when(productRepositoryMock.findById(any())).thenReturn(Optional.empty());
 
-        //WHEN
-
-        //THEN
         assertThatThrownBy(() -> underTest.update(imReqStub, idStub))
                 .isInstanceOf(ProductNotFoundException.class)
                 .hasMessageContaining(idStub.toString());
@@ -221,11 +183,7 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         final UUID idStub = UUID.randomUUID();
         when(productRepositoryMock.findIdByName(any())).thenReturn(Optional.of(UUID.randomUUID()));
 
-        //WHEN
-
-        //THEN
         assertThatThrownBy(() -> underTest.update(imReqStub, idStub))
-
                 .isInstanceOf(ProductNotUniqueException.class)
                 .hasMessageContaining("Name must be unique");
     }
@@ -240,10 +198,8 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         ArgumentCaptor<Product> captor = ArgumentCaptor.forClass(Product.class);
         when(productRepositoryMock.findIdByName(any())).thenReturn(Optional.of(idStub));
 
-        //WHEN
         underTest.update(imReqStub, idStub);
 
-        //THEN
         verify(productRepositoryMock).save(captor.capture());
     }
 
@@ -257,10 +213,8 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         ArgumentCaptor<Product> captor = ArgumentCaptor.forClass(Product.class);
         when(productRepositoryMock.findIdByName(any())).thenReturn(Optional.empty());
 
-        //WHEN
         underTest.update(imReqStub, idStub);
 
-        //THEN
         verify(productRepositoryMock).save(captor.capture());
     }
 
@@ -330,10 +284,8 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         ArgumentCaptor<Product> captor = ArgumentCaptor.forClass(Product.class);
         when(productRepositoryMock.findIdByName(any())).thenReturn(Optional.empty());
 
-        //WHEN
         underTest.update(imReqStub, idStub);
 
-        //THEN
         verify(productRepositoryMock).save(captor.capture());
         Product actual = captor.getValue();
         assertEquals(actual.getDescription(), imReqStub.getDescription());
@@ -344,7 +296,6 @@ public class ProductServiceImplTest extends AbstractUnitTest {
             "when call Update " +
             "then productRepository invoked with old category product")
     void givenNoCategory_whenUpdate_thenProductRepositoryInvokedWithOldCategoryProduct() {
-        //GIVEN
         imReqStub = ImmutableUpdateProductRequest.builder()
                 .name("STUB")
                 .description("Test Description")
@@ -357,10 +308,8 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         ArgumentCaptor<Product> captor = ArgumentCaptor.forClass(Product.class);
         when(productRepositoryMock.findIdByName(any())).thenReturn(Optional.empty());
 
-        //WHEN
         underTest.update(imReqStub, idStub);
 
-        //THEN
         verify(productRepositoryMock).save(captor.capture());
         Product actual = captor.getValue();
         assertEquals(actual.getCategory(), productStub.getCategory());
@@ -385,10 +334,8 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         ArgumentCaptor<Product> captor = ArgumentCaptor.forClass(Product.class);
         when(productRepositoryMock.findIdByName(any())).thenReturn(Optional.empty());
 
-        //WHEN
         underTest.update(imReqStub, idStub);
 
-        //THEN
         verify(productRepositoryMock).save(captor.capture());
         Product actual = captor.getValue();
         assertEquals(actual.getCategory(), imReqStub.getCategory());
@@ -399,7 +346,6 @@ public class ProductServiceImplTest extends AbstractUnitTest {
             "when call Update " +
             "then productRepository invoked with old price product")
     void givenNoPrice_whenUpdate_thenProductRepositoryInvokedWithPriceDescriptionProduct() {
-        //GIVEN
         imReqStub = ImmutableUpdateProductRequest.builder()
                 .name("STUB")
                 .description("Test Description")
@@ -412,10 +358,8 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         ArgumentCaptor<Product> captor = ArgumentCaptor.forClass(Product.class);
         when(productRepositoryMock.findIdByName(any())).thenReturn(Optional.empty());
 
-        //WHEN
         underTest.update(imReqStub, idStub);
 
-        //THEN
         verify(productRepositoryMock).save(captor.capture());
         Product actual = captor.getValue();
         assertEquals(actual.getPrice(), productStub.getPrice());
@@ -440,10 +384,8 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         ArgumentCaptor<Product> captor = ArgumentCaptor.forClass(Product.class);
         when(productRepositoryMock.findIdByName(any())).thenReturn(Optional.empty());
 
-        //WHEN
         underTest.update(imReqStub, idStub);
 
-        //THEN
         verify(productRepositoryMock).save(captor.capture());
         Product actual = captor.getValue();
         assertEquals(actual.getPrice(), imReqStub.getPrice());
@@ -454,7 +396,6 @@ public class ProductServiceImplTest extends AbstractUnitTest {
             "when call Update " +
             "then productRepository invoked with old amount product")
     void givenNoAmount_whenUpdate_thenProductRepositoryInvokedWithOldAmountProduct() {
-        //GIVEN
         imReqStub = ImmutableUpdateProductRequest.builder()
                 .name("STUB")
                 .description("Test Description")
@@ -467,10 +408,8 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         ArgumentCaptor<Product> captor = ArgumentCaptor.forClass(Product.class);
         when(productRepositoryMock.findIdByName(any())).thenReturn(Optional.empty());
 
-        //WHEN
         underTest.update(imReqStub, idStub);
 
-        //THEN
         verify(productRepositoryMock).save(captor.capture());
         Product actual = captor.getValue();
         assertEquals(actual.getAmount(), productStub.getAmount());
@@ -495,10 +434,8 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         ArgumentCaptor<Product> captor = ArgumentCaptor.forClass(Product.class);
         when(productRepositoryMock.findIdByName(any())).thenReturn(Optional.empty());
 
-        //WHEN
         underTest.update(imReqStub, idStub);
 
-        //THEN
         verify(productRepositoryMock).save(captor.capture());
         Product actual = captor.getValue();
         assertEquals(actual.getAmount(), imReqStub.getAmount());
@@ -509,7 +446,6 @@ public class ProductServiceImplTest extends AbstractUnitTest {
             "when call Update " +
             "then productRepository invoked with old availability product")
     void givenNoAvailability_whenUpdate_thenProductRepositoryInvokedWithOldAvailabilityProduct() {
-        //GIVEN
         imReqStub = ImmutableUpdateProductRequest.builder()
                 .name("STUB")
                 .description("Test Description")
@@ -522,10 +458,8 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         ArgumentCaptor<Product> captor = ArgumentCaptor.forClass(Product.class);
         when(productRepositoryMock.findIdByName(any())).thenReturn(Optional.empty());
 
-        //WHEN
         underTest.update(imReqStub, idStub);
 
-        //THEN
         verify(productRepositoryMock).save(captor.capture());
         Product actual = captor.getValue();
         assertEquals(actual.isAvailability(), productStub.isAvailability());
@@ -536,7 +470,6 @@ public class ProductServiceImplTest extends AbstractUnitTest {
             "when call Update " +
             "then productRepository invoked with new Availability product")
     void givenNewAvailability_whenUpdate_thenProductRepositoryInvokedWithNewAvailabilityProduct() {
-        //GIVEN
         imReqStub = ImmutableUpdateProductRequest.builder()
                 .name("STUB")
                 .description("Test Description")
@@ -550,10 +483,8 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         ArgumentCaptor<Product> captor = ArgumentCaptor.forClass(Product.class);
         when(productRepositoryMock.findIdByName(any())).thenReturn(Optional.empty());
 
-        //WHEN
         underTest.update(imReqStub, idStub);
 
-        //THEN
         verify(productRepositoryMock).save(captor.capture());
         Product actual = captor.getValue();
         assertEquals(actual.isAvailability(), imReqStub.getAvailability());
@@ -564,7 +495,6 @@ public class ProductServiceImplTest extends AbstractUnitTest {
             "when call Update " +
             "then converter invoked with expecting product")
     void givenProduct_whenUpdate_thenProductRepositoryInvokedWithNewAvailabilityProduct() {
-        //GIVEN
         imReqStub = ImmutableUpdateProductRequest.builder()
                 .name("STUB")
                 .build();
@@ -573,31 +503,27 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         ArgumentCaptor<Product> captor = ArgumentCaptor.forClass(Product.class);
         when(productRepositoryMock.findIdByName(any())).thenReturn(Optional.empty());
 
-        //WHEN
         underTest.update(imReqStub, idStub);
 
-        //THEN
         verify(conversionServiceMock).convert(captor.capture(), any());
-
     }
+
     @Test
     @DisplayName("Given converter returns ProductDto " +
             "when call update " +
             "then return the ProductDto")
     void givenProductDto_whenUpdate_thenReturnProductDto() {
-        //GIVEN
         final UUID idStub = UUID.randomUUID();
         final ProductDTO productDTOStub = ProductDTO.builder().build();
         when(productRepositoryMock.findIdByName(any())).thenReturn(Optional.empty());
         when(conversionServiceMock.convert(any(), any())).thenReturn(productDTOStub);
 
-        //WHEN
         final ProductDTO actual = underTest.update(imReqStub, idStub);
 
-        //THEN
         assertAll(() -> assertNotNull(actual),
                 () -> assertThat(actual).isEqualTo(productDTOStub));
     }
+
     static Stream<String> nullEmptyBlankStrings() {
         return Stream.of(null,
                 Strings.EMPTY,

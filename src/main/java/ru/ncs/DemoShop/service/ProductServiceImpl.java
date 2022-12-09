@@ -1,7 +1,13 @@
 package ru.ncs.DemoShop.service;
 
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+import javax.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
@@ -11,20 +17,12 @@ import org.springframework.util.Assert;
 import ru.ncs.DemoShop.exception.ProductNotCreatedException;
 import ru.ncs.DemoShop.exception.ProductNotFoundException;
 import ru.ncs.DemoShop.exception.ProductNotUniqueException;
-import ru.ncs.DemoShop.exception.ProductNotUpdatedException;
 import ru.ncs.DemoShop.model.Product;
 import ru.ncs.DemoShop.repository.ProductRepository;
 import ru.ncs.DemoShop.service.aop.LogExecutionTime;
 import ru.ncs.DemoShop.service.data.ProductDTO;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
-
-import javax.persistence.Version;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -83,16 +81,6 @@ public class ProductServiceImpl implements ProductService {
         log.info("Product saved");
         return product.getId();
     }
-
-
-    private boolean checkUnique(final String name, final UUID id) {
-        final boolean check = productRepository.findIdByName(name).map(entId -> Objects.equals(entId, id)).orElse(true);
-        if (!check) {
-            throw new ProductNotUniqueException("Name must be unique");
-        }
-        return true;
-    }
-
 
     private boolean checkUnique(final String name, final UUID id) {
 
