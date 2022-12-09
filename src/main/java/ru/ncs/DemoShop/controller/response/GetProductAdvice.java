@@ -40,7 +40,7 @@ public class GetProductAdvice implements ResponseBodyAdvice<GetProductResponse> 
                 .amountUpdatedAt(body.getAmountUpdatedAt())
                 .category(body.getCategory())
                 .id(body.getId())
-                .price(body.getPrice() * rate)
+                .price(body.getPrice() / rate)
                 .build();
     }
 }

@@ -1,5 +1,9 @@
 package ru.ncs.DemoShop.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
@@ -14,14 +18,10 @@ import ru.ncs.DemoShop.controller.request.UpdateProductRequest;
 import ru.ncs.DemoShop.controller.response.GetListResponse;
 import ru.ncs.DemoShop.controller.response.GetProductResponse;
 import ru.ncs.DemoShop.exception.ProductNotFoundException;
-import ru.ncs.DemoShop.service.data.ProductDTO;
 import ru.ncs.DemoShop.service.ProductService;
+import ru.ncs.DemoShop.service.data.ProductDTO;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
-
-import javax.validation.Valid;
-import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/products")
@@ -33,8 +33,6 @@ public class ProductControllerImpl implements ProductController {
     @Override
     @GetMapping
     public GetListResponse getProducts() {
-        List<GetProductResponse> list = conversionService.convert(productService.findAll(), List.class);
-        return conversionService.convert(list, GetListResponse.class);
         List<ProductDTO> ListDTO = productService.findAll();
         List<GetProductResponse> listGPR = new ArrayList<>();
         for (ProductDTO product : ListDTO) {
@@ -45,7 +43,7 @@ public class ProductControllerImpl implements ProductController {
     }
 
     @Override
-      public GetProductResponse getOneProduct(@PathVariable("id") UUID id) {
+    public GetProductResponse getOneProduct(@PathVariable("id") UUID id) {
         return conversionService.convert(productService.findOne(id), GetProductResponse.class);
     }
 
