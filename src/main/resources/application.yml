@@ -6,6 +6,11 @@ spring:
     url: 'jdbc:postgresql://localhost:5432/Shop_db'
     username: postgres
     password: SQL13
+  cache:
+    cache-names: exchangeRates
+    caffeine:
+      spec: maximumSize=5, expireAfterWrite=30s
+
   jpa:
     properties:
       hibernate:
