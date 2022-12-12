@@ -2,6 +2,7 @@ package ru.ncs.DemoShop.controller.response;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -9,13 +10,13 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
-import ru.ncs.DemoShop.controller.exchanging.ExchangeTakingService;
+import ru.ncs.DemoShop.controller.exchanging.ExchangeTakingProvider;
 
 @Slf4j
 @RestControllerAdvice
 @AllArgsConstructor
 public class GetProductAdvice implements ResponseBodyAdvice<GetProductResponse> {
-    private ExchangeTakingService exchangeTakingService;
+    private ExchangeTakingProvider exchangeTakingProvider;
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
@@ -25,11 +26,13 @@ public class GetProductAdvice implements ResponseBodyAdvice<GetProductResponse> 
     }
 
     @Override
-    public GetProductResponse beforeBodyWrite(GetProductResponse body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        String url = "http://localhost:7071/exchangerate";
+    public GetProductResponse beforeBodyWrite(GetProductResponse body, MethodParameter returnType,
+                                              MediaType selectedContentType,
+                                              Class<? extends HttpMessageConverter<?>> selectedConverterType,
+                                              ServerHttpRequest request, ServerHttpResponse response) {
 
-        double rate = exchangeTakingService.takeExchangeRate(url);
-        if (!exchangeTakingService.getTaken()) exchangeTakingService.evictLocalRate(rate);
+
+        double rate = exchangeTakingProvider.takeExchangeRate();
         return GetProductResponse.builder()
                 .name(body.getName())
                 .availability(body.isAvailability())
@@ -41,4 +44,5 @@ public class GetProductAdvice implements ResponseBodyAdvice<GetProductResponse> 
                 .price(body.getPrice() / rate)
                 .build();
     }
+
 }
