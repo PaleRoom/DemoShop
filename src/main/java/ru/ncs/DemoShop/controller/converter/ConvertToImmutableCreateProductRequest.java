@@ -15,6 +15,7 @@ public class ConvertToImmutableCreateProductRequest implements Converter<CreateP
                 .description(source.getDescription())
                 .name(source.getName())
                 .price(source.getPrice())
+                .availability(source.getAvailability())
                 .build();
     }
 }

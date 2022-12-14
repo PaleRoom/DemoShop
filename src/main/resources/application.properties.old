@@ -13,3 +13,24 @@ spring.liquibase.clear-checksums=true
 
 springdoc.api-docs.path=/api-docs
 spring.jpa.hibernate.ddl-auto = validate
+
+create function change_update_time() returns trigger
+    language plpgsql
+as
+$$
+BEGIN
+   IF OLD.product_amount!= NEW.product_amount THEN
+       NEW.amount_update=now();
+       END IF;
+    RETURN NEW;
+END;
+$$;
+
+alter function change_update_time() owner to postgres;
+
+-- auto-generated definition
+create trigger updated_time
+    before update
+    on products
+    for each row
+execute procedure change_update_time();

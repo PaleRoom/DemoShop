@@ -17,6 +17,7 @@ public class ConvertToProductDTO implements Converter<Product, ProductDTO> {
                 .description(source.getDescription())
                 .name(source.getName())
                 .price(source.getPrice())
+                .availability(source.isAvailability())
                 .build();
     }
 }

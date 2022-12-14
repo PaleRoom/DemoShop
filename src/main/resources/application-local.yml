@@ -27,3 +27,10 @@ spring:
 springdoc:
   api-docs:
     path: /api-docs
+
+
+app:
+  scheduling:
+    period: 15000
+    enabled: false
+    priceModificator: 1.1

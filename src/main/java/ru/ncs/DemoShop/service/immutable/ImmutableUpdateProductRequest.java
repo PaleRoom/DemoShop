@@ -8,10 +8,10 @@ import ru.ncs.DemoShop.model.ProductCategoryEnum;
 @Value
 @Builder
 public class ImmutableUpdateProductRequest {
-    UUID id;
     String name;
     String description;
     ProductCategoryEnum category;
-    double price;
-    int amount;
+    Double price;
+    Integer amount;
+    Boolean availability;
 }

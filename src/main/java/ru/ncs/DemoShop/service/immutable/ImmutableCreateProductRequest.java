@@ -13,4 +13,5 @@ public class ImmutableCreateProductRequest {
     ProductCategoryEnum category;
     double price;
     int amount;
+    boolean availability;
 }

@@ -16,4 +16,5 @@ public class ProductDTO {
     double price;
     int amount;
     LocalDateTime amountUpdatedAt;
+    boolean availability;
 }

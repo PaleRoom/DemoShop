@@ -15,6 +15,7 @@ public class ConvertToImmutableUpdateProductRequest implements Converter<UpdateP
                 .description(source.getDescription())
                 .name(source.getName())
                 .price(source.getPrice())
-                .build();
+                 .availability(source.getAvailability())
+                 .build();
     }
 }

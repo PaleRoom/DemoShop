@@ -25,4 +25,6 @@ public class CreateProductRequest {
 
     @Positive(message = "Amount should be at least 0 or higher")
     int amount;
+
+    Boolean availability;
 }
