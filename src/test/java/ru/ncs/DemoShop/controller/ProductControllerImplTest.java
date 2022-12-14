@@ -2,30 +2,26 @@ package ru.ncs.DemoShop.controller;
 
 import io.restassured.http.ContentType;
 import java.util.UUID;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.ncs.DemoShop.AbstractSpringBootTest;
 import ru.ncs.DemoShop.controller.request.CreateProductRequest;
 import ru.ncs.DemoShop.service.ProductServiceImpl;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static ru.ncs.DemoShop.model.ProductCategoryEnum.PERIPHERY;
 
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class ProductControllerImplTest
         extends AbstractSpringBootTest {
-
     @SpyBean
     ConversionService conversionService;
 
@@ -34,10 +30,11 @@ class ProductControllerImplTest
 
     private ImmutableCreateProductRequest imReqStub;
     private CreateProductRequest reqBodyStub;
-
+    private UUID idStub;
 
     @Override
     protected void init() {
+
         reqBodyStub = CreateProductRequest.builder()
                 .amount(1)
                 .category(PERIPHERY)
@@ -54,7 +51,8 @@ class ProductControllerImplTest
                 .price(reqBodyStub.getPrice())
                 .build();
 
-        final UUID idStub = UUID.randomUUID();
+        idStub = UUID.randomUUID();
+
         when(conversionService.convert(reqBodyStub, ImmutableCreateProductRequest.class)).
                 thenReturn(imReqStub);
         when(productService.save(any())).thenReturn(idStub);
@@ -65,16 +63,18 @@ class ProductControllerImplTest
             "when call Create " +
             "then Controller returns Status code 201")
     void givenValidRequestBody_thenControllerReturnsStatus201() {
-
-        given()
-                .baseUri("http://localhost:7070")
+        UUID idResponse = given()
+                .baseUri("http://localhost:" + port)
                 .basePath("/products")
                 .contentType(ContentType.JSON)
                 .when()
                 .body(reqBodyStub)
                 .post()
                 .then()
-                .statusCode(201).log().all();
+                .statusCode(201).log().all()
+                .extract()
+                .as(UUID.class);
+        Assertions.assertEquals(idResponse, idStub);
     }
 
     @Test
@@ -82,7 +82,6 @@ class ProductControllerImplTest
             "when call Create " +
             "then Controller returns Status code 400")
     void givenWithoutNameFieldRequestBody_thenControllerReturnsStatus201() {
-
         CreateProductRequest reqBodyStub = CreateProductRequest.builder()
                 .amount(1)
                 .category(PERIPHERY)
@@ -91,13 +90,14 @@ class ProductControllerImplTest
                 .build();
 
         given()
-                .baseUri("http://localhost:7070")
+                .baseUri("http://localhost:" + port)
                 .basePath("/products")
                 .contentType(ContentType.JSON)
                 .when()
                 .body(reqBodyStub)
                 .post()
                 .then()
+                .body("message", containsString("product name should  not be Empty"))
                 .statusCode(400).log().all();
     }
 }

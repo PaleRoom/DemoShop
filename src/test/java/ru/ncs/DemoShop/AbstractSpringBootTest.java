@@ -1,24 +1,26 @@
 package ru.ncs.DemoShop;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.ActiveProfiles;
 
+
+@ActiveProfiles("local")
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public abstract class AbstractSpringBootTest {
+    @LocalServerPort
+    protected int port;
 
     private AutoCloseable closeable;
 
     @BeforeEach
     void setup() {
-        closeable = MockitoAnnotations.openMocks(this);
         init();
     }
 
     protected abstract void init();
 
-    @AfterEach
-    void tearDown() throws Exception {
-        closeable.close();
-    }
 }
 
