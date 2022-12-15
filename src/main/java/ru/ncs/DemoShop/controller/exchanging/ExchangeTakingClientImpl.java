@@ -17,10 +17,8 @@ import ru.ncs.DemoShop.exception.ExchangeInputException;
 public class ExchangeTakingClientImpl implements ExchangeTakingClient {
     @Value("${app.exchange.URL}")
     String url;
-
     @Cacheable(cacheNames = "exchangeRates")
     public Double takeRateFromURL() {
-        System.out.println("!!!!");
         RestTemplate restTemplate = new RestTemplate();
         ExchangeRate resp = restTemplate.getForObject(url, ExchangeRate.class);
         if (resp != null) {

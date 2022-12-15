@@ -5,10 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
 import ru.ncs.DemoShop.exception.ExchangeInputException;
@@ -17,13 +14,9 @@ import ru.ncs.DemoShop.exception.ExchangeInputException;
 @Component
 @RequiredArgsConstructor
 public class ExchangeTakingProvider {
-
     private final ExchangeTakingClient exchangeTakingClient;
-    private CacheManager cacheManager;
-
 
     public Double takeExchangeRate() {
-
         Double rate = null;
         log.info("Take exchangeRate invoked");
         try {
