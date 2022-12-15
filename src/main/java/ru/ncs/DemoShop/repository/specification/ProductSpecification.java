@@ -31,9 +31,5 @@ public class ProductSpecification {
         }
         if (availability)  {return (root, query, criteriaBuilder) -> criteriaBuilder.isTrue(root.get(Product_.AVAILABILITY));}
     else {return (root, query, criteriaBuilder) -> criteriaBuilder.isFalse(root.get(Product_.AVAILABILITY));}
-
     }
-
-
-
 }

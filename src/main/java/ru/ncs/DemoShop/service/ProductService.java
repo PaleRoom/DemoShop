@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ncs.DemoShop.service.data.ProductDTO;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
+import ru.ncs.DemoShop.service.immutable.ImmutableSearchProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 
 import java.util.List;
@@ -24,4 +25,6 @@ public interface ProductService {
      ProductDTO update(ImmutableUpdateProductRequest request, UUID id);
     @Transactional
      void delete(UUID id);
+
+    public List<ProductDTO> searchProducts(ImmutableSearchProductRequest request);
 }

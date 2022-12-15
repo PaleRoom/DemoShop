@@ -1,32 +1,36 @@
 package ru.ncs.DemoShop.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import ru.ncs.DemoShop.controller.request.CreateProductRequest;
 import ru.ncs.DemoShop.controller.request.SearchProductRequest;
 import ru.ncs.DemoShop.controller.request.UpdateProductRequest;
 import ru.ncs.DemoShop.controller.response.GetListResponse;
 import ru.ncs.DemoShop.controller.response.GetProductResponse;
 import ru.ncs.DemoShop.exception.ProductNotFoundException;
-import ru.ncs.DemoShop.service.ProductServiceImpl;
+import ru.ncs.DemoShop.service.ProductService;
 import ru.ncs.DemoShop.service.data.ProductDTO;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableSearchProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 
-import javax.validation.Valid;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductControllerImpl implements ProductController {
-    private final ProductServiceImpl productServiceImpl;
+    private final ProductService productService;
     private final ConversionService conversionService;
     private final SearchedToXlsSaver searchedToXlsSaver;
     private final SearchedToPDFsaver searchedToPDFsaver;
@@ -34,7 +38,7 @@ public class ProductControllerImpl implements ProductController {
     @Override
     @GetMapping
     public GetListResponse getProducts() {
-        List<ProductDTO> ListDTO = productServiceImpl.findAll();
+        List<ProductDTO> ListDTO = productService.findAll();
         List<GetProductResponse> listGPR = new ArrayList<>();
         for (ProductDTO product : ListDTO) {
             listGPR.add(conversionService.convert(product, GetProductResponse.class));
@@ -45,14 +49,14 @@ public class ProductControllerImpl implements ProductController {
 
     @Override
     public GetProductResponse getOneProduct(@PathVariable("id") UUID id) {
-        return conversionService.convert(productServiceImpl.findOne(id), GetProductResponse.class);
+        return conversionService.convert(productService.findOne(id), GetProductResponse.class);
     }
 
     @Override
     @ResponseStatus(value = HttpStatus.CREATED)
     public UUID create(@RequestBody @Valid CreateProductRequest createProductRequest) {
         ImmutableCreateProductRequest immutableCreateProductRequest = conversionService.convert(createProductRequest, ImmutableCreateProductRequest.class);
-        return productServiceImpl.save(immutableCreateProductRequest);
+        return productService.save(immutableCreateProductRequest);
     }
 
     @Override
@@ -60,15 +64,15 @@ public class ProductControllerImpl implements ProductController {
         ImmutableUpdateProductRequest immutableUpdateProductRequest =
                 conversionService.convert(updateProductRequest, ImmutableUpdateProductRequest.class);
 
-        return productServiceImpl.update(immutableUpdateProductRequest, id).getId();
+        return productService.update(immutableUpdateProductRequest, id).getId();
     }
 
     @Override
     public void deleteProduct(@PathVariable("id") UUID id) {
-        if (productServiceImpl.findOne(id) == null) {
+        if (productService.findOne(id) == null) {
             throw new ProductNotFoundException();
         }
-        productServiceImpl.delete(id);
+        productService.delete(id);
     }
 
     @Override
@@ -76,7 +80,7 @@ public class ProductControllerImpl implements ProductController {
         System.out.println(searchProductRequest);
         ImmutableSearchProductRequest immutableSearchProductRequest =
                 conversionService.convert(searchProductRequest, ImmutableSearchProductRequest.class);
-        List<ProductDTO> ListDTO = productServiceImpl.searchProducts(immutableSearchProductRequest);
+        List<ProductDTO> ListDTO = productService.searchProducts(immutableSearchProductRequest);
 
         List<GetProductResponse> listGPR = new ArrayList<>();
         for (ProductDTO product : ListDTO) {

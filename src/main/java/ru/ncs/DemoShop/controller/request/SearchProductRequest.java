@@ -11,7 +11,6 @@ import javax.validation.constraints.Positive;
 @Builder
 @Data
 public class SearchProductRequest {
-
     String name;
     Double price;
     Integer amount;
