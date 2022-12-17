@@ -1,11 +1,10 @@
 package ru.ncs.DemoShop.service.data;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.Builder;
 import lombok.Value;
 import ru.ncs.DemoShop.model.ProductCategoryEnum;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Value
 @Builder
@@ -18,5 +17,4 @@ public class ProductDTO {
     int amount;
     LocalDateTime amountUpdatedAt;
     boolean availability;
-
 }
