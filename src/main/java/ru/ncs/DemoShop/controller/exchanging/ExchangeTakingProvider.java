@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import ru.ncs.DemoShop.exception.ExchangeInputException;
 
 @Slf4j
@@ -26,8 +27,9 @@ public class ExchangeTakingProvider {
         } catch (HttpServerErrorException.ServiceUnavailable
                  | HttpServerErrorException.GatewayTimeout
                  | HttpServerErrorException.InternalServerError
-                 | ExchangeInputException e) {
-            log.info("That service unavailable - going to apply JSON");
+                 | ExchangeInputException
+                 | ResourceAccessException e) {
+            log.info("Exchange service is unavailable - going to apply JSON");
 
         }
         if (rate == null) {

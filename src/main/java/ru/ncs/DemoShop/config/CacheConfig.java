@@ -1,11 +1,9 @@
 package ru.ncs.DemoShop.config;
 
-import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
@@ -26,11 +24,8 @@ public class CacheConfig {
         return Caffeine.newBuilder()
                 .initialCapacity(1)
                 .maximumSize(1)
-                .expireAfterWrite(30, TimeUnit.SECONDS)
+                .expireAfterWrite(120, TimeUnit.SECONDS)
                 .weakKeys()
                 .recordStats();
     }
-
-
-
 }
