@@ -23,10 +23,6 @@ import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableSearchProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 
-import javax.validation.Valid;
-import java.util.List;
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor

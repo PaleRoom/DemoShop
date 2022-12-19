@@ -41,6 +41,7 @@ class ProductControllerImplTest
                 .description("p")
                 .name("Test")
                 .price(1)
+                .availability(true)
                 .build();
 
         imReqStub = ImmutableCreateProductRequest.builder()
@@ -49,6 +50,7 @@ class ProductControllerImplTest
                 .description(reqBodyStub.getDescription())
                 .name(reqBodyStub.getName())
                 .price(reqBodyStub.getPrice())
+                .availability(reqBodyStub.getAvailability())
                 .build();
 
         idStub = UUID.randomUUID();

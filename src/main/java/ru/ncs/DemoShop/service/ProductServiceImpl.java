@@ -78,8 +78,6 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public UUID save(ImmutableCreateProductRequest request) {
         Product product = conversionService.convert(request, Product.class);
-
-
         try {
             if (findOneByName(product.getName()) != null) {
                 throw new ProductNotCreatedException("This Product is already exists!");
