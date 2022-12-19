@@ -30,9 +30,8 @@ public interface ProductController {
 
     @PutMapping("/{id}")
     UUID updateProduct(@PathVariable("id") UUID id,
-                             @RequestBody @Valid UpdateProductRequest updateProductRequest);
+                       @RequestBody @Valid UpdateProductRequest updateProductRequest);
 
     @DeleteMapping("/{id}")
     void deleteProduct(@PathVariable("id") UUID id);
-
 }
