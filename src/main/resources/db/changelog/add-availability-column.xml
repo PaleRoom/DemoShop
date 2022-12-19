@@ -7,6 +7,9 @@
     <property name="now" value="now()" dbms="postgresql"/>
 
     <changeSet id="add-availability-column" author="Nicolas">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="products"/>
+        </preConditions>
         <addColumn tableName="products">
             <column name="availability" type="boolean"/>
         </addColumn>

@@ -1,15 +1,4 @@
-package ru.ncs.DemoShop.controller;
-
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.stereotype.Component;
-import ru.ncs.DemoShop.controller.response.GetListResponse;
-import ru.ncs.DemoShop.controller.response.GetProductResponse;
-import ru.ncs.DemoShop.model.ProductCategoryEnum;
+package ru.ncs.DemoShop.service;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,14 +6,73 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Component;
+import ru.ncs.DemoShop.model.ProductCategoryEnum;
+import ru.ncs.DemoShop.service.data.ProductDTO;
 
 @Component
-public class SearchedToXlsSaver {
+public class SearchResultSaver {
     private XSSFSheet sheet;
     private XSSFWorkbook workbook;
+    public void saveSearchedToPdf(List<ProductDTO> listResponse) throws IOException {
+        int x = 20;
+        int y = 750;
+        int defaultCount=5;// Max Products per page
+        int count = 0;
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage();
+        document.addPage(page);
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        contentStream.setFont(PDType1Font.COURIER, 10);
+        contentStream.beginText();
+        contentStream.newLineAtOffset(x, y);
+        contentStream.setLeading(12f);
 
-    public void SaveSearchedToXls(GetListResponse listResponse) throws IOException {
-        List<GetProductResponse> productList = listResponse.getProducts();
+        ProductDTO[] bigStr = new ProductDTO[listResponse.size()];
+        listResponse.toArray(bigStr);
+
+        for (ProductDTO product : bigStr) {
+            if (count == defaultCount) {
+                contentStream.endText();
+                contentStream.close();
+                page = new PDPage();
+                document.addPage(page);
+                contentStream = new PDPageContentStream(document, page);
+                contentStream.setFont(PDType1Font.COURIER, 10);
+                contentStream.beginText();
+                contentStream.newLineAtOffset(x, y);
+                contentStream.setLeading(12f);
+            }
+            count++;
+
+            contentStream.newLine();
+            String[] str = product.toString().split(",");
+            for (String field : str) {
+                contentStream.newLine();
+                contentStream.showText(" ");
+                contentStream.showText(field);
+            }
+        }
+
+        contentStream.endText();
+        contentStream.close();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy_MM_dd__HH_mm");
+        document.save("Searched_" + LocalDateTime.now().format(formatter) + ".pdf");
+        document.close();
+    }
+
+    public void saveSearchedToXls(List<ProductDTO> listResponse) throws IOException {
+       // List<GetProductResponse> productList = listResponse.getProducts();
         workbook = new XSSFWorkbook();
 
         sheet = workbook.createSheet("Products");
@@ -46,7 +94,7 @@ public class SearchedToXlsSaver {
         int rowCount = 1;
         font.setFontHeight(14);
         style.setFont(font);
-        for (GetProductResponse product : productList) {
+        for (ProductDTO product :listResponse) {
             row = sheet.createRow(rowCount++);
             int columnCount = 0;
             createCell(row, columnCount++, product.getId(), style);
@@ -85,4 +133,3 @@ public class SearchedToXlsSaver {
         cell.setCellStyle(style);
     }
 }
-

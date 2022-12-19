@@ -1,12 +1,14 @@
 package ru.ncs.DemoShop.service;
 
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +22,8 @@ import ru.ncs.DemoShop.exception.ProductNotFoundException;
 import ru.ncs.DemoShop.exception.ProductNotUniqueException;
 import ru.ncs.DemoShop.model.Product;
 import ru.ncs.DemoShop.repository.ProductRepository;
-import ru.ncs.DemoShop.service.aop.LogExecutionTime;
 import ru.ncs.DemoShop.repository.specification.ProductSpecification;
+import ru.ncs.DemoShop.service.aop.LogExecutionTime;
 import ru.ncs.DemoShop.service.data.ProductDTO;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableSearchProductRequest;
@@ -33,8 +35,8 @@ import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-
     private final ConversionService conversionService;
+    private final SearchResultSaver searchResultSaver;
 
     @Override
     @LogExecutionTime
@@ -135,19 +137,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> searchProducts(ImmutableSearchProductRequest request)  {
-
+    public List<ProductDTO> searchProducts(ImmutableSearchProductRequest request) throws IOException {
+        System.out.println();
         Specification<Product> specs = Specification.where(ProductSpecification.lessPrice(request.getPrice()))
                 .and(ProductSpecification.likeName(request.getName()))
                 .and(ProductSpecification.greaterThanOrEqualToAmount(request.getAmount()))
                 .and(ProductSpecification.isAvailable(request.getAvailability()));
 
-        List<Product> foundList = productRepository.findAll(specs);
-
-        List<ProductDTO> listDTO = new ArrayList<>();
-        for (Product product : foundList) {
-            listDTO.add(conversionService.convert(product, ProductDTO.class));
-        }
-        return listDTO;
+        List<ProductDTO> searchedList = productRepository.findAll(specs).stream().map(product ->
+                conversionService.convert(product, ProductDTO.class)).collect(Collectors.toList());
+        searchResultSaver.saveSearchedToPdf(searchedList);
+        searchResultSaver.saveSearchedToXls(searchedList);
+        return searchedList;
     }
 }

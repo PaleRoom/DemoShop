@@ -1,5 +1,6 @@
 package ru.ncs.DemoShop.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
@@ -21,16 +22,16 @@ public interface ProductService {
     List<ProductDTO> findAll();
 
     @Transactional
-     UUID save(ImmutableCreateProductRequest immutableCreateProductRequest);
+    UUID save(ImmutableCreateProductRequest immutableCreateProductRequest);
 
     @Transactional
-     ProductDTO update(ImmutableUpdateProductRequest request, UUID id);
+    ProductDTO update(ImmutableUpdateProductRequest request, UUID id);
 
     @Transactional
-     void delete(UUID id);
+    void delete(UUID id);
 
     @Transactional
     void increasePrice(double mod) throws InterruptedException;
 
-    public List<ProductDTO> searchProducts(ImmutableSearchProductRequest request);
+    List<ProductDTO> searchProducts(ImmutableSearchProductRequest request) throws IOException;
 }

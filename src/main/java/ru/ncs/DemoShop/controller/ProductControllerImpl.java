@@ -1,9 +1,9 @@
 package ru.ncs.DemoShop.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
@@ -17,11 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.ncs.DemoShop.controller.request.CreateProductRequest;
 import ru.ncs.DemoShop.controller.request.SearchProductRequest;
 import ru.ncs.DemoShop.controller.request.UpdateProductRequest;
-import ru.ncs.DemoShop.controller.response.GetListResponse;
 import ru.ncs.DemoShop.controller.response.GetProductResponse;
 import ru.ncs.DemoShop.exception.ProductNotFoundException;
 import ru.ncs.DemoShop.service.ProductService;
-import ru.ncs.DemoShop.service.data.ProductDTO;
+import ru.ncs.DemoShop.service.SearchResultSaver;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableSearchProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
@@ -32,19 +31,15 @@ import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 public class ProductControllerImpl implements ProductController {
     private final ProductService productService;
     private final ConversionService conversionService;
-    private final SearchedToXlsSaver searchedToXlsSaver;
-    private final SearchedToPDFsaver searchedToPDFsaver;
+    private final SearchResultSaver searchResultSaver;
 
     @Override
     @GetMapping
-    public GetListResponse getProducts() {
-        List<ProductDTO> ListDTO = productService.findAll();
-        List<GetProductResponse> listGPR = new ArrayList<>();
-        for (ProductDTO product : ListDTO) {
-            listGPR.add(conversionService.convert(product, GetProductResponse.class));
-        }
-        GetListResponse responseList = conversionService.convert(listGPR, GetListResponse.class);
-        return responseList;
+    public List<GetProductResponse> getProducts() {
+        List <GetProductResponse>list =
+                productService.findAll().stream().map(dto ->
+                        conversionService.convert(dto, GetProductResponse.class)).collect(Collectors.toList());
+        return list;
     }
 
     @Override
@@ -76,20 +71,14 @@ public class ProductControllerImpl implements ProductController {
     }
 
     @Override
-    public GetListResponse searchProducts(@RequestBody SearchProductRequest searchProductRequest) throws IOException {
-        System.out.println(searchProductRequest);
-        ImmutableSearchProductRequest immutableSearchProductRequest =
+    public List<GetProductResponse> searchProducts(@RequestBody SearchProductRequest searchProductRequest) throws IOException {
+         ImmutableSearchProductRequest immutableSearchProductRequest =
                 conversionService.convert(searchProductRequest, ImmutableSearchProductRequest.class);
-        List<ProductDTO> ListDTO = productService.searchProducts(immutableSearchProductRequest);
-
-        List<GetProductResponse> listGPR = new ArrayList<>();
-        for (ProductDTO product : ListDTO) {
-            listGPR.add(conversionService.convert(product, GetProductResponse.class));
-        }
-
-        GetListResponse responseList = conversionService.convert(listGPR, GetListResponse.class);
-        searchedToPDFsaver.saveSearchedToPdf(responseList);
-        searchedToXlsSaver.SaveSearchedToXls(responseList);
-        return responseList;
+        List <GetProductResponse>list = productService.searchProducts(immutableSearchProductRequest).stream().map(dto ->
+                conversionService.convert(dto, GetProductResponse.class)).collect(Collectors.toList());
+//         searchResultSaver.saveSearchedToPdf(list);
+//        searchResultSaver.SaveSearchedToXls(list);
+        return productService.searchProducts(immutableSearchProductRequest).stream().map(dto ->
+                conversionService.convert(dto, GetProductResponse.class)).collect(Collectors.toList());
     }
 }
