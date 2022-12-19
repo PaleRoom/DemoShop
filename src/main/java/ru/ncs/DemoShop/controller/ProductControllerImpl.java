@@ -1,6 +1,5 @@
 package ru.ncs.DemoShop.controller;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -20,7 +19,6 @@ import ru.ncs.DemoShop.controller.request.UpdateProductRequest;
 import ru.ncs.DemoShop.controller.response.GetProductResponse;
 import ru.ncs.DemoShop.exception.ProductNotFoundException;
 import ru.ncs.DemoShop.service.ProductService;
-import ru.ncs.DemoShop.service.SearchResultSaver;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableSearchProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
@@ -31,15 +29,13 @@ import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 public class ProductControllerImpl implements ProductController {
     private final ProductService productService;
     private final ConversionService conversionService;
-    private final SearchResultSaver searchResultSaver;
 
     @Override
     @GetMapping
     public List<GetProductResponse> getProducts() {
-        List <GetProductResponse>list =
-                productService.findAll().stream().map(dto ->
-                        conversionService.convert(dto, GetProductResponse.class)).collect(Collectors.toList());
-        return list;
+        return productService.findAll().stream()
+                .map(dto -> conversionService.convert(dto, GetProductResponse.class))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -51,6 +47,7 @@ public class ProductControllerImpl implements ProductController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public UUID create(@RequestBody @Valid CreateProductRequest createProductRequest) {
         ImmutableCreateProductRequest immutableCreateProductRequest = conversionService.convert(createProductRequest, ImmutableCreateProductRequest.class);
+
         return productService.save(immutableCreateProductRequest);
     }
 
@@ -71,14 +68,12 @@ public class ProductControllerImpl implements ProductController {
     }
 
     @Override
-    public List<GetProductResponse> searchProducts(@RequestBody SearchProductRequest searchProductRequest) throws IOException {
-         ImmutableSearchProductRequest immutableSearchProductRequest =
+    public List<GetProductResponse> searchProducts(@RequestBody SearchProductRequest searchProductRequest) {
+        ImmutableSearchProductRequest immutableSearchProductRequest =
                 conversionService.convert(searchProductRequest, ImmutableSearchProductRequest.class);
-        List <GetProductResponse>list = productService.searchProducts(immutableSearchProductRequest).stream().map(dto ->
-                conversionService.convert(dto, GetProductResponse.class)).collect(Collectors.toList());
-//         searchResultSaver.saveSearchedToPdf(list);
-//        searchResultSaver.SaveSearchedToXls(list);
-        return productService.searchProducts(immutableSearchProductRequest).stream().map(dto ->
-                conversionService.convert(dto, GetProductResponse.class)).collect(Collectors.toList());
+
+        return productService.searchProducts(immutableSearchProductRequest).stream()
+                .map(dto -> conversionService.convert(dto, GetProductResponse.class))
+                .collect(Collectors.toList());
     }
 }

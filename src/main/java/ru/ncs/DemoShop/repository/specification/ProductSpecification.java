@@ -21,6 +21,7 @@ public class ProductSpecification {
             if (amount == null) {
                 return criteriaBuilder.conjunction();
             }
+
             return criteriaBuilder.greaterThanOrEqualTo(root.get(Product_.AMOUNT), amount);
         };
     }
@@ -36,12 +37,11 @@ public class ProductSpecification {
 
     public static Specification<Product> isAvailable(Boolean availability) {
         return (root, query, criteriaBuilder) -> {
-            if (availability == null)
+            if (availability == null) {
                 return criteriaBuilder.conjunction();
-            if (availability) {
-                return criteriaBuilder.isTrue(root.get(Product_.AVAILABILITY));
-            } else
-                return criteriaBuilder.isFalse(root.get(Product_.AVAILABILITY));
+            } else {
+                return criteriaBuilder.equal(root.get(Product_.AVAILABILITY), availability);
+            }
         };
     }
 }

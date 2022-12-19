@@ -46,6 +46,7 @@ public class ProductServiceImpl implements ProductService {
         for (Product product : list) {
             listDTO.add(conversionService.convert(product, ProductDTO.class));
         }
+
         return listDTO;
     }
 
@@ -53,6 +54,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     public ProductDTO findOne(UUID id) {
         Optional<Product> foundProduct = productRepository.findById(id);
+
         return conversionService.convert(foundProduct.orElseThrow(() ->
                 new ProductNotFoundException("Product with id not found: " + id.toString())), ProductDTO.class);
     }
@@ -62,6 +64,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO findOneByName(String name) {
         Assert.hasText(name, "name must not be blank");
         Optional<Product> foundProduct = productRepository.findByName(name);
+
         return conversionService.convert(foundProduct.orElseThrow(ProductNotFoundException::new), ProductDTO.class);
     }
 
@@ -75,6 +78,8 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public UUID save(ImmutableCreateProductRequest request) {
         Product product = conversionService.convert(request, Product.class);
+
+
         try {
             if (findOneByName(product.getName()) != null) {
                 throw new ProductNotCreatedException("This Product is already exists!");
@@ -84,23 +89,23 @@ public class ProductServiceImpl implements ProductService {
         product.setAmountUpdatedAt(LocalDateTime.now());
         productRepository.save(product);
         log.info("Product saved");
+
         return product.getId();
     }
 
     private boolean checkUnique(final String name, final UUID id) {
-
         final boolean check = productRepository.findIdByName(name).map(entId ->
                 Objects.equals(entId, id)).orElse(true);
         if (!check) {
             throw new ProductNotUniqueException("Name must be unique");
         }
+
         return true;
     }
 
     @Override
     @Transactional
     public ProductDTO update(ImmutableUpdateProductRequest request, UUID id) {
-
         Product product = productRepository.findById(id).orElseThrow(() ->
                 new ProductNotFoundException("Product with id not found: " + id.toString()));
         if (request.getName() != null && checkUnique(request.getName(), id)) {
@@ -115,6 +120,7 @@ public class ProductServiceImpl implements ProductService {
 
         productRepository.save(product);
         log.debug("Product updated, ID: {}", id);
+
         return conversionService.convert(product, ProductDTO.class);
     }
 
@@ -137,17 +143,23 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> searchProducts(ImmutableSearchProductRequest request) throws IOException {
+    public List<ProductDTO> searchProducts(ImmutableSearchProductRequest request) {
         System.out.println();
         Specification<Product> specs = Specification.where(ProductSpecification.lessPrice(request.getPrice()))
                 .and(ProductSpecification.likeName(request.getName()))
                 .and(ProductSpecification.greaterThanOrEqualToAmount(request.getAmount()))
                 .and(ProductSpecification.isAvailable(request.getAvailability()));
 
-        List<ProductDTO> searchedList = productRepository.findAll(specs).stream().map(product ->
-                conversionService.convert(product, ProductDTO.class)).collect(Collectors.toList());
-        searchResultSaver.saveSearchedToPdf(searchedList);
-        searchResultSaver.saveSearchedToXls(searchedList);
+        List<ProductDTO> searchedList = productRepository.findAll(specs).stream()
+                .map(product -> conversionService.convert(product, ProductDTO.class))
+                .collect(Collectors.toList());
+        try {
+            searchResultSaver.saveSearchedToPdf(searchedList);
+            searchResultSaver.saveSearchedToXls(searchedList);
+        } catch (IOException e) {
+            log.info("Search results are not saved. Thrown exception: ", e);
+        }
+
         return searchedList;
     }
 }

@@ -6,7 +6,7 @@ import ru.ncs.DemoShop.model.Product;
 import ru.ncs.DemoShop.service.data.ProductDTO;
 
 @Component
-public class ConvertToProductDTO implements Converter<Product, ProductDTO> {
+public class ProductToProductDTOConverter implements Converter<Product, ProductDTO> {
     @Override
     public ProductDTO convert(Product source) {
         return ProductDTO.builder()

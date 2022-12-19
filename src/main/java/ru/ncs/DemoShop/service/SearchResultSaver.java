@@ -22,12 +22,13 @@ import ru.ncs.DemoShop.service.data.ProductDTO;
 
 @Component
 public class SearchResultSaver {
-    private XSSFSheet sheet;
-    private XSSFWorkbook workbook;
+
+
+
     public void saveSearchedToPdf(List<ProductDTO> listResponse) throws IOException {
         int x = 20;
         int y = 750;
-        int defaultCount=5;// Max Products per page
+        int defaultCount = 5;// Max Products per page
         int count = 0;
         PDDocument document = new PDDocument();
         PDPage page = new PDPage();
@@ -72,8 +73,8 @@ public class SearchResultSaver {
     }
 
     public void saveSearchedToXls(List<ProductDTO> listResponse) throws IOException {
-       // List<GetProductResponse> productList = listResponse.getProducts();
-        workbook = new XSSFWorkbook();
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet;
 
         sheet = workbook.createSheet("Products");
         Row row = sheet.createRow(0);
@@ -82,40 +83,41 @@ public class SearchResultSaver {
         font.setBold(true);
         font.setFontHeight(16);
         style.setFont(font);
-        createCell(row, 0, "ID", style);
-        createCell(row, 1, "Name", style);
-        createCell(row, 2, "Category", style);
-        createCell(row, 3, "Description", style);
-        createCell(row, 4, "Price", style);
-        createCell(row, 5, "Amount", style);
-        createCell(row, 6, "Availability", style);
-        createCell(row, 7, "Amount Updated At", style);
+        createCell(row, 0, "ID", style, sheet);
+        createCell(row, 1, "Name", style, sheet);
+        createCell(row, 2, "Category", style, sheet);
+        createCell(row, 3, "Description", style, sheet);
+        createCell(row, 4, "Price", style, sheet);
+        createCell(row, 5, "Amount", style, sheet);
+        createCell(row, 6, "Availability", style, sheet);
+        createCell(row, 7, "Amount Updated At", style, sheet);
 
         int rowCount = 1;
         font.setFontHeight(14);
         style.setFont(font);
-        for (ProductDTO product :listResponse) {
+        for (ProductDTO product : listResponse) {
             row = sheet.createRow(rowCount++);
             int columnCount = 0;
-            createCell(row, columnCount++, product.getId(), style);
-            createCell(row, columnCount++, product.getName(), style);
-            createCell(row, columnCount++, product.getCategory(), style);
-            createCell(row, columnCount++, product.getDescription(), style);
-            createCell(row, columnCount++, product.getPrice(), style);
-            createCell(row, columnCount++, product.getAmount(), style);
-            createCell(row, columnCount++, product.isAvailability(), style);
-            createCell(row, columnCount++, product.getAmountUpdatedAt(), style);
+            createCell(row, columnCount++, product.getId(), style, sheet);
+            createCell(row, columnCount++, product.getName(), style, sheet);
+            createCell(row, columnCount++, product.getCategory(), style, sheet);
+            createCell(row, columnCount++, product.getDescription(), style, sheet);
+            createCell(row, columnCount++, product.getPrice(), style, sheet);
+            createCell(row, columnCount++, product.getAmount(), style, sheet);
+            createCell(row, columnCount++, product.isAvailability(), style, sheet);
+            createCell(row, columnCount++, product.getAmountUpdatedAt(), style, sheet);
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy_MM_dd__HH_mm");
-        FileOutputStream fileOut = new FileOutputStream("Searched_" + LocalDateTime.now().format(formatter) + ".xls");
-        workbook.write(fileOut);
-        workbook.close();
-        fileOut.close();
+        try (FileOutputStream fileOut = new FileOutputStream("Searched_" + LocalDateTime.now().format(formatter) + ".xls")) {
+            workbook.write(fileOut);
+            workbook.close();
+        }
     }
-    private void createCell(Row row, int columnCount, Object valueOfCell, CellStyle style) {
+
+    private void createCell(Row row, int columnCount, Object valueOfCell, CellStyle style, XSSFSheet sheet) {
         sheet.autoSizeColumn(columnCount);
         Cell cell = row.createCell(columnCount);
-        if (valueOfCell instanceof Integer) {
+        if (valueOfCell instanceof Integer) {           //sets type to Excel cells
             cell.setCellValue((Integer) valueOfCell);
         } else if (valueOfCell instanceof UUID) {
             cell.setCellValue(String.valueOf(valueOfCell));

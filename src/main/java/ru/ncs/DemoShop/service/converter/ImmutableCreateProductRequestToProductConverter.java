@@ -6,7 +6,7 @@ import ru.ncs.DemoShop.model.Product;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 
 @Component
-public class ConvertToProductCreate implements Converter<ImmutableCreateProductRequest, Product> {
+public class ImmutableCreateProductRequestToProductConverter implements Converter<ImmutableCreateProductRequest, Product> {
     @Override
     public Product convert(ImmutableCreateProductRequest source) {
         Product product = new Product();
@@ -16,7 +16,7 @@ public class ConvertToProductCreate implements Converter<ImmutableCreateProductR
         product.setPrice(source.getPrice());
         product.setDescription(source.getDescription());
         product.setAvailability(source.isAvailability());
-        return product;
 
+        return product;
     }
 }
