@@ -12,8 +12,6 @@ spring:
         path: /h2
         settings.trace: false
         settings.web-allow-others: false
-
-
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
