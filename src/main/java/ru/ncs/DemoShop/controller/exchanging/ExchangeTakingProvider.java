@@ -21,7 +21,7 @@ public class ExchangeTakingProvider {
         Double rate = null;
         log.info("Take exchangeRate invoked");
         try {
-            rate = exchangeTakingClient.takeRateFromURL();
+            rate = exchangeTakingClient.takeRate();
 
             log.debug("Exchange Service is running, Exchange rate has taken: {}", rate);
         } catch (HttpServerErrorException.ServiceUnavailable

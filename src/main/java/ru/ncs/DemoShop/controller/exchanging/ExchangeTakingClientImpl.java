@@ -18,12 +18,12 @@ public class ExchangeTakingClientImpl implements ExchangeTakingClient {
     @Value("${app.exchange.URL}")
     String url;
     @Cacheable(cacheNames = "exchangeRates")
-    public Double takeRateFromURL() {
+    public Double takeRate() {
         RestTemplate restTemplate = new RestTemplate();
         ExchangeRate resp = restTemplate.getForObject(url, ExchangeRate.class);
 
-        if (resp != null) {
-            return Optional.ofNullable(resp.getExchangeRate()).orElseThrow(() -> new ExchangeInputException("Json from Service is Empty"));
-        } else throw new ExchangeInputException("Json from Service is Empty");
+       return Optional.ofNullable(resp).map(r ->Optional.ofNullable(resp.getExchangeRate()).orElseThrow(() ->
+                new ExchangeInputException("Json from Service is Empty"))).orElseThrow(()->
+                new ExchangeInputException("Json from Service is Empty"));
     }
 }

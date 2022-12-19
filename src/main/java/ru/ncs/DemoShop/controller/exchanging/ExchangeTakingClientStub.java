@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @ConditionalOnMissingBean(ExchangeTakingClientImpl.class)
 public class ExchangeTakingClientStub implements ExchangeTakingClient {
     @Override
-    public Double takeRateFromURL() {
+    public Double takeRate() {
         double max = 120.0;
         double min = 1.0;
         return (Math.random() * ((max - min) + 1)) + min;
