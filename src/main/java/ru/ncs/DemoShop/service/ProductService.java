@@ -3,14 +3,12 @@ package ru.ncs.DemoShop.service;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.ncs.DemoShop.model.Product;
 import ru.ncs.DemoShop.service.data.ProductDTO;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
+import ru.ncs.DemoShop.service.immutable.ImmutableSearchProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 
 @Service
-@Transactional(readOnly = true)
 public interface ProductService {
     ProductDTO findOne(UUID id);
 
@@ -20,14 +18,13 @@ public interface ProductService {
 
     List<ProductDTO> findAll();
 
-    @Transactional
-     UUID save(ImmutableCreateProductRequest immutableCreateProductRequest);
+    UUID save(ImmutableCreateProductRequest immutableCreateProductRequest);
 
-    @Transactional
-     ProductDTO update(ImmutableUpdateProductRequest request, UUID id);
+    ProductDTO update(ImmutableUpdateProductRequest request, UUID id);
 
-    @Transactional
-     void delete(UUID id);
-    @Transactional
+    void delete(UUID id);
+
     void increasePrice(double mod) throws InterruptedException;
+
+    List<ProductDTO> searchProducts(ImmutableSearchProductRequest request);
 }

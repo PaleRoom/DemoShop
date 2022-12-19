@@ -6,19 +6,12 @@
     <!-- Здесь мы позже напишем скрипт -->
     <property name="now" value="now()" dbms="postgresql"/>
 
-    <changeSet id="insert-into-product" author="Nicolas">
+    <changeSet id="add-availability-column" author="Nicolas">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="products"/>
         </preConditions>
-        <insert tableName="products">
-            <column name="id" value="4c888859-50a1-4538-a51c-b1ae9a299f1f"/>
-            <column name="product_name" value="A4tech X7"/>
-            <column name="product_price" value="1250"/>
-            <column name="product_description" value="Yet another keyboard"/>
-            <column name="product_category" value="Computer periphery"/>
-            <column name="product_amount" value="150"/>
-            <column name="amount_update" value="${now}"/>
-
-        </insert>
+        <addColumn tableName="products">
+            <column name="availability" type="boolean"/>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>

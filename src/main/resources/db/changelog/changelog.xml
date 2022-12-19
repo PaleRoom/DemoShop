@@ -5,6 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <include file="create-changeset-product-table.xml" relativeToChangelogFile="true"/>
+    <include file="add-availability-column.xml" relativeToChangelogFile="true"/>
     <!-- <include file="insert-changeset-product-table.xml" relativeToChangelogFile="true"/> -->
     <include file ="create-changeset-on-update-trigger.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

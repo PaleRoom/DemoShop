@@ -6,7 +6,7 @@ import ru.ncs.DemoShop.controller.response.GetProductResponse;
 import ru.ncs.DemoShop.service.data.ProductDTO;
 
 @Component
-final class ConvertToGetProductResponse implements Converter<ProductDTO, GetProductResponse> {
+public class ProductDtoToGetProductResponseConverter implements Converter<ProductDTO, GetProductResponse> {
     @Override
     public GetProductResponse convert(ProductDTO productDTO) {
         return GetProductResponse.builder()

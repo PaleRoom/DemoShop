@@ -42,6 +42,8 @@ public class ProductServiceImplTest extends AbstractUnitTest {
     @Mock
     private ConversionService conversionServiceMock;
 
+    @Mock SearchResultSaver searchResultSaverMock;
+
     private Product productStub;
 
     private ImmutableUpdateProductRequest imReqStub;
@@ -73,7 +75,7 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         when(productRepositoryMock.findById(any())).thenReturn(Optional.of(productStub));
         when(productRepositoryMock.findIdByName(any())).thenReturn(Optional.of(idStub));
 
-        underTest = new ProductServiceImpl(productRepositoryMock, conversionServiceMock);
+        underTest = new ProductServiceImpl(productRepositoryMock, conversionServiceMock,searchResultSaverMock);
     }
 
     @Test

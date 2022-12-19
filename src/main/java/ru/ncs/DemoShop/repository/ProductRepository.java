@@ -9,8 +9,9 @@ import javax.persistence.LockModeType;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface ProductRepository extends JpaRepository<Product, UUID> {
+public interface ProductRepository extends JpaRepository<Product, UUID> , JpaSpecificationExecutor<Product> {
     Optional<Product> findByName(String name);
 
     @Query("select b.id from Product b where b.name = :name")

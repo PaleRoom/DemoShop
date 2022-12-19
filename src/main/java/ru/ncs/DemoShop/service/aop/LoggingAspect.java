@@ -15,12 +15,10 @@ public class LoggingAspect {
     @Around("@annotation(LogExecutionTime)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
-
         Object proceed = joinPoint.proceed();
-
         long executionTime = System.currentTimeMillis() - start;
-
         logger.log(Level.INFO, joinPoint.getSignature() + " executing time: " + executionTime + "ms");
+
         return proceed;
     }
 }

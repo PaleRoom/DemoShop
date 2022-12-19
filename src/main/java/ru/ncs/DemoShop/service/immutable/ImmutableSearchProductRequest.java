@@ -2,14 +2,14 @@ package ru.ncs.DemoShop.service.immutable;
 
 import lombok.Builder;
 import lombok.Value;
-import ru.ncs.DemoShop.model.ProductCategoryEnum;
 
-@Value
+import javax.validation.constraints.Positive;
+
 @Builder
-public class ImmutableUpdateProductRequest {
+@Value
+public class ImmutableSearchProductRequest {
+
     String name;
-    String description;
-    ProductCategoryEnum category;
     Double price;
     Integer amount;
     Boolean availability;

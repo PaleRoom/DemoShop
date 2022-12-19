@@ -1,16 +1,19 @@
 package ru.ncs.DemoShop.service;
 
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -19,9 +22,11 @@ import ru.ncs.DemoShop.exception.ProductNotFoundException;
 import ru.ncs.DemoShop.exception.ProductNotUniqueException;
 import ru.ncs.DemoShop.model.Product;
 import ru.ncs.DemoShop.repository.ProductRepository;
+import ru.ncs.DemoShop.repository.specification.ProductSpecification;
 import ru.ncs.DemoShop.service.aop.LogExecutionTime;
 import ru.ncs.DemoShop.service.data.ProductDTO;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
+import ru.ncs.DemoShop.service.immutable.ImmutableSearchProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 
 @Service
@@ -30,8 +35,8 @@ import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-
     private final ConversionService conversionService;
+    private final SearchResultSaver searchResultSaver;
 
     @Override
     @LogExecutionTime
@@ -41,6 +46,7 @@ public class ProductServiceImpl implements ProductService {
         for (Product product : list) {
             listDTO.add(conversionService.convert(product, ProductDTO.class));
         }
+
         return listDTO;
     }
 
@@ -48,6 +54,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     public ProductDTO findOne(UUID id) {
         Optional<Product> foundProduct = productRepository.findById(id);
+
         return conversionService.convert(foundProduct.orElseThrow(() ->
                 new ProductNotFoundException("Product with id not found: " + id.toString())), ProductDTO.class);
     }
@@ -57,6 +64,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO findOneByName(String name) {
         Assert.hasText(name, "name must not be blank");
         Optional<Product> foundProduct = productRepository.findByName(name);
+
         return conversionService.convert(foundProduct.orElseThrow(ProductNotFoundException::new), ProductDTO.class);
     }
 
@@ -79,23 +87,23 @@ public class ProductServiceImpl implements ProductService {
         product.setAmountUpdatedAt(LocalDateTime.now());
         productRepository.save(product);
         log.info("Product saved");
+
         return product.getId();
     }
 
     private boolean checkUnique(final String name, final UUID id) {
-
         final boolean check = productRepository.findIdByName(name).map(entId ->
                 Objects.equals(entId, id)).orElse(true);
         if (!check) {
             throw new ProductNotUniqueException("Name must be unique");
         }
+
         return true;
     }
 
     @Override
     @Transactional
     public ProductDTO update(ImmutableUpdateProductRequest request, UUID id) {
-
         Product product = productRepository.findById(id).orElseThrow(() ->
                 new ProductNotFoundException("Product with id not found: " + id.toString()));
         if (request.getName() != null && checkUnique(request.getName(), id)) {
@@ -110,6 +118,7 @@ public class ProductServiceImpl implements ProductService {
 
         productRepository.save(product);
         log.debug("Product updated, ID: {}", id);
+
         return conversionService.convert(product, ProductDTO.class);
     }
 
@@ -129,5 +138,26 @@ public class ProductServiceImpl implements ProductService {
         Thread.sleep(30000);
         productRepository.saveAll(sourceList);
         log.info("Price increased");
+    }
+
+    @Override
+    public List<ProductDTO> searchProducts(ImmutableSearchProductRequest request) {
+        System.out.println();
+        Specification<Product> specs = Specification.where(ProductSpecification.lessPrice(request.getPrice()))
+                .and(ProductSpecification.likeName(request.getName()))
+                .and(ProductSpecification.greaterThanOrEqualToAmount(request.getAmount()))
+                .and(ProductSpecification.isAvailable(request.getAvailability()));
+
+        List<ProductDTO> searchedList = productRepository.findAll(specs).stream()
+                .map(product -> conversionService.convert(product, ProductDTO.class))
+                .collect(Collectors.toList());
+        try {
+            searchResultSaver.saveSearchedToPdf(searchedList);
+            searchResultSaver.saveSearchedToXls(searchedList);
+        } catch (IOException e) {
+            log.info("Search results are not saved. Thrown exception: ", e);
+        }
+
+        return searchedList;
     }
 }
