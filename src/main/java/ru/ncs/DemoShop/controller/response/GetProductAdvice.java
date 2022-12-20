@@ -1,8 +1,8 @@
 package ru.ncs.DemoShop.controller.response;
 
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -22,6 +22,7 @@ public class GetProductAdvice implements ResponseBodyAdvice<GetProductResponse> 
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         String className = returnType.getContainingClass().toString();
         String methodName = returnType.getMethod().toString();
+
         return className.contains("ProductControllerImpl") && methodName.contains("getOneProduct");
     }
 
@@ -31,8 +32,8 @@ public class GetProductAdvice implements ResponseBodyAdvice<GetProductResponse> 
                                               Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                               ServerHttpRequest request, ServerHttpResponse response) {
 
+        Double rate = exchangeTakingProvider.takeExchangeRate();
 
-        double rate = exchangeTakingProvider.takeExchangeRate();
         return GetProductResponse.builder()
                 .name(body.getName())
                 .availability(body.isAvailability())
@@ -44,5 +45,4 @@ public class GetProductAdvice implements ResponseBodyAdvice<GetProductResponse> 
                 .price(body.getPrice() / rate)
                 .build();
     }
-
 }

@@ -21,9 +21,10 @@ public class ExchangeTakingClientImpl implements ExchangeTakingClient {
     public Double takeRate() {
         RestTemplate restTemplate = new RestTemplate();
         ExchangeRate resp = restTemplate.getForObject(url, ExchangeRate.class);
-
-       return Optional.ofNullable(resp).map(r ->Optional.ofNullable(resp.getExchangeRate()).orElseThrow(() ->
-                new ExchangeInputException("Json from Service is Empty"))).orElseThrow(()->
-                new ExchangeInputException("Json from Service is Empty"));
+        System.out.println(resp);
+       return
+               Optional.ofNullable(resp).map(r ->Optional.ofNullable(resp.getUsdExchangeRate()).orElseThrow(() ->
+                new ExchangeInputException("Json from Service not valid"))).orElseThrow(()->
+                new ExchangeInputException("Json from Service not valid"));
     }
 }

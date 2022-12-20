@@ -8,10 +8,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @ConditionalOnMissingBean(ExchangeTakingClientImpl.class)
 public class ExchangeTakingClientStub implements ExchangeTakingClient {
+    private static final double MAX = 120.0;
+    private static final double MIN = 1.0;
     @Override
     public Double takeRate() {
-        double max = 120.0;
-        double min = 1.0;
-        return (Math.random() * ((max - min) + 1)) + min;
+
+        return (Math.random() * ((MAX- MIN) + 1)) + MIN;
     }
 }
