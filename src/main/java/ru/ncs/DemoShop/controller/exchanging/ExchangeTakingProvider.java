@@ -30,7 +30,6 @@ public class ExchangeTakingProvider {
                  | ExchangeInputException
                  | ResourceAccessException e) {
             log.info("Exchange service is unavailable - going to apply JSON");
-
         }
         if (rate == null) {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -46,6 +45,7 @@ public class ExchangeTakingProvider {
                 throw new RuntimeException(e);
             }
         }
+
         return rate;
     }
 
