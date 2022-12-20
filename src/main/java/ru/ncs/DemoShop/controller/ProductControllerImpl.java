@@ -3,6 +3,7 @@ package ru.ncs.DemoShop.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
@@ -14,13 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ncs.DemoShop.controller.request.CreateProductRequest;
+import ru.ncs.DemoShop.controller.request.SearchProductRequest;
 import ru.ncs.DemoShop.controller.request.UpdateProductRequest;
-import ru.ncs.DemoShop.controller.response.GetListResponse;
 import ru.ncs.DemoShop.controller.response.GetProductResponse;
 import ru.ncs.DemoShop.exception.ProductNotFoundException;
 import ru.ncs.DemoShop.service.ProductService;
 import ru.ncs.DemoShop.service.data.ProductDTO;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
+import ru.ncs.DemoShop.service.immutable.ImmutableSearchProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 
 @RestController
@@ -32,14 +34,10 @@ public class ProductControllerImpl implements ProductController {
 
     @Override
     @GetMapping
-    public GetListResponse getProducts() {
-        List<ProductDTO> ListDTO = productService.findAll();
-        List<GetProductResponse> listGPR = new ArrayList<>();
-        for (ProductDTO product : ListDTO) {
-            listGPR.add(conversionService.convert(product, GetProductResponse.class));
-        }
-        GetListResponse responseList = conversionService.convert(listGPR, GetListResponse.class);
-        return responseList;
+    public List<GetProductResponse> getProducts() {
+        return productService.findAll().stream()
+                .map(dto -> conversionService.convert(dto, GetProductResponse.class))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -51,6 +49,7 @@ public class ProductControllerImpl implements ProductController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public UUID create(@RequestBody @Valid CreateProductRequest createProductRequest) {
         ImmutableCreateProductRequest immutableCreateProductRequest = conversionService.convert(createProductRequest, ImmutableCreateProductRequest.class);
+
         return productService.save(immutableCreateProductRequest);
     }
 
@@ -68,5 +67,15 @@ public class ProductControllerImpl implements ProductController {
             throw new ProductNotFoundException();
         }
         productService.delete(id);
+    }
+
+    @Override
+    public List<GetProductResponse> searchProducts(@RequestBody SearchProductRequest searchProductRequest) {
+        ImmutableSearchProductRequest immutableSearchProductRequest =
+                conversionService.convert(searchProductRequest, ImmutableSearchProductRequest.class);
+
+        return productService.searchProducts(immutableSearchProductRequest).stream()
+                .map(dto -> conversionService.convert(dto, GetProductResponse.class))
+                .collect(Collectors.toList());
     }
 }

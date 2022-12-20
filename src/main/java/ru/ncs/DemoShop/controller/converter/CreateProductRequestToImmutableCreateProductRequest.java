@@ -6,7 +6,7 @@ import ru.ncs.DemoShop.controller.request.CreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
 
 @Component
-public class ConvertToImmutableCreateProductRequest implements Converter<CreateProductRequest, ImmutableCreateProductRequest> {
+public class CreateProductRequestToImmutableCreateProductRequest implements Converter<CreateProductRequest, ImmutableCreateProductRequest> {
     @Override
     public ImmutableCreateProductRequest convert(CreateProductRequest source) {
         return ImmutableCreateProductRequest.builder()

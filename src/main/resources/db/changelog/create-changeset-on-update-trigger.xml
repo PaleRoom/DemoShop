@@ -5,15 +5,18 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
     <!-- Здесь мы позже напишем скрипт -->
     <changeSet id="create_on_update_procedure" author="Nicolas">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="products"/>
+        </preConditions>
         <createProcedure>
             CREATE FUNCTION change_update_time() RETURNS TRIGGER
                 LANGUAGE plpgsql
             AS $$
             BEGIN
                  IF
-                OLD.product_amount!= NEW.product_amount THEN
+            OLD.product_amount!= NEW.product_amount THEN
                  NEW.amount_update=now();
-                END IF;
+            END IF;
             RETURN NEW;
             END;
 $$;

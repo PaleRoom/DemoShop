@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.ncs.DemoShop.controller.request.CreateProductRequest;
+import ru.ncs.DemoShop.controller.request.SearchProductRequest;
 import ru.ncs.DemoShop.controller.request.UpdateProductRequest;
-import ru.ncs.DemoShop.controller.response.GetListResponse;
 import ru.ncs.DemoShop.controller.response.GetProductResponse;
 
 import javax.validation.Valid;
@@ -25,7 +25,7 @@ import java.util.UUID;
 public interface ProductController {
 
     @GetMapping
-    GetListResponse getProducts();
+    List<GetProductResponse> getProducts();
 
     @GetMapping("/{id}")
     GetProductResponse getOneProduct(@PathVariable("id") UUID id);
@@ -40,4 +40,6 @@ public interface ProductController {
     @DeleteMapping("/{id}")
     void deleteProduct(@PathVariable("id") UUID id);
 
+    @PostMapping("/search")
+    List<GetProductResponse> searchProducts(SearchProductRequest searchProductRequest) throws IOException;
 }

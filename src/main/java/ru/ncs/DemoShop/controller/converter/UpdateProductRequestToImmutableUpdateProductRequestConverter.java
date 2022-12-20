@@ -6,10 +6,10 @@ import ru.ncs.DemoShop.controller.request.UpdateProductRequest;
 import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 
 @Component
-public class ConvertToImmutableUpdateProductRequest implements Converter<UpdateProductRequest, ImmutableUpdateProductRequest> {
+public class UpdateProductRequestToImmutableUpdateProductRequestConverter implements Converter<UpdateProductRequest, ImmutableUpdateProductRequest> {
     @Override
     public ImmutableUpdateProductRequest convert(UpdateProductRequest source) {
-        return ImmutableUpdateProductRequest.builder()
+         return ImmutableUpdateProductRequest.builder()
                 .amount(source.getAmount())
                 .category(source.getCategory())
                 .description(source.getDescription())
