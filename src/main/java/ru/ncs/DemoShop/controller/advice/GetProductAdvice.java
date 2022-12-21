@@ -1,5 +1,6 @@
 package ru.ncs.DemoShop.controller.advice;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -33,7 +34,7 @@ public class GetProductAdvice implements ResponseBodyAdvice<GetProductResponse> 
                                               ServerHttpRequest request, ServerHttpResponse response) {
 
         Double rate = exchangeTakingProvider.takeExchangeRate();
-        body.setPrice(body.getPrice() / rate);
+        Optional.ofNullable(body).ifPresent(b->b.setPrice(body.getPrice() / rate));
 
         return body;
     }

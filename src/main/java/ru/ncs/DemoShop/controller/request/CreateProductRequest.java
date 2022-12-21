@@ -3,6 +3,7 @@ package ru.ncs.DemoShop.controller.request;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Value;
@@ -17,6 +18,7 @@ public class CreateProductRequest {
     @NotBlank(message = "product description should not be Empty")
     String description;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     ProductCategoryEnum category;
 
@@ -26,5 +28,6 @@ public class CreateProductRequest {
     @Positive(message = "Amount should be at least 0 or higher")
     int amount;
 
-    Boolean availability;
+    @NotNull
+    boolean availability;
 }

@@ -1,6 +1,7 @@
 package ru.ncs.DemoShop.controller.advice;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import ru.ncs.DemoShop.controller.exchanging.ExchangeTakingProvider;
@@ -29,13 +31,13 @@ public class ListGetProductAdvice implements ResponseBodyAdvice<List<GetProductR
     }
 
     @Override
-    public List<GetProductResponse> beforeBodyWrite(List<GetProductResponse> body, MethodParameter returnType,
+    public List<GetProductResponse> beforeBodyWrite(@Nullable List<GetProductResponse> body, MethodParameter returnType,
                                                     MediaType selectedContentType,
                                                     Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                                     ServerHttpRequest request, ServerHttpResponse response) {
 
         Double rate = exchangeTakingProvider.takeExchangeRate();
-        body.forEach(p -> p.setPrice(p.getPrice() / rate));
+        Optional.ofNullable(body).ifPresent(b -> b.forEach(p -> p.setPrice(p.getPrice() / rate)));
 
         return body;
     }
