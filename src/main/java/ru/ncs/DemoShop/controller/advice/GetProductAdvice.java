@@ -17,6 +17,7 @@ import ru.ncs.DemoShop.controller.response.GetProductResponse;
 @RequiredArgsConstructor
 public class GetProductAdvice implements ResponseBodyAdvice<GetProductResponse> {
     private final ExchangeTakingProvider exchangeTakingProvider;
+
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         String className = returnType.getContainingClass().toString();
@@ -32,16 +33,8 @@ public class GetProductAdvice implements ResponseBodyAdvice<GetProductResponse> 
                                               ServerHttpRequest request, ServerHttpResponse response) {
 
         Double rate = exchangeTakingProvider.takeExchangeRate();
+        body.setPrice(body.getPrice() / rate);
 
-        return GetProductResponse.builder()
-                .name(body.getName())
-                .availability(body.isAvailability())
-                .description(body.getDescription())
-                .amount(body.getAmount())
-                .amountUpdatedAt(body.getAmountUpdatedAt())
-                .category(body.getCategory())
-                .id(body.getId())
-                .price(body.getPrice() / rate)
-                .build();
+        return body;
     }
 }

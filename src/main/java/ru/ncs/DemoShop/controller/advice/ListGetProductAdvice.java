@@ -19,33 +19,24 @@ import ru.ncs.DemoShop.controller.response.GetProductResponse;
 @RequiredArgsConstructor
 public class ListGetProductAdvice implements ResponseBodyAdvice<List<GetProductResponse>> {
     private final ExchangeTakingProvider exchangeTakingProvider;
+
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         String className = returnType.getContainingClass().toString();
         String methodName = returnType.getMethod().toString();
 
-        return className.contains("ProductControllerImpl") && methodName.contains("Products") ;
+        return className.contains("ProductControllerImpl") && methodName.contains("Products");
     }
 
     @Override
     public List<GetProductResponse> beforeBodyWrite(List<GetProductResponse> body, MethodParameter returnType,
-                                              MediaType selectedContentType,
-                                              Class<? extends HttpMessageConverter<?>> selectedConverterType,
-                                              ServerHttpRequest request, ServerHttpResponse response) {
+                                                    MediaType selectedContentType,
+                                                    Class<? extends HttpMessageConverter<?>> selectedConverterType,
+                                                    ServerHttpRequest request, ServerHttpResponse response) {
 
         Double rate = exchangeTakingProvider.takeExchangeRate();
+        body.forEach(p -> p.setPrice(p.getPrice() / rate));
 
-        return  body.stream()
-                .map(product ->GetProductResponse.builder()
-                                .name(product.getName())
-                                .availability(product.isAvailability())
-                                .description(product.getDescription())
-                                .amount(product.getAmount())
-                                .amountUpdatedAt(product.getAmountUpdatedAt())
-                                .category(product.getCategory())
-                                .id(product.getId())
-                                .price(product.getPrice() / rate)
-                                .build())
-                .collect(Collectors.toList());
+        return body;
     }
 }
