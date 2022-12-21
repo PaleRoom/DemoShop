@@ -1,7 +1,6 @@
-package ru.ncs.DemoShop.controller.response;
+package ru.ncs.DemoShop.controller.advice;
 
-import java.util.Optional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -11,13 +10,13 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import ru.ncs.DemoShop.controller.exchanging.ExchangeTakingProvider;
+import ru.ncs.DemoShop.controller.response.GetProductResponse;
 
 @Slf4j
 @RestControllerAdvice
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GetProductAdvice implements ResponseBodyAdvice<GetProductResponse> {
-    private ExchangeTakingProvider exchangeTakingProvider;
-
+    private final ExchangeTakingProvider exchangeTakingProvider;
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         String className = returnType.getContainingClass().toString();

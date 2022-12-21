@@ -17,14 +17,16 @@ import ru.ncs.DemoShop.exception.ExchangeInputException;
 public class ExchangeTakingClientImpl implements ExchangeTakingClient {
     @Value("${app.exchange.URL}")
     String url;
+
     @Cacheable(cacheNames = "exchangeRates")
     public Double takeRate() {
         RestTemplate restTemplate = new RestTemplate();
         ExchangeRate resp = restTemplate.getForObject(url, ExchangeRate.class);
         System.out.println(resp);
-       return
-               Optional.ofNullable(resp).map(r ->Optional.ofNullable(resp.getUsdExchangeRate()).orElseThrow(() ->
-                new ExchangeInputException("Json from Service not valid"))).orElseThrow(()->
+
+        return Optional.ofNullable(resp)
+                .map(r -> Optional.ofNullable(resp.getUsdExchangeRate()).orElseThrow(() ->
+                new ExchangeInputException("Json from Service not valid"))).orElseThrow(() ->
                 new ExchangeInputException("Json from Service not valid"));
     }
 }

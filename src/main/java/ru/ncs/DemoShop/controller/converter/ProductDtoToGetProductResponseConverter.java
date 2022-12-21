@@ -8,7 +8,7 @@ import ru.ncs.DemoShop.service.data.ProductDTO;
 @Component
 public class ProductDtoToGetProductResponseConverter implements Converter<ProductDTO, GetProductResponse> {
     @Override
-    public GetProductResponse convert(ProductDTO productDTO) {
+    public  GetProductResponse convert(ProductDTO productDTO) {
         return GetProductResponse.builder()
                 .id(productDTO.getId())
                 .amount(productDTO.getAmount())

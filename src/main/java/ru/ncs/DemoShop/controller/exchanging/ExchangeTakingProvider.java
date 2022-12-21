@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
-import javax.el.ELException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -17,16 +16,10 @@ import org.springframework.stereotype.Component;
 public class ExchangeTakingProvider {
     private final ExchangeTakingClient exchangeTakingClient;
 
-
     public Double takeExchangeRate() {
         return Optional.ofNullable(getRemoteRate())
                 .or(() -> Optional.ofNullable(getLocalRate()))
                 .orElse(1.0);
-    }
-
-    @CacheEvict(value = "exchangeRates", allEntries = true)
-    public void evictLocalRate(Double rate) {
-        log.info("Evicting Rate {}", rate);
     }
 
     private @Nullable Double getRemoteRate() {
@@ -61,5 +54,10 @@ public class ExchangeTakingProvider {
 
             return null;
         }
+    }
+
+    @CacheEvict(value = "exchangeRates", allEntries = true)
+    public void evictLocalRate(Double rate) {
+        log.info("Evicting Rate {}", rate);
     }
 }
