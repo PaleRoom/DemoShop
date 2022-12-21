@@ -9,13 +9,13 @@ import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
 public class UpdateProductRequestToImmutableUpdateProductRequestConverter implements Converter<UpdateProductRequest, ImmutableUpdateProductRequest> {
     @Override
     public ImmutableUpdateProductRequest convert(UpdateProductRequest source) {
-         return ImmutableUpdateProductRequest.builder()
+        return ImmutableUpdateProductRequest.builder()
                 .amount(source.getAmount())
                 .category(source.getCategory())
                 .description(source.getDescription())
                 .name(source.getName())
                 .price(source.getPrice())
-                 .availability(source.getAvailability())
-                 .build();
+                .availability(source.getAvailability())
+                .build();
     }
 }

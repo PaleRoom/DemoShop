@@ -15,7 +15,7 @@ public class CreateProductRequestToImmutableCreateProductRequest implements Conv
                 .description(source.getDescription())
                 .name(source.getName())
                 .price(source.getPrice())
-                .availability(source.getAvailability())
+                .availability(source.isAvailability())
                 .build();
     }
 }

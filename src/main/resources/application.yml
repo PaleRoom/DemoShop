@@ -6,6 +6,12 @@ spring:
     url: 'jdbc:postgresql://localhost:5432/Shop_db'
     username: postgres
     password: SQL13
+# Alternative configuration of caffeine
+#  cache:
+#    cache-names: exchangeRates
+#    caffeine:
+#      spec: maximumSize=5, expireAfterWrite=30s
+
   jpa:
     properties:
       hibernate:
@@ -26,7 +32,9 @@ app:
     period: 15000  #15sec scheduler freq. period
     enabled: false
     priceModificator: 1.1
-
+  exchange:
+    URL: "http://localhost:7071/exchangerate"
+    remoteEnabled: true
 logging:
     file.name: DemoShop.log
     level:
