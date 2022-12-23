@@ -8,6 +8,46 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler
+    private ResponseEntity<CustomerErrorResponse> handleException(CustomerNotCreatedException e) {
+        CustomerErrorResponse response = new CustomerErrorResponse(
+                e.getMessage(),
+                e.getClass().getSimpleName(),
+                System.currentTimeMillis()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST); // 401
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<CustomerErrorResponse> handleException(CustomerNotFoundException e) {
+        CustomerErrorResponse response = new CustomerErrorResponse(
+                "Customer with this ID not found!",
+                e.getClass().getSimpleName(),
+                System.currentTimeMillis()
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND); // 404
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<CustomerErrorResponse> handleException(CustomerNotUpdatedException e) {
+        CustomerErrorResponse response = new CustomerErrorResponse(
+                e.getMessage(),
+                e.getClass().getSimpleName(),
+                System.currentTimeMillis()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST); // 401
+    }
+
+//    @ExceptionHandler
+//    private ResponseEntity<CustomerErrorResponse> handleException(Exception e) {
+//        CustomerErrorResponse response = new CustomerErrorResponse(
+//                e.getMessage(),
+//                e.getClass().getSimpleName(),
+//                System.currentTimeMillis()
+//        );
+//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST); // 401
+//    }
+
+    @ExceptionHandler
     private ResponseEntity<ProductErrorResponse> handleException(ProductNotCreatedException e) {
         ProductErrorResponse response = new ProductErrorResponse(
                 e.getMessage(),

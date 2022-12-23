@@ -1,12 +1,12 @@
-package ru.ncs.DemoShop.controller.converter;
+package ru.ncs.DemoShop.controller.converter.productConverter;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-import ru.ncs.DemoShop.controller.request.CreateProductRequest;
-import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
+import ru.ncs.DemoShop.controller.request.productRequest.CreateProductRequest;
+import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableCreateProductRequest;
 
 @Component
-public class CreateProductRequestToImmutableCreateProductRequest implements Converter<CreateProductRequest, ImmutableCreateProductRequest> {
+public class CreateProductRequestToImmutableCreateProductRequestConverter implements Converter<CreateProductRequest, ImmutableCreateProductRequest> {
     @Override
     public ImmutableCreateProductRequest convert(CreateProductRequest source) {
         return ImmutableCreateProductRequest.builder()

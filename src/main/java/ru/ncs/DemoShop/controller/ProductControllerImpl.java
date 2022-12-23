@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.ncs.DemoShop.controller.request.CreateProductRequest;
-import ru.ncs.DemoShop.controller.request.SearchProductRequest;
-import ru.ncs.DemoShop.controller.request.UpdateProductRequest;
+import ru.ncs.DemoShop.controller.request.productRequest.CreateProductRequest;
+import ru.ncs.DemoShop.controller.request.productRequest.SearchProductRequest;
+import ru.ncs.DemoShop.controller.request.productRequest.UpdateProductRequest;
 import ru.ncs.DemoShop.controller.response.GetProductResponse;
 import ru.ncs.DemoShop.exception.ProductNotFoundException;
 import ru.ncs.DemoShop.service.ProductService;
-import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
-import ru.ncs.DemoShop.service.immutable.ImmutableSearchProductRequest;
-import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
+import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableCreateProductRequest;
+import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableSearchProductRequest;
+import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableUpdateProductRequest;
 
 @RestController
 @RequestMapping("/products")

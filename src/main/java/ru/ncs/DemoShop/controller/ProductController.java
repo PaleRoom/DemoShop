@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.ncs.DemoShop.controller.request.CreateProductRequest;
-import ru.ncs.DemoShop.controller.request.SearchProductRequest;
-import ru.ncs.DemoShop.controller.request.UpdateProductRequest;
+import ru.ncs.DemoShop.controller.request.productRequest.CreateProductRequest;
+import ru.ncs.DemoShop.controller.request.productRequest.SearchProductRequest;
+import ru.ncs.DemoShop.controller.request.productRequest.UpdateProductRequest;
 import ru.ncs.DemoShop.controller.response.GetProductResponse;
 
 @RequestMapping("/default")

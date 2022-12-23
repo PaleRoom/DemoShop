@@ -8,4 +8,5 @@
     <include file="add-availability-column.xml" relativeToChangelogFile="true"/>
     <!-- <include file="insert-changeset-product-table.xml" relativeToChangelogFile="true"/> -->
     <include file ="create-changeset-on-update-trigger.xml" relativeToChangelogFile="true"/>
+    <include file ="create-changeset-customer-table.XML" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -1,9 +1,9 @@
-package ru.ncs.DemoShop.controller.converter;
+package ru.ncs.DemoShop.controller.converter.productConverter;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-import ru.ncs.DemoShop.controller.request.UpdateProductRequest;
-import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
+import ru.ncs.DemoShop.controller.request.productRequest.UpdateProductRequest;
+import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableUpdateProductRequest;
 
 @Component
 public class UpdateProductRequestToImmutableUpdateProductRequestConverter implements Converter<UpdateProductRequest, ImmutableUpdateProductRequest> {

@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import ru.ncs.DemoShop.service.data.ProductDTO;
-import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
-import ru.ncs.DemoShop.service.immutable.ImmutableSearchProductRequest;
-import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
+import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableCreateProductRequest;
+import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableSearchProductRequest;
+import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableUpdateProductRequest;
 
 @Service
 public interface ProductService {

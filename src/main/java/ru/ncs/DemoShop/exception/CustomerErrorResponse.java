@@ -9,8 +9,8 @@ import lombok.Value;
 @Setter
 @Value
 @AllArgsConstructor
-public class ProductErrorResponse {
-     String message;
-     String exceptionName;
-     long timestamp;
+public class CustomerErrorResponse {
+    String message;
+    String exceptionName;
+    long timestamp;
 }

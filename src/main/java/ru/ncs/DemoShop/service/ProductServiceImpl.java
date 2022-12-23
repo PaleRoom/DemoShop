@@ -25,9 +25,9 @@ import ru.ncs.DemoShop.repository.ProductRepository;
 import ru.ncs.DemoShop.repository.specification.ProductSpecification;
 import ru.ncs.DemoShop.service.aop.LogExecutionTime;
 import ru.ncs.DemoShop.service.data.ProductDTO;
-import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
-import ru.ncs.DemoShop.service.immutable.ImmutableSearchProductRequest;
-import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
+import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableCreateProductRequest;
+import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableSearchProductRequest;
+import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableUpdateProductRequest;
 
 @Service
 @Slf4j

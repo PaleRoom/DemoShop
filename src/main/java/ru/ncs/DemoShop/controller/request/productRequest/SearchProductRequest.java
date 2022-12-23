@@ -1,4 +1,4 @@
-package ru.ncs.DemoShop.controller.request;
+package ru.ncs.DemoShop.controller.request.productRequest;
 
 import lombok.Builder;
 import lombok.Value;

@@ -1,4 +1,4 @@
-package ru.ncs.DemoShop.controller.converter;
+package ru.ncs.DemoShop.controller.converter.productConverter;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

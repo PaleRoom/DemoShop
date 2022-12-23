@@ -18,7 +18,7 @@ import ru.ncs.DemoShop.exception.ProductNotUniqueException;
 import ru.ncs.DemoShop.model.Product;
 import ru.ncs.DemoShop.repository.ProductRepository;
 import ru.ncs.DemoShop.service.data.ProductDTO;
-import ru.ncs.DemoShop.service.immutable.ImmutableUpdateProductRequest;
+import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableUpdateProductRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
