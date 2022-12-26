@@ -1,4 +1,4 @@
-package ru.ncs.DemoShop.exception;
+package ru.ncs.DemoShop.exception.customerException;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -4,6 +4,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import ru.ncs.DemoShop.exception.customerException.CustomerErrorResponse;
+import ru.ncs.DemoShop.exception.customerException.CustomerNotCreatedException;
+import ru.ncs.DemoShop.exception.customerException.CustomerNotFoundException;
+import ru.ncs.DemoShop.exception.customerException.CustomerNotUpdatedException;
+import ru.ncs.DemoShop.exception.productException.ProductErrorResponse;
+import ru.ncs.DemoShop.exception.productException.ProductNotCreatedException;
+import ru.ncs.DemoShop.exception.productException.ProductNotFoundException;
+import ru.ncs.DemoShop.exception.productException.ProductNotUpdatedException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

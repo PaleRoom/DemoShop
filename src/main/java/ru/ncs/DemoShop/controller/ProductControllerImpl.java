@@ -17,7 +17,7 @@ import ru.ncs.DemoShop.controller.request.productRequest.CreateProductRequest;
 import ru.ncs.DemoShop.controller.request.productRequest.SearchProductRequest;
 import ru.ncs.DemoShop.controller.request.productRequest.UpdateProductRequest;
 import ru.ncs.DemoShop.controller.response.GetProductResponse;
-import ru.ncs.DemoShop.exception.ProductNotFoundException;
+import ru.ncs.DemoShop.exception.productException.ProductNotFoundException;
 import ru.ncs.DemoShop.service.ProductService;
 import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableSearchProductRequest;

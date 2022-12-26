@@ -1,4 +1,4 @@
-package ru.ncs.DemoShop.exception;
+package ru.ncs.DemoShop.exception.customerException;
 
 public class CustomerNotFoundException extends RuntimeException{
     public  CustomerNotFoundException(String msg) {super(msg);}

@@ -10,5 +10,6 @@
     <include file ="create-changeset-on-update-trigger.xml" relativeToChangelogFile="true"/>
     <include file ="create-changeset-customer-table.XML" relativeToChangelogFile="true"/>
     <include file ="create-changeset-on-update-customer-trigger.XML" relativeToChangelogFile="true"/>
+    <include file ="create-changeset-order-table.XML" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

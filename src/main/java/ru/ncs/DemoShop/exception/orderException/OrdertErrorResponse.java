@@ -1,4 +1,4 @@
-package ru.ncs.DemoShop.exception;
+package ru.ncs.DemoShop.exception.orderException;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Value;
 @Setter
 @Value
 @AllArgsConstructor
-public class ProductErrorResponse {
+public class OrdertErrorResponse {
      String message;
      String exceptionName;
      long timestamp;

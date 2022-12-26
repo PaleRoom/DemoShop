@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.ncs.DemoShop.controller.request.customerRequest.CreateCustomerRequest;
 import ru.ncs.DemoShop.controller.request.customerRequest.UpdateCustomerRequest;
 import ru.ncs.DemoShop.controller.response.GetCustomerResponse;
-import ru.ncs.DemoShop.exception.ProductNotFoundException;
+import ru.ncs.DemoShop.controller.response.GetOrderResponse;
+import ru.ncs.DemoShop.exception.productException.ProductNotFoundException;
 import ru.ncs.DemoShop.service.CustomerService;
+import ru.ncs.DemoShop.service.OrderService;
 import ru.ncs.DemoShop.service.immutable.customerImmutable.ImmutableCreateCustomerRequest;
 import ru.ncs.DemoShop.service.immutable.customerImmutable.ImmutableUpdateCustomerRequest;
 
@@ -24,6 +26,7 @@ import ru.ncs.DemoShop.service.immutable.customerImmutable.ImmutableUpdateCustom
 @RequiredArgsConstructor
 public class CustomerControllerImpl implements CustomerController {
     private final CustomerService customerService;
+    private final OrderService orderService;
     private final ConversionService conversionService;
 
     @Override
@@ -62,6 +65,18 @@ public class CustomerControllerImpl implements CustomerController {
         }
         customerService.delete(id);
     }
+
+    @Override
+    public UUID createOrder(UUID id) {
+            return orderService.save(id);
+    }
+
+    @Override
+    public List<GetOrderResponse> getCustomersOrders (UUID id) {
+
+        return orderService.findCustomersOrders(id).stream()
+                .map(dto -> conversionService.convert(dto, GetOrderResponse.class))
+                .collect(Collectors.toList()); }
 
     //TODO реализовать поиск
 }
