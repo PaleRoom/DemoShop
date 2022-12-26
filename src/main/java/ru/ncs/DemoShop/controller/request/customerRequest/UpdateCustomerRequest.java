@@ -3,7 +3,11 @@ package ru.ncs.DemoShop.controller.request.customerRequest;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
 public class UpdateCustomerRequest {
     @NotEmpty(message = "customer name should be not Empty")
     private String name;

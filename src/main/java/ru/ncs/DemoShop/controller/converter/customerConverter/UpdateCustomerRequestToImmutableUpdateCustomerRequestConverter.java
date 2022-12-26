@@ -2,14 +2,14 @@ package ru.ncs.DemoShop.controller.converter.customerConverter;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-import ru.ncs.DemoShop.controller.request.customerRequest.CreateCustomerRequest;
-import ru.ncs.DemoShop.service.immutable.customerImmutable.ImmutableCreateCustomerRequest;
+import ru.ncs.DemoShop.controller.request.customerRequest.UpdateCustomerRequest;
+import ru.ncs.DemoShop.service.immutable.customerImmutable.ImmutableUpdateCustomerRequest;
 
 @Component
-public class CreateCustomerRequestToImmutableCreateCustomerRequestConverter implements Converter<CreateCustomerRequest, ImmutableCreateCustomerRequest> {
+public class UpdateCustomerRequestToImmutableUpdateCustomerRequestConverter implements Converter<UpdateCustomerRequest, ImmutableUpdateCustomerRequest> {
     @Override
-    public ImmutableCreateCustomerRequest convert(CreateCustomerRequest source) {
-        return ImmutableCreateCustomerRequest.builder()
+    public ImmutableUpdateCustomerRequest convert(UpdateCustomerRequest source) {
+        return ImmutableUpdateCustomerRequest.builder()
                 .name(source.getName())
                 .surname(source.getSurname())
                 .patronymic(source.getPatronymic())

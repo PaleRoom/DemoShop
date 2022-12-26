@@ -59,7 +59,6 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<CustomerDTO> findAll() {
         List<Customer> list = customerRepository.findAll();
         List<CustomerDTO> listDTO = new ArrayList<>();

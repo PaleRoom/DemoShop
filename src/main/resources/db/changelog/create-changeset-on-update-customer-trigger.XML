@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <!-- Здесь мы позже напишем скрипт -->
+    <changeSet id="create_on_customer_update_procedure" author="Nicolas">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="customer"/>
+        </preConditions>
+        <createProcedure>
+            CREATE FUNCTION change_customer_update_time() RETURNS TRIGGER
+                LANGUAGE plpgsql
+            AS $$
+            BEGIN
+                 IF
+            OLD!= NEW THEN
+                 NEW.customer_update=now();
+            END IF;
+            RETURN NEW;
+            END;
+$$;
+        </createProcedure>
+    </changeSet>
+
+    <changeSet id="create_on_customer_update_trigger" author="Nicolas">
+        <sql>
+            CREATE TRIGGER customer_updated_time
+                BEFORE UPDATE
+                ON customer
+                FOR EACH ROW
+                EXECUTE FUNCTION change_customer_update_time();
+        </sql>
+    </changeSet>
+</databaseChangeLog>
