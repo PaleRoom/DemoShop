@@ -1,7 +1,9 @@
 package ru.ncs.DemoShop.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
@@ -35,8 +38,6 @@ public class Order {
     @GeneratedValue
     private UUID id;
 
-
-
     @Column(name = "order_status")
     @Enumerated(EnumType.STRING)
     private OrderStatusEnum status;
@@ -50,9 +51,11 @@ public class Order {
     @Column(name = "order_create", nullable = false)
     private LocalDateTime orderCreatedAt;
 
+    @Nullable
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
-
-    @Nullable
     private Customer owner;
+
+    @OneToMany(mappedBy = "ownerOrder", cascade = CascadeType.REMOVE)
+    private List<OrderedProduct> orderedProducts;
 }

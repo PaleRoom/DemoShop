@@ -571,7 +571,7 @@
 							"script": {
 								"exec": [
 									"var jsonData = pm.response.json();\r",
-									"pm.environment.set('pr_id_1', jsonData);\r",
+									"pm.environment.set('c_id_1', jsonData);\r",
 									"pm.test(\"Status code is 201\", function () {\r",
 									"    pm.response.to.have.status(201);\r",
 									"});"
@@ -585,7 +585,91 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"name\": \"Ivan\",\r\n        \"surname\": \"Entov\",\r\n        \"petronymic\": \"Sergeevich\",\r\n        \"email\": \"Yet another mouse\",\r\n        \"phoneNumber\": \"896523342233\"\r\n    }",
+							"raw": "    {\r\n        \"name\": \"Ivan\",\r\n        \"surname\": \"Entov\",\r\n        \"patronymic\": \"Sergeevich\",\r\n        \"email\": \"HelloWorld@vk.com\",\r\n        \"phoneNumber\": \"896523342233\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7070/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Customer 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set('c_id_2', jsonData);\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"name\": \"Elena\",\r\n        \"surname\": \"Mercaeva\",\r\n        \"patronymic\": \"Evgenievna\",\r\n        \"email\": \"Zhenka@vk.com\",\r\n        \"phoneNumber\": \"8973423342233\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7070/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Customer Email Exists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"name\": \"Ivan\",\r\n        \"surname\": \"Entov\",\r\n        \"patronymic\": \"Sergeevich\",\r\n        \"email\": \"HelloWorld@vk.com\",\r\n        \"phoneNumber\": \"896523342233\"\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -618,16 +702,15 @@
 									"pm.collectionVariables.get(\"variable_key\");\r",
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
-									"pm.test(\"Body contains proper product\", function () {\r",
+									"pm.test(\"Body contains proper customer\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.id).to.eql(pm.variables.get('id'));\r",
-									"    pm.expect(jsonData.name).to.eql(\"RAZR Mouse\");\r",
-									"     pm.expect(jsonData.description).to.eql(\"Yet another mouse\");\r",
-									"      pm.expect(jsonData.category).to.eql(\"PERIPHERY\");\r",
-									"       pm.expect(jsonData.price).to.eql(1100.0);\r",
-									"         pm.expect(jsonData.availability).to.eql(true);\r",
-									"        pm.expect(jsonData.amount).to.eql(15);\r",
-									"});\r",
+									"    pm.expect(jsonData.id).to.eql(pm.variables.get('c_id_1'));\r",
+									"    pm.expect(jsonData.name).to.eql(\"Ivan\");\r",
+									"      pm.expect(jsonData.surname).to.eql(\"Entov\");\r",
+									"        pm.expect(jsonData.patronymic).to.eql(\"Sergeevich\");\r",
+									"         pm.expect(jsonData.email).to.eql(\"HelloWorld@vk.com\");\r",
+									"            pm.expect(jsonData.phoneNumber).to.eql(\"896523342233\");\r",
+									"     });\r",
 									""
 								],
 								"type": "text/javascript"
@@ -638,15 +721,293 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:7070/products/{{id}}",
+							"raw": "http://localhost:7070/customers/{{c_id_1}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "7070",
 							"path": [
-								"products",
-								"{{id}}"
+								"customers",
+								"{{c_id_1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{c_id_1}}\",\r\n    \"name\": \"Stas\",\r\n    \"surname\": \"Entov\",\r\n    \"patronymic\": \"Sergeevich\",\r\n    \"email\": \"HelloWorld@vk.com\",\r\n    \"phoneNumber\": \"896523342233\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7070/customers/{{c_id_1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers",
+								"{{c_id_1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Customers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body contains proper Lists of products\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.products[0].id).to.eql(pm.variables.get('id'));\r",
+									"    pm.expect(jsonData.products[0].name).to.eql(\"RAZR Mouse\");\r",
+									"     pm.expect(jsonData.products[0].description).to.eql(\"Yet another mouse\");\r",
+									"      pm.expect(jsonData.products[0].category).to.eql(\"PERIPHERY\");\r",
+									"       pm.expect(jsonData.products[0].price).to.eql(1100.0);\r",
+									"        pm.expect(jsonData.products[0].amount).to.eql(15);\r",
+									"        pm.expect(jsonData.products[0].availability).to.eql(true);\r",
+									"    pm.expect(jsonData.products[1].id).to.eql(pm.variables.get('id2'));\r",
+									"    pm.expect(jsonData.products[1].name).to.eql(\"Logitech G15\");\r",
+									"     pm.expect(jsonData.products[1].description).to.eql(\"Yet another keyboard\");\r",
+									"      pm.expect(jsonData.products[1].category).to.eql(\"PERIPHERY\");\r",
+									"       pm.expect(jsonData.products[1].price).to.eql(95.0);\r",
+									"        pm.expect(jsonData.products[1].amount).to.eql(1050);\r",
+									"        pm.expect(jsonData.products[1].availability).to.eql(false);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/customers/{{c_id_1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers",
+								"{{c_id_1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/customers/{{c_id_2}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers",
+								"{{c_id_2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create  Empty Order for Customer 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/customers/{{c_id_2}}/order",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers",
+								"{{c_id_2}}",
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Customer 2 Orders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/customers/{{c_id_2}}/order",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers",
+								"{{c_id_2}}",
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Orders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body contains proper Lists of products\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.products[0].id).to.eql(pm.variables.get('id'));\r",
+									"    pm.expect(jsonData.products[0].name).to.eql(\"RAZR Mouse\");\r",
+									"     pm.expect(jsonData.products[0].description).to.eql(\"Yet another mouse\");\r",
+									"      pm.expect(jsonData.products[0].category).to.eql(\"PERIPHERY\");\r",
+									"       pm.expect(jsonData.products[0].price).to.eql(1100.0);\r",
+									"        pm.expect(jsonData.products[0].amount).to.eql(15);\r",
+									"        pm.expect(jsonData.products[0].availability).to.eql(true);\r",
+									"    pm.expect(jsonData.products[1].id).to.eql(pm.variables.get('id2'));\r",
+									"    pm.expect(jsonData.products[1].name).to.eql(\"Logitech G15\");\r",
+									"     pm.expect(jsonData.products[1].description).to.eql(\"Yet another keyboard\");\r",
+									"      pm.expect(jsonData.products[1].category).to.eql(\"PERIPHERY\");\r",
+									"       pm.expect(jsonData.products[1].price).to.eql(95.0);\r",
+									"        pm.expect(jsonData.products[1].amount).to.eql(1050);\r",
+									"        pm.expect(jsonData.products[1].availability).to.eql(false);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"orders"
 							]
 						}
 					},

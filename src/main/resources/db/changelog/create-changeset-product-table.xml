@@ -28,7 +28,7 @@
             <column name="product_price" type="double">
             </column>
 
-            <column name="product_amount" type="bigint">
+            <column name="product_amount" type="integer">
             </column>
 
             <column name="amount_update" type="datetime">

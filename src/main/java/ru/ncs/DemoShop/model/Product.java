@@ -1,13 +1,16 @@
 package ru.ncs.DemoShop.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
@@ -56,6 +59,9 @@ public class Product {
 
     @Column(name = "availability", nullable = false)
     private boolean availability;
+
+    @OneToMany(mappedBy = "ownerProduct", cascade = CascadeType.REMOVE)
+    private List<OrderedProduct> orderedProducts;
 
 
 }

@@ -10,12 +10,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.ncs.DemoShop.controller.request.orderRequest.UpdateOrderRequest;
 import ru.ncs.DemoShop.exception.customerException.CustomerNotFoundException;
 import ru.ncs.DemoShop.exception.orderException.OrderNotFoundException;
 import ru.ncs.DemoShop.model.Order;
 import ru.ncs.DemoShop.model.OrderStatusEnum;
 import ru.ncs.DemoShop.repository.CustomerRepository;
 import ru.ncs.DemoShop.repository.OrderRepository;
+import ru.ncs.DemoShop.repository.OrderedProductRepository;
 import ru.ncs.DemoShop.service.data.OrderDTO;
 
 @Service
@@ -24,6 +26,8 @@ import ru.ncs.DemoShop.service.data.OrderDTO;
 @AllArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
+
+    private final OrderedProductRepository orderedProductRepository;
     private final ConversionService conversionService;
     private final CustomerRepository customerRepository;
 
@@ -61,25 +65,28 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public UUID save(UUID customerId) {
         Order order = new Order();
-
         order.setOrderCreatedAt(LocalDateTime.now());
         order.setOrderUpdatedAt(LocalDateTime.now());
         order.setStatus(OrderStatusEnum.OPENED);
-        log.debug("Order after times set: {}",order);
-
+        log.debug("Order after times set: {}", order);
         order.setOwner(Optional.of(customerRepository.findById(customerId))
                 .get()
                 .orElseThrow(CustomerNotFoundException::new));
 
-        log.debug("Order before saving: {}",order.getOwner().getId());
-        log.debug("Order before saving: {}",order.getOwner().getName());
-        log.debug("Order before saving: {}",order.getOwner().getEmail());
-        log.debug("Order before saving: {}",order.getOwner().getPhoneNumber());
+        log.debug("Order before saving: {}", order.getOwner().getId());
+        log.debug("Order before saving: {}", order.getOwner().getName());
+
         orderRepository.save(order);
         log.info("Order saved");
 
         return order.getId();
     }
+
+    public UUID update(UpdateOrderRequest request, UUID orderId) {
+
+        return orderId;
+    }
+
 
     @Override
     public void delete(UUID id) {
