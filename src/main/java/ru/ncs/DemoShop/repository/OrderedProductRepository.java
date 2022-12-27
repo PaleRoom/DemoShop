@@ -11,5 +11,5 @@ import ru.ncs.DemoShop.model.Product;
 public interface OrderedProductRepository extends JpaRepository<OrderedProduct, OrderedId> {
     List<OrderedProduct> findOrderedProductByOwnerOrder(Order order);
     List<OrderedProduct> findOrderedProductByOwnerProduct(Product product);
-    List<OrderedProduct> findByOrderIdAndProductId(UUID order_id, UUID prod_id);
+    OrderedProduct findByOrderIdAndProductId(UUID order_id, UUID prod_id);
 }

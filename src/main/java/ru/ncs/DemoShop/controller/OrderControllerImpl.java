@@ -8,6 +8,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ncs.DemoShop.controller.request.customerRequest.UpdateCustomerRequest;
+import ru.ncs.DemoShop.controller.request.orderRequest.UpdateOrderRequest;
 import ru.ncs.DemoShop.controller.response.GetCustomerResponse;
 import ru.ncs.DemoShop.controller.response.GetOrderResponse;
 import ru.ncs.DemoShop.service.OrderService;
@@ -32,8 +33,10 @@ public class OrderControllerImpl implements OrderController{
     }
 
     @Override
-    public UUID updateOrder(UUID id, UpdateCustomerRequest updateCustomerRequest) {
-        return null;
+    public UUID updateOrder(UUID id, UpdateOrderRequest updateOrderRequest) {
+
+
+        return orderService.update(updateOrderRequest, id);
     }
 
     @Override

@@ -13,11 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.ncs.DemoShop.controller.request.orderRequest.UpdateOrderRequest;
 import ru.ncs.DemoShop.exception.customerException.CustomerNotFoundException;
 import ru.ncs.DemoShop.exception.orderException.OrderNotFoundException;
+import ru.ncs.DemoShop.exception.productException.ProductNotFoundException;
 import ru.ncs.DemoShop.model.Order;
 import ru.ncs.DemoShop.model.OrderStatusEnum;
+import ru.ncs.DemoShop.model.OrderedProduct;
 import ru.ncs.DemoShop.repository.CustomerRepository;
 import ru.ncs.DemoShop.repository.OrderRepository;
 import ru.ncs.DemoShop.repository.OrderedProductRepository;
+import ru.ncs.DemoShop.repository.ProductRepository;
+import ru.ncs.DemoShop.service.aop.LogExecutionTime;
 import ru.ncs.DemoShop.service.data.OrderDTO;
 
 @Service
@@ -26,6 +30,7 @@ import ru.ncs.DemoShop.service.data.OrderDTO;
 @AllArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
 
     private final OrderedProductRepository orderedProductRepository;
     private final ConversionService conversionService;
@@ -82,7 +87,45 @@ public class OrderServiceImpl implements OrderService {
         return order.getId();
     }
 
+    private OrderedProduct createOrdered(UUID productId, UUID orderId) {
+        OrderedProduct ordered = new OrderedProduct();
+        ordered.setOwnerOrder(Optional.of(orderRepository.findById(orderId))
+                .get()
+                .orElseThrow(OrderNotFoundException::new));
+        ordered.setOrderId(orderId);
+
+        ordered.setOwnerProduct(Optional.of(productRepository.findById(productId))
+                .get()
+                .orElseThrow(ProductNotFoundException::new));
+        ordered.setProductId(productId);
+        return ordered;
+    }
+
+    @Override
+    @LogExecutionTime
     public UUID update(UpdateOrderRequest request, UUID orderId) {
+        OrderedProduct ordered = Optional.ofNullable(orderedProductRepository
+                        .findByOrderIdAndProductId(orderId, request.getProductId()))
+                .or(() -> Optional.of(createOrdered(request.getProductId(), orderId)))
+                .orElseThrow(RuntimeException::new);
+
+        if (ordered.getOwnerProduct().isAvailability()
+                & ordered.getOwnerProduct().getAmount() >= request.getQuantity()
+                & (ordered.getQuantity() + request.getQuantity() >= 0)) {
+            ordered.getOwnerOrder().setTotal(ordered.getOwnerOrder().getTotal() +
+                    ordered.getOwnerProduct().getPrice() * request.getQuantity());
+            ordered.getOwnerProduct().setAmount(ordered.getOwnerProduct().getAmount()
+                    - request.getQuantity());
+
+            ordered.setQuantity(ordered.getQuantity() + request.getQuantity());
+            log.info("Ordered product: {}", ordered.getOwnerOrder().getId());
+            log.info("Ordered product: {}", ordered.getOwnerProduct().getId());
+            log.info("Ordered product: {}", ordered.getQuantity());
+            orderedProductRepository.save(ordered);
+            log.info("Ordered product saved");
+        } else {
+            throw new RuntimeException("Product unavailable or Request quantity is higher than product amount");
+        }
 
         return orderId;
     }

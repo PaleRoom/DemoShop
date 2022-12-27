@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.ncs.DemoShop.controller.request.customerRequest.UpdateCustomerRequest;
+import ru.ncs.DemoShop.controller.request.orderRequest.UpdateOrderRequest;
 import ru.ncs.DemoShop.controller.response.GetCustomerResponse;
 import ru.ncs.DemoShop.controller.response.GetOrderResponse;
 
@@ -28,7 +29,7 @@ public interface OrderController {
 
     @PutMapping("/{id}")
     UUID updateOrder(@PathVariable("id") UUID id,
-                        @RequestBody @Valid UpdateCustomerRequest updateCustomerRequest);
+                        @RequestBody @Valid UpdateOrderRequest updateOrderRequest);
 
     @DeleteMapping("/{id}")
     void deleteOrder(@PathVariable("id") UUID id);

@@ -3,6 +3,7 @@ package ru.ncs.DemoShop.service;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
+import ru.ncs.DemoShop.controller.request.orderRequest.UpdateOrderRequest;
 import ru.ncs.DemoShop.service.data.OrderDTO;
 import ru.ncs.DemoShop.service.data.ProductDTO;
 
@@ -17,6 +18,8 @@ public interface OrderService {
     UUID save(UUID customerId);
 
     //ProductDTO update(ImmutableUpdateProductRequest request, UUID id);
+
+    UUID update(UpdateOrderRequest request, UUID orderId);
 
     void delete(UUID id);
  }
