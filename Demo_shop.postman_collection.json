@@ -829,72 +829,6 @@
 					"response": []
 				},
 				{
-					"name": "Delete Customer",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:7070/customers/{{c_id_1}}",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "7070",
-							"path": [
-								"customers",
-								"{{c_id_1}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Customer 2",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:7070/customers/{{c_id_2}}",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "7070",
-							"path": [
-								"customers",
-								"{{c_id_2}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Create  Empty Order for Customer 2",
 					"event": [
 						{
@@ -950,13 +884,113 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"productId\": \"{{id3}}\",\r\n     \"quantity\": 1\r\n}",
+							"raw": "[\r\n    {\r\n    \"productId\": \"{{id3}}\",\r\n     \"quantity\": 1\r\n    },\r\n    {\r\n    \"productId\": \"{{id2}}\",\r\n     \"quantity\": 2\r\n    }\r\n\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
+						"url": {
+							"raw": "http://localhost:7070/orders/{{o_id_1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"orders",
+								"{{o_id_1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Close Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/orders/{{o_id_1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"orders",
+								"{{o_id_1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/orders/{{o_id_1}}/cancel",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"orders",
+								"{{o_id_1}}",
+								"cancel"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
 						"url": {
 							"raw": "http://localhost:7070/orders/{{o_id_1}}",
 							"protocol": "http",
@@ -1052,6 +1086,72 @@
 							"port": "7070",
 							"path": [
 								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/customers/{{c_id_1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers",
+								"{{c_id_1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/customers/{{c_id_2}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers",
+								"{{c_id_2}}"
 							]
 						}
 					},
