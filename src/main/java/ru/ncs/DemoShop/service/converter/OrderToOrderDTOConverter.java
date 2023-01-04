@@ -14,6 +14,7 @@ public class OrderToOrderDTOConverter implements Converter <Order, OrderDTO> {
                 .orderCreatedAt(source.getOrderCreatedAt())
                 .orderUpdatedAt(source.getOrderUpdatedAt())
                 .owner(source.getOwner())
+                .orderedProducts(source.getOrderedProducts())
                 .status(source.getStatus())
                 .total(source.getTotal())
                 .build();

@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.ncs.DemoShop.controller.request.orderRequest.UpdateOrderRequest;
 import ru.ncs.DemoShop.exception.customerException.CustomerNotFoundException;
 import ru.ncs.DemoShop.exception.orderException.OrderNotFoundException;
 import ru.ncs.DemoShop.exception.productException.ProductNotFoundException;
@@ -23,6 +22,7 @@ import ru.ncs.DemoShop.repository.OrderedProductRepository;
 import ru.ncs.DemoShop.repository.ProductRepository;
 import ru.ncs.DemoShop.service.aop.LogExecutionTime;
 import ru.ncs.DemoShop.service.data.OrderDTO;
+import ru.ncs.DemoShop.service.immutable.orderImmutable.ImmutableUpdateOrderRequest;
 
 @Service
 @Slf4j
@@ -92,6 +92,7 @@ public class OrderServiceImpl implements OrderService {
         ordered.setOwnerOrder(Optional.of(orderRepository.findById(orderId))
                 .get()
                 .orElseThrow(OrderNotFoundException::new));
+        ordered.getOwnerOrder().setStatus(OrderStatusEnum.EXECUTING);
         ordered.setOrderId(orderId);
 
         ordered.setOwnerProduct(Optional.of(productRepository.findById(productId))
@@ -103,42 +104,61 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @LogExecutionTime
-    public UUID update(UpdateOrderRequest request, UUID orderId) {
-        OrderStatusEnum status = Optional.ofNullable(orderRepository.findById(orderId).get().getStatus()).orElseThrow(OrderNotFoundException::new);
+    public UUID update(List<ImmutableUpdateOrderRequest> requestList, UUID orderId) {
+
+        OrderStatusEnum status = orderRepository.findById(orderId)
+                .map(Order::getStatus)
+                .orElseThrow(OrderNotFoundException::new);
+
         if (status == OrderStatusEnum.CLOSED) {
             throw new RuntimeException("This order is closed and can't be updated");
         }
 
+        for (ImmutableUpdateOrderRequest request : requestList) {
+            OrderedProduct ordered = Optional.ofNullable(orderedProductRepository
+                            .findByOrderIdAndProductId(orderId, request.getProductId()))
+                    .or(() -> Optional.of(createOrdered(request.getProductId(), orderId)))
+                    .orElseThrow(RuntimeException::new);
 
-        OrderedProduct ordered = Optional.ofNullable(orderedProductRepository
-                        .findByOrderIdAndProductId(orderId, request.getProductId()))
-                .or(() -> Optional.of(createOrdered(request.getProductId(), orderId)))
-                .orElseThrow(RuntimeException::new);
+            if (ordered.getOwnerProduct().isAvailability()
+                    & ordered.getOwnerProduct().getAmount() >= request.getQuantity()
+                    & (ordered.getQuantity() + request.getQuantity() >= 0)) {
+                ordered.getOwnerOrder().setTotal(ordered.getOwnerOrder().getTotal() +
+                        ordered.getOwnerProduct().getPrice() * request.getQuantity());
+                ordered.getOwnerProduct().setAmount(ordered.getOwnerProduct().getAmount()
+                        - request.getQuantity());
 
-        if (ordered.getOwnerProduct().isAvailability()
-                & ordered.getOwnerProduct().getAmount() >= request.getQuantity()
-                & (ordered.getQuantity() + request.getQuantity() >= 0)) {
-            ordered.getOwnerOrder().setTotal(ordered.getOwnerOrder().getTotal() +
-                    ordered.getOwnerProduct().getPrice() * request.getQuantity());
-            ordered.getOwnerProduct().setAmount(ordered.getOwnerProduct().getAmount()
-                    - request.getQuantity());
-
-            ordered.setQuantity(ordered.getQuantity() + request.getQuantity());
-            log.info("Ordered product: {}", ordered.getOwnerOrder().getId());
-            log.info("Ordered product: {}", ordered.getOwnerProduct().getId());
-            log.info("Ordered product: {}", ordered.getQuantity());
-            orderedProductRepository.save(ordered);
-            log.info("Ordered product saved");
-        } else {
-            throw new RuntimeException("Product unavailable or Request quantity is higher than product amount");
+                ordered.setQuantity(ordered.getQuantity() + request.getQuantity());
+                log.info("Ordered product: {}", ordered.getOwnerOrder().getId());
+                log.info("Ordered product: {}", ordered.getOwnerProduct().getId());
+                log.info("Ordered product: {}", ordered.getQuantity());
+                orderedProductRepository.save(ordered);
+                log.info("Ordered product saved");
+            } else {
+                throw new RuntimeException("Product unavailable or Request quantity is higher than product amount");
+            }
         }
 
         return orderId;
     }
 
-
     @Override
     public void delete(UUID id) {
         orderRepository.deleteById(id);
+    }
+
+    @Override
+    public void closeOrder(UUID id) {
+        orderRepository.findById(id).ifPresentOrElse(r -> r.setStatus(OrderStatusEnum.CLOSED),
+                OrderNotFoundException::new);
+    }
+
+    @Override
+    public void cancelOrder(UUID id) {
+        orderRepository.findById(id).ifPresentOrElse(r -> {
+                    r.setStatus(OrderStatusEnum.CANCELED);
+                    r.getOrderedProducts().forEach(p -> p.getOwnerProduct().setAmount(p.getOwnerProduct().getAmount() + p.getQuantity()));
+                },
+                OrderNotFoundException::new);
     }
 }

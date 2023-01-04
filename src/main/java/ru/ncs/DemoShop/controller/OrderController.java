@@ -6,13 +6,13 @@ import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.ncs.DemoShop.controller.request.customerRequest.UpdateCustomerRequest;
 import ru.ncs.DemoShop.controller.request.orderRequest.UpdateOrderRequest;
-import ru.ncs.DemoShop.controller.response.GetCustomerResponse;
+import ru.ncs.DemoShop.controller.response.GetFullOrderResponse;
 import ru.ncs.DemoShop.controller.response.GetOrderResponse;
 
 @RequestMapping("/default")
@@ -22,16 +22,23 @@ public interface OrderController {
     List<GetOrderResponse> getOrders();
 
     @GetMapping("/{id}")
-    GetCustomerResponse getOneOrder(@PathVariable("id") UUID id);
+    GetFullOrderResponse getOneOrder(@PathVariable("id") UUID id);
 
 //    @PostMapping
 //    UUID create(@RequestBody @Valid CreateCustomerRequest createCustomerRequest);
 
     @PutMapping("/{id}")
     UUID updateOrder(@PathVariable("id") UUID id,
-                        @RequestBody @Valid UpdateOrderRequest updateOrderRequest);
+                        @RequestBody @Valid List<UpdateOrderRequest> updateOrderRequest);
 
     @DeleteMapping("/{id}")
     void deleteOrder(@PathVariable("id") UUID id);
+
+    @PatchMapping("/{id}")
+    void closeOrder(@PathVariable("id") UUID id);
+
+    @PatchMapping("/{id}/cancel")
+    void cancelOrder(@PathVariable("id") UUID id);
+
 
 }

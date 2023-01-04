@@ -18,6 +18,5 @@ public class OrderDtoToGetOrderResponseConverter implements Converter<OrderDTO, 
                 .CustomerId(source.getOwner().getId())
                 .CustomerName(source.getOwner().getName())
                 .build();
-
     }
 }
