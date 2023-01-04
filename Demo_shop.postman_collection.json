@@ -901,7 +901,9 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set('o_id_1', jsonData);\r",
+									"pm.test(\"Status code is 201\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
@@ -923,6 +925,48 @@
 								"customers",
 								"{{c_id_2}}",
 								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productId\": \"{{id3}}\",\r\n     \"quantity\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7070/orders/{{o_id_1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"orders",
+								"{{o_id_1}}"
 							]
 						}
 					},

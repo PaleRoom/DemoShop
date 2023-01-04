@@ -104,6 +104,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @LogExecutionTime
     public UUID update(UpdateOrderRequest request, UUID orderId) {
+        OrderStatusEnum status = Optional.ofNullable(orderRepository.findById(orderId).get().getStatus()).orElseThrow(OrderNotFoundException::new);
+        if (status == OrderStatusEnum.CLOSED) {
+            throw new RuntimeException("This order is closed and can't be updated");
+        }
+
+
         OrderedProduct ordered = Optional.ofNullable(orderedProductRepository
                         .findByOrderIdAndProductId(orderId, request.getProductId()))
                 .or(() -> Optional.of(createOrdered(request.getProductId(), orderId)))
