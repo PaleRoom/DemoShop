@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,24 +34,24 @@ public class Customer {
     private UUID id;
 
     @Column(name = "customer_name", nullable = false)
-    @NotEmpty(message = "customer name should be not Empty")
+    @NotBlank(message = "Поле name ну должно быть пустым")
     private String name;
 
     @Column(name = "customer_surname", nullable = false)
-    @NotEmpty(message = "customer surname should be not Empty")
+    @NotBlank(message = "Поле surname не должно быть пустым")
     private String surname;
 
     @Column(name = "customer_patronymic", nullable = false)
-    @NotEmpty(message = "customer patronymic  should be not Empty")
+    @NotBlank(message = "Поле patronymic  не должно быть пустым")
     private String patronymic;
 
     @Column(name = "customer_email", nullable = false)
-    @Email
-    @NotEmpty(message = "customer email should be not Empty")
+    @Email(message = "Поле должно содержать email")
+    @NotBlank(message = "Поле email не должно быть пустым")
     private String email;
 
     @Column(name = "customer_phone_number", nullable = false)
-    @NotEmpty(message = "customer phone number should be not Empty")
+    @NotBlank(message = "Поле phone number не должно быть пустым")
     private String phoneNumber;
 
     @Column(name = "customer_update", nullable = false)

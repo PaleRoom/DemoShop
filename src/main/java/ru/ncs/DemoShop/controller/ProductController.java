@@ -17,7 +17,7 @@ import ru.ncs.DemoShop.controller.request.productRequest.SearchProductRequest;
 import ru.ncs.DemoShop.controller.request.productRequest.UpdateProductRequest;
 import ru.ncs.DemoShop.controller.response.GetProductResponse;
 
-@RequestMapping("/default")
+@RequestMapping("/products")
 @Tag(name = "Product service", description = "the Product API with description tag annotation")
 public interface ProductController {
 

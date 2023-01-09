@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ru.ncs.DemoShop.controller.response.GetFullOrderResponse;
-import ru.ncs.DemoShop.controller.response.ProductInOrder;
+import ru.ncs.DemoShop.controller.response.ProductDetails;
 import ru.ncs.DemoShop.service.data.OrderDTO;
 
 @Slf4j
@@ -24,17 +24,17 @@ public class OrderDtoToGetFullOrderResponseConverter implements Converter<OrderD
                 .CustomerName(source.getOwner().getName())
                 .build();
 
-        List<ProductInOrder> prList = new ArrayList<>();
+        List<ProductDetails> prList = new ArrayList<>();
 
         source.getOrderedProducts().forEach(p -> {
-            ProductInOrder pr = ProductInOrder.builder()
-                    .productName(p.getOwnerProduct().getName())
-                    .price(p.getOwnerProduct().getPrice())
+            ProductDetails pr = ProductDetails.builder()
+                    .productName(p.getProduct().getName())
+                    .price(p.getProduct().getPrice())
                     .quantity(p.getQuantity())
                     .build();
             prList.add(pr);
         });
-        getFullOrderResponse.setProductInOrderList(prList);
+        getFullOrderResponse.setProductDetailsList(prList);
 
         return getFullOrderResponse;
     }

@@ -89,13 +89,13 @@ public class OrderServiceImpl implements OrderService {
 
     private OrderedProduct createOrdered(UUID productId, UUID orderId) {
         OrderedProduct ordered = new OrderedProduct();
-        ordered.setOwnerOrder(Optional.of(orderRepository.findById(orderId))
+        ordered.setOrder(Optional.of(orderRepository.findById(orderId))
                 .get()
                 .orElseThrow(OrderNotFoundException::new));
-        ordered.getOwnerOrder().setStatus(OrderStatusEnum.EXECUTING);
+        ordered.getOrder().setStatus(OrderStatusEnum.EXECUTING);
         ordered.setOrderId(orderId);
 
-        ordered.setOwnerProduct(Optional.of(productRepository.findById(productId))
+        ordered.setProduct(Optional.of(productRepository.findById(productId))
                 .get()
                 .orElseThrow(ProductNotFoundException::new));
         ordered.setProductId(productId);
@@ -120,17 +120,17 @@ public class OrderServiceImpl implements OrderService {
                     .or(() -> Optional.of(createOrdered(request.getProductId(), orderId)))
                     .orElseThrow(RuntimeException::new);
 
-            if (ordered.getOwnerProduct().isAvailability()
-                    & ordered.getOwnerProduct().getAmount() >= request.getQuantity()
+            if (ordered.getProduct().isAvailability()
+                    & ordered.getProduct().getAmount() >= request.getQuantity()
                     & (ordered.getQuantity() + request.getQuantity() >= 0)) {
-                ordered.getOwnerOrder().setTotal(ordered.getOwnerOrder().getTotal() +
-                        ordered.getOwnerProduct().getPrice() * request.getQuantity());
-                ordered.getOwnerProduct().setAmount(ordered.getOwnerProduct().getAmount()
+                ordered.getOrder().setTotal(ordered.getOrder().getTotal() +
+                        ordered.getProduct().getPrice() * request.getQuantity());
+                ordered.getProduct().setAmount(ordered.getProduct().getAmount()
                         - request.getQuantity());
 
                 ordered.setQuantity(ordered.getQuantity() + request.getQuantity());
-                log.info("Ordered product: {}", ordered.getOwnerOrder().getId());
-                log.info("Ordered product: {}", ordered.getOwnerProduct().getId());
+                log.info("Ordered product: {}", ordered.getOrder().getId());
+                log.info("Ordered product: {}", ordered.getProduct().getId());
                 log.info("Ordered product: {}", ordered.getQuantity());
                 orderedProductRepository.save(ordered);
                 log.info("Ordered product saved");
@@ -157,7 +157,7 @@ public class OrderServiceImpl implements OrderService {
     public void cancelOrder(UUID id) {
         orderRepository.findById(id).ifPresentOrElse(r -> {
                     r.setStatus(OrderStatusEnum.CANCELED);
-                    r.getOrderedProducts().forEach(p -> p.getOwnerProduct().setAmount(p.getOwnerProduct().getAmount() + p.getQuantity()));
+                    r.getOrderedProducts().forEach(p -> p.getProduct().setAmount(p.getProduct().getAmount() + p.getQuantity()));
                 },
                 OrderNotFoundException::new);
     }

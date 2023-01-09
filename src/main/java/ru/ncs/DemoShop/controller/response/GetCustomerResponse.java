@@ -9,14 +9,14 @@ import lombok.Data;
 @Data
 @Builder
 public class GetCustomerResponse {
-    UUID id;
-    String name;
-    String surname;
-    String patronymic;
-    String email;
-    String phoneNumber;
+    private UUID id;
+    private String name;
+    private String surname;
+    private String patronymic;
+    private String email;
+    private String phoneNumber;
 
     @JsonFormat
             (shape = JsonFormat.Shape.STRING, pattern = "yyyy/MMMM/d HH:mm:ss")
-    LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;
 }

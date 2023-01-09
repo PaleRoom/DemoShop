@@ -22,7 +22,6 @@ import ru.ncs.DemoShop.service.immutable.customerImmutable.ImmutableUpdateCustom
 
 
 @RestController
-@RequestMapping("/customers")
 @RequiredArgsConstructor
 public class CustomerControllerImpl implements CustomerController {
     private final CustomerService customerService;

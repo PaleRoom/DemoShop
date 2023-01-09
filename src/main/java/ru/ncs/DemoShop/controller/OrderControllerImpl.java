@@ -15,7 +15,6 @@ import ru.ncs.DemoShop.service.OrderService;
 import ru.ncs.DemoShop.service.immutable.orderImmutable.ImmutableUpdateOrderRequest;
 
 @RestController
-@RequestMapping("/orders")
 @RequiredArgsConstructor
 public class OrderControllerImpl implements OrderController{
     private final OrderService orderService;

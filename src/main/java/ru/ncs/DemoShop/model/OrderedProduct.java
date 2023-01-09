@@ -39,11 +39,11 @@ public class OrderedProduct implements Serializable {
 
    @ManyToOne
    @JoinColumn(name = "order_id", insertable=false, updatable=false)
-   private Order ownerOrder;
+   private Order order;
 
    @ManyToOne
    @JoinColumn(name = "product_id", insertable=false, updatable=false)
-   private Product ownerProduct;
+   private Product product;
 
 
 }

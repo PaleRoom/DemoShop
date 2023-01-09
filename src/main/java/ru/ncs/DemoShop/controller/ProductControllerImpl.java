@@ -24,7 +24,6 @@ import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableSearchProductR
 import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableUpdateProductRequest;
 
 @RestController
-@RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductControllerImpl implements ProductController {
     private final ProductService productService;

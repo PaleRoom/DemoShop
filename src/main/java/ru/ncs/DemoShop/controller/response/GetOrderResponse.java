@@ -10,18 +10,18 @@ import ru.ncs.DemoShop.model.OrderStatusEnum;
 @Data
 @Builder
 public class GetOrderResponse {
-    UUID id;
-    OrderStatusEnum status;
-    double total;
+    private UUID id;
+    private OrderStatusEnum status;
+    private  double total;
 
     @JsonFormat
             (shape = JsonFormat.Shape.STRING, pattern = "yyyy/MMMM/d HH:mm:ss")
-    LocalDateTime orderUpdatedAt;
+    private  LocalDateTime orderUpdatedAt;
 
     @JsonFormat
             (shape = JsonFormat.Shape.STRING, pattern = "yyyy/MMMM/d HH:mm:ss")
-    LocalDateTime orderCreatedAt;
+    private LocalDateTime orderCreatedAt;
 
-    String CustomerName;
-    UUID CustomerId;
+    private String CustomerName;
+    private UUID CustomerId;
 }

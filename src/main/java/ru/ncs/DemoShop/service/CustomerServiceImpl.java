@@ -12,10 +12,9 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import ru.ncs.DemoShop.exception.customerException.CustomerEmailAlreadyExistsException;
 import ru.ncs.DemoShop.exception.customerException.CustomerNotCreatedException;
 import ru.ncs.DemoShop.exception.customerException.CustomerNotFoundException;
-import ru.ncs.DemoShop.exception.customerException.CustomerNotUniqueException;
-import ru.ncs.DemoShop.exception.productException.ProductNotFoundException;
 import ru.ncs.DemoShop.model.Customer;
 import ru.ncs.DemoShop.repository.CustomerRepository;
 import ru.ncs.DemoShop.service.data.CustomerDTO;
@@ -52,7 +51,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional(readOnly = true)
     public UUID findIdByEmail(String email) {
-        return customerRepository.findIdByEmail(email).orElseThrow(ProductNotFoundException::new);
+        return customerRepository.findIdByEmail(email).orElseThrow(CustomerNotFoundException::new);
     }
 
     @Override
@@ -87,7 +86,7 @@ public class CustomerServiceImpl implements CustomerService {
         final boolean check = customerRepository.findIdByEmail(email).map(entId ->
                 Objects.equals(entId, id)).orElse(true);
         if (!check) {
-            throw new CustomerNotUniqueException("Email must be unique");
+            throw new CustomerEmailAlreadyExistsException("Email must be unique");
         }
 
         return true;
@@ -97,7 +96,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     public CustomerDTO update(ImmutableUpdateCustomerRequest request, UUID id) {
         Customer customer = customerRepository.findById(id).orElseThrow(() ->
-                new CustomerNotFoundException("Customer with id not found: " + id.toString()));
+                new CustomerNotFoundException("Customer with Id not found: " + id.toString()));
         if (request.getEmail() != null && checkUnique(request.getEmail(), id)) {
             customer.setEmail(request.getEmail());
         }

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import ru.ncs.DemoShop.model.Customer;
 import ru.ncs.DemoShop.model.Order;
 
-public interface OrderRepository extends JpaRepository<Order, UUID>, JpaSpecificationExecutor<Order> {
+public interface OrderRepository extends JpaRepository<Order, UUID>{
     List<Order> findByOwner(Customer owner);
     List<Order> findByOwnerId(UUID id);
 

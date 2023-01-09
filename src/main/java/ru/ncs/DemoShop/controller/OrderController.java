@@ -15,17 +15,14 @@ import ru.ncs.DemoShop.controller.request.orderRequest.UpdateOrderRequest;
 import ru.ncs.DemoShop.controller.response.GetFullOrderResponse;
 import ru.ncs.DemoShop.controller.response.GetOrderResponse;
 
-@RequestMapping("/default")
-@Tag(name = "Orderr service", description = "the Order API with description tag annotation")
+@RequestMapping("/orders")
+@Tag(name = "Order service", description = "the Order API with description tag annotation")
 public interface OrderController {
     @GetMapping
     List<GetOrderResponse> getOrders();
 
     @GetMapping("/{id}")
     GetFullOrderResponse getOneOrder(@PathVariable("id") UUID id);
-
-//    @PostMapping
-//    UUID create(@RequestBody @Valid CreateCustomerRequest createCustomerRequest);
 
     @PutMapping("/{id}")
     UUID updateOrder(@PathVariable("id") UUID id,
@@ -39,6 +36,4 @@ public interface OrderController {
 
     @PatchMapping("/{id}/cancel")
     void cancelOrder(@PathVariable("id") UUID id);
-
-
 }
