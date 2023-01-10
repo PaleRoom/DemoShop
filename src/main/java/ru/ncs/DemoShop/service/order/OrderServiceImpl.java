@@ -1,15 +1,16 @@
 package ru.ncs.DemoShop.service.order;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.ncs.DemoShop.aop.LogExecutionTime;
 import ru.ncs.DemoShop.exception.customerException.CustomerNotFoundException;
 import ru.ncs.DemoShop.exception.orderException.OrderNotFoundException;
 import ru.ncs.DemoShop.exception.productException.ProductNotFoundException;
@@ -20,7 +21,6 @@ import ru.ncs.DemoShop.repository.CustomerRepository;
 import ru.ncs.DemoShop.repository.OrderRepository;
 import ru.ncs.DemoShop.repository.OrderedProductRepository;
 import ru.ncs.DemoShop.repository.ProductRepository;
-import ru.ncs.DemoShop.aop.LogExecutionTime;
 import ru.ncs.DemoShop.service.order.data.OrderDTO;
 import ru.ncs.DemoShop.service.order.immutable.ImmutableUpdateOrderRequest;
 
@@ -48,23 +48,19 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDTO> findAll() {
         List<Order> list = orderRepository.findAll();
-        List<OrderDTO> listDTO = new ArrayList<>();
-        for (Order order : list) {
-            listDTO.add(conversionService.convert(order, OrderDTO.class));
-        }
 
-        return listDTO;
+        return list.stream()
+                .map(o -> conversionService.convert(o, OrderDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<OrderDTO> findCustomersOrders(UUID id) {
         List<Order> list = orderRepository.findByOwnerId(id);
-        List<OrderDTO> listDTO = new ArrayList<>();
-        for (Order order : list) {
-            listDTO.add(conversionService.convert(order, OrderDTO.class));
-        }
 
-        return listDTO;
+        return list.stream()
+                .map(o -> conversionService.convert(o, OrderDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override

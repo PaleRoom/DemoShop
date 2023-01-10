@@ -1,6 +1,5 @@
 package ru.ncs.DemoShop.controller.converter.orderConverter;
 
-import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
@@ -24,16 +23,14 @@ public class OrderDtoToGetFullOrderResponseConverter implements Converter<OrderD
                 .CustomerName(source.getOwner().getName())
                 .build();
 
-        List<ProductDetails> prList = new ArrayList<>();
+        List<ProductDetails> prList = source.getOrderedProducts().stream()
+                .map(p -> ProductDetails.builder()
+                        .productName(p.getProduct().getName())
+                        .price(p.getProduct().getPrice())
+                        .quantity(p.getQuantity())
+                        .build())
+                .toList();
 
-        source.getOrderedProducts().forEach(p -> {
-            ProductDetails pr = ProductDetails.builder()
-                    .productName(p.getProduct().getName())
-                    .price(p.getProduct().getPrice())
-                    .quantity(p.getQuantity())
-                    .build();
-            prList.add(pr);
-        });
         getFullOrderResponse.setProductDetailsList(prList);
 
         return getFullOrderResponse;

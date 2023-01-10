@@ -10,8 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,8 +47,8 @@ public class Customer {
     private String patronymic;
 
     @Column(name = "customer_email", nullable = false)
-    @Email(message = "Поле должно содержать email")
     @NotBlank(message = "Поле email не должно быть пустым")
+    @Pattern(regexp=".+@.+\\..+", message="Поле должно содержать валидный email")
     private String email;
 
     @Column(name = "customer_phone_number", nullable = false)

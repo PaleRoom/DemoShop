@@ -1,6 +1,5 @@
 package ru.ncs.DemoShop.controller.request.customerRequest;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import lombok.Builder;
@@ -18,8 +17,8 @@ public class UpdateCustomerRequest {
     @NotBlank(message = "Поле  patronymic ну должно быть пустым")
     String patronymic;
 
-    @Email(message = "Поле должно содержать email")
     @NotBlank(message = "Поле email не должно быть пустым")
+    @Pattern(regexp=".+@.+\\..+", message="Поле должно содержать валидный email")
     String email;
 
     @NotBlank(message = "Поле phone number не должно быть пустым")

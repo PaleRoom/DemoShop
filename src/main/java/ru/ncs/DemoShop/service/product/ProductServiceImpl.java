@@ -22,6 +22,7 @@ import ru.ncs.DemoShop.exception.productException.ProductNotUniqueException;
 import ru.ncs.DemoShop.model.Product;
 import ru.ncs.DemoShop.repository.ProductRepository;
 import ru.ncs.DemoShop.repository.specification.ProductSpecification;
+import ru.ncs.DemoShop.service.order.data.OrderDTO;
 import ru.ncs.DemoShop.utils.SearchResultSaver;
 import ru.ncs.DemoShop.aop.LogExecutionTime;
 import ru.ncs.DemoShop.service.product.data.ProductDTO;
@@ -36,18 +37,15 @@ import ru.ncs.DemoShop.service.product.immutable.ImmutableUpdateProductRequest;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ConversionService conversionService;
-   // private final SearchResultSaver searchResultSaver;
 
     @Override
     @LogExecutionTime
     public List<ProductDTO> findAll() {
         List<Product> list = productRepository.findAllLocked();
-        List<ProductDTO> listDTO = new ArrayList<>();
-        for (Product product : list) {
-            listDTO.add(conversionService.convert(product, ProductDTO.class));
-        }
 
-        return listDTO;
+        return list.stream()
+                .map(p -> conversionService.convert(p, ProductDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override

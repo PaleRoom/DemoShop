@@ -59,9 +59,4 @@ public class Product {
 
     @Column(name = "availability", nullable = false)
     private boolean availability;
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
-    private List<OrderedProduct> orderedProducts;
-
-
 }

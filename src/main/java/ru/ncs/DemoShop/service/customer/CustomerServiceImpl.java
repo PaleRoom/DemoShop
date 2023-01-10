@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
@@ -19,6 +20,7 @@ import ru.ncs.DemoShop.repository.CustomerRepository;
 import ru.ncs.DemoShop.service.customer.data.CustomerDTO;
 import ru.ncs.DemoShop.service.customer.immutable.ImmutableCreateCustomerRequest;
 import ru.ncs.DemoShop.service.customer.immutable.ImmutableUpdateCustomerRequest;
+import ru.ncs.DemoShop.service.order.data.OrderDTO;
 
 @Service
 @Slf4j
@@ -47,12 +49,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<CustomerDTO> findAll() {
         List<Customer> list = customerRepository.findAll();
-        List<CustomerDTO> listDTO = new ArrayList<>();
-        for (Customer customer : list) {
-            listDTO.add(conversionService.convert(customer, CustomerDTO.class));
-        }
 
-        return listDTO;
+        return list.stream()
+                .map(c -> conversionService.convert(c, CustomerDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
