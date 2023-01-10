@@ -1,4 +1,4 @@
-package ru.ncs.DemoShop.service;
+package ru.ncs.DemoShop.service.product;
 
 
 import java.io.IOException;
@@ -16,18 +16,18 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 import ru.ncs.DemoShop.exception.productException.ProductNotCreatedException;
 import ru.ncs.DemoShop.exception.productException.ProductNotFoundException;
 import ru.ncs.DemoShop.exception.productException.ProductNotUniqueException;
 import ru.ncs.DemoShop.model.Product;
 import ru.ncs.DemoShop.repository.ProductRepository;
 import ru.ncs.DemoShop.repository.specification.ProductSpecification;
-import ru.ncs.DemoShop.service.aop.LogExecutionTime;
-import ru.ncs.DemoShop.service.data.ProductDTO;
-import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableCreateProductRequest;
-import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableSearchProductRequest;
-import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableUpdateProductRequest;
+import ru.ncs.DemoShop.utils.SearchResultSaver;
+import ru.ncs.DemoShop.aop.LogExecutionTime;
+import ru.ncs.DemoShop.service.product.data.ProductDTO;
+import ru.ncs.DemoShop.service.product.immutable.ImmutableCreateProductRequest;
+import ru.ncs.DemoShop.service.product.immutable.ImmutableSearchProductRequest;
+import ru.ncs.DemoShop.service.product.immutable.ImmutableUpdateProductRequest;
 
 @Service
 @Slf4j
@@ -36,12 +36,12 @@ import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableUpdateProductR
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ConversionService conversionService;
-    private final SearchResultSaver searchResultSaver;
+   // private final SearchResultSaver searchResultSaver;
 
     @Override
     @LogExecutionTime
     public List<ProductDTO> findAll() {
-        List<Product> list = productRepository.findAll();
+        List<Product> list = productRepository.findAllLocked();
         List<ProductDTO> listDTO = new ArrayList<>();
         for (Product product : list) {
             listDTO.add(conversionService.convert(product, ProductDTO.class));
@@ -59,15 +59,6 @@ public class ProductServiceImpl implements ProductService {
                 new ProductNotFoundException("Product with id not found: " + id.toString())), ProductDTO.class);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public ProductDTO findOneByName(String name) {
-        Assert.hasText(name, "name must not be blank");
-        Optional<Product> foundProduct = productRepository.findByName(name);
-
-        return conversionService.convert(foundProduct.orElseThrow(ProductNotFoundException::new), ProductDTO.class);
-    }
-
     @Version
     @Transactional(readOnly = true)
     public UUID findIdByName(String name) {
@@ -78,12 +69,10 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public UUID save(ImmutableCreateProductRequest request) {
         Product product = conversionService.convert(request, Product.class);
-        try {
-            if (findOneByName(product.getName()) != null) {
-                throw new ProductNotCreatedException("This Product is already exists!");
-            }
-        } catch (ProductNotFoundException ignored) {
-        }
+        productRepository.findByName(product.getName())
+                .ifPresent(c -> {
+                    throw new ProductNotCreatedException("This Product is already exists!");
+                });
         product.setAmountUpdatedAt(LocalDateTime.now());
         productRepository.save(product);
         log.info("Product saved");
@@ -130,7 +119,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     public void increasePrice(double mod) throws InterruptedException {
-        List<Product> sourceList = productRepository.findAll();
+        List<Product> sourceList = productRepository.findAllLocked();
         for (Product product : sourceList) {
             product.setPrice(product.getPrice() * mod);
         }
@@ -152,8 +141,8 @@ public class ProductServiceImpl implements ProductService {
                 .map(product -> conversionService.convert(product, ProductDTO.class))
                 .collect(Collectors.toList());
         try {
-            searchResultSaver.saveSearchedToPdf(searchedList);
-            searchResultSaver.saveSearchedToXls(searchedList);
+            SearchResultSaver.saveSearchedToPdf(searchedList);
+            SearchResultSaver.saveSearchedToXls(searchedList);
         } catch (IOException e) {
             log.info("Search results are not saved. Thrown exception: ", e);
         }

@@ -1,4 +1,4 @@
-package ru.ncs.DemoShop.service;
+package ru.ncs.DemoShop.service.order;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,9 +20,9 @@ import ru.ncs.DemoShop.repository.CustomerRepository;
 import ru.ncs.DemoShop.repository.OrderRepository;
 import ru.ncs.DemoShop.repository.OrderedProductRepository;
 import ru.ncs.DemoShop.repository.ProductRepository;
-import ru.ncs.DemoShop.service.aop.LogExecutionTime;
-import ru.ncs.DemoShop.service.data.OrderDTO;
-import ru.ncs.DemoShop.service.immutable.orderImmutable.ImmutableUpdateOrderRequest;
+import ru.ncs.DemoShop.aop.LogExecutionTime;
+import ru.ncs.DemoShop.service.order.data.OrderDTO;
+import ru.ncs.DemoShop.service.order.immutable.ImmutableUpdateOrderRequest;
 
 @Service
 @Slf4j

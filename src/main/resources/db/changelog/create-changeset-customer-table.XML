@@ -10,31 +10,32 @@
             </not>
         </preConditions>
         <createTable tableName="customer">
-            <column name="id" type="uuid">
+            <column name="id" type="uuid" remarks="ID заказчика">
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
 
-            <column name="customer_surname" type="varchar(64)">
+            <column name="customer_surname" type="varchar(64)" remarks="Фамилия заказчика">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="customer_name" type="varchar(64)">
+            <column name="customer_name" type="varchar(64)" remarks="Имя заказчика">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="customer_patronymic" type="varchar(64)">
+            <column name="customer_patronymic" type="varchar(64)" remarks="Отчество заказчика">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="customer_email" type="varchar(64)">
+            <column name="customer_email" type="varchar(64)" remarks="Email заказчика">
                 <constraints nullable="false" unique="true"/>
             </column>
 
-            <column name="customer_phone_number" type="varchar(64)">
+            <column name="customer_phone_number" type="varchar(64)" remarks="номер телефона заказчика">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="customer_update" type="datetime">
+            <column name="customer_update" type="datetime" remarks="Дата обновления пользователя"
+                    defaultValueDate="NOW()">
             </column>
         </createTable>
 

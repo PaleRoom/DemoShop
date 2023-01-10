@@ -1,4 +1,4 @@
-package ru.ncs.DemoShop.service;
+package ru.ncs.DemoShop.service.customer;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,15 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 import ru.ncs.DemoShop.exception.customerException.CustomerEmailAlreadyExistsException;
 import ru.ncs.DemoShop.exception.customerException.CustomerNotCreatedException;
 import ru.ncs.DemoShop.exception.customerException.CustomerNotFoundException;
 import ru.ncs.DemoShop.model.Customer;
 import ru.ncs.DemoShop.repository.CustomerRepository;
-import ru.ncs.DemoShop.service.data.CustomerDTO;
-import ru.ncs.DemoShop.service.immutable.customerImmutable.ImmutableCreateCustomerRequest;
-import ru.ncs.DemoShop.service.immutable.customerImmutable.ImmutableUpdateCustomerRequest;
+import ru.ncs.DemoShop.service.customer.data.CustomerDTO;
+import ru.ncs.DemoShop.service.customer.immutable.ImmutableCreateCustomerRequest;
+import ru.ncs.DemoShop.service.customer.immutable.ImmutableUpdateCustomerRequest;
 
 @Service
 @Slf4j
@@ -37,15 +36,6 @@ public class CustomerServiceImpl implements CustomerService {
         return conversionService.convert(foundCustomer.orElseThrow(() ->
                 new CustomerNotFoundException("Customer with id not found: "
                         + id.toString())), CustomerDTO.class);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public CustomerDTO findOneByEmail(String email) {
-        Assert.hasText(email, "name must not be blank");
-        Optional<Customer> foundCustomer = customerRepository.findByEmail(email);
-
-        return conversionService.convert(foundCustomer.orElseThrow(CustomerNotFoundException::new), CustomerDTO.class);
     }
 
     @Override
@@ -69,12 +59,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     public UUID save(ImmutableCreateCustomerRequest request) {
         Customer customer = conversionService.convert(request, Customer.class);
-        try {
-            if (findOneByEmail(customer.getEmail()) != null) {
-                throw new CustomerNotCreatedException("This Customer is already exists!");
-            }
-        } catch (CustomerNotFoundException ignored) {
-        }
+        customerRepository.findByEmail(customer.getEmail())
+                .ifPresent(c -> {
+                    throw new CustomerNotCreatedException("This Customer is already exists!");
+                });
         customer.setUpdatedAt(LocalDateTime.now());
         customerRepository.save(customer);
         log.info("Product saved");

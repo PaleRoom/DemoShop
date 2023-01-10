@@ -15,7 +15,7 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID> {
     @Query("select b.id from Customer b where b.email = :email")
     Optional<UUID> findIdByEmail(String email);
 
-    @Override
-    @Lock(LockModeType.PESSIMISTIC_READ)
-    List<Customer> findAll();
+//    @Override
+//    @Lock(LockModeType.PESSIMISTIC_READ)
+//    List<Customer> findAll();
 }

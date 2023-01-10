@@ -1,4 +1,4 @@
-package ru.ncs.DemoShop.service.data;
+package ru.ncs.DemoShop.service.customer.data;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

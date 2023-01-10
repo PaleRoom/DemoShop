@@ -3,7 +3,7 @@ package ru.ncs.DemoShop.controller.converter.productConverter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ru.ncs.DemoShop.controller.request.productRequest.SearchProductRequest;
-import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableSearchProductRequest;
+import ru.ncs.DemoShop.service.product.immutable.ImmutableSearchProductRequest;
 
 @Component
 public class SearchProductRequestToImmutableSearchProductRequestConverter implements Converter<SearchProductRequest, ImmutableSearchProductRequest> {

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ru.ncs.DemoShop.controller.request.customerRequest.CreateCustomerRequest;
 import ru.ncs.DemoShop.controller.request.customerRequest.UpdateCustomerRequest;
 import ru.ncs.DemoShop.controller.response.GetCustomerResponse;
-import ru.ncs.DemoShop.controller.response.GetOrderResponse;
 
 @RequestMapping("/customers")
 @Tag(name = "Customer service", description = "the Customer API with description tag annotation")
@@ -34,15 +33,4 @@ public interface CustomerController {
 
     @DeleteMapping("/{id}")
     void deleteCustomer(@PathVariable("id") UUID id);
-
-    @PostMapping("/{id}/order")
-    UUID createOrder(@PathVariable("id") UUID id);
-
-    @GetMapping("/{id}/order")
-     List<GetOrderResponse> getCustomersOrders (@PathVariable("id") UUID id);
-
-
-    //TODO реализовать поиск
-    //    @PostMapping("/search")
-//    List<GetCustomerResponse> searchCustomers(SearchCustomerRequest searchCustomerRequest) throws IOException;
 }

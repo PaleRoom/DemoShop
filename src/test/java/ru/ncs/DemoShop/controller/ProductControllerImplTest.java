@@ -10,8 +10,8 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.core.convert.ConversionService;
 import ru.ncs.DemoShop.AbstractSpringBootTest;
 import ru.ncs.DemoShop.controller.request.productRequest.CreateProductRequest;
-import ru.ncs.DemoShop.service.ProductServiceImpl;
-import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableCreateProductRequest;
+import ru.ncs.DemoShop.service.product.ProductServiceImpl;
+import ru.ncs.DemoShop.service.product.immutable.ImmutableCreateProductRequest;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;

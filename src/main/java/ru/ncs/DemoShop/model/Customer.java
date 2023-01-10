@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Getter
@@ -54,6 +55,7 @@ public class Customer {
     @NotBlank(message = "Поле phone number не должно быть пустым")
     private String phoneNumber;
 
+    @UpdateTimestamp
     @Column(name = "customer_update", nullable = false)
     private LocalDateTime updatedAt;
 

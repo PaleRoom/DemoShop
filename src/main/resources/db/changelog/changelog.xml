@@ -6,11 +6,8 @@
 
     <include file="create-changeset-product-table.xml" relativeToChangelogFile="true"/>
     <include file="add-availability-column.xml" relativeToChangelogFile="true"/>
-    <!-- <include file="insert-changeset-product-table.xml" relativeToChangelogFile="true"/> -->
-    <include file ="create-changeset-on-update-trigger.xml" relativeToChangelogFile="true"/>
-    <include file ="create-changeset-customer-table.XML" relativeToChangelogFile="true"/>
-    <include file ="create-changeset-on-update-customer-trigger.XML" relativeToChangelogFile="true"/>
-    <include file ="create-changeset-order-table.XML" relativeToChangelogFile="true"/>
-    <include file ="create-changeset-on-update-order-trigger.XML" relativeToChangelogFile="true"/>
-    <include file ="create-changeset-ordered-product-table.XML" relativeToChangelogFile="true"/>
+    <include file="create-changeset-on-update-trigger.xml" relativeToChangelogFile="true"/>
+    <include file="create-changeset-customer-table.XML" relativeToChangelogFile="true"/>
+     <include file="create-changeset-order-table.XML" relativeToChangelogFile="true"/>
+     <include file="create-changeset-ordered-product-table.XML" relativeToChangelogFile="true"/>
 </databaseChangeLog>

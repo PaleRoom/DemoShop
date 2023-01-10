@@ -3,7 +3,7 @@ package ru.ncs.DemoShop.service.converter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ru.ncs.DemoShop.model.Customer;
-import ru.ncs.DemoShop.service.immutable.customerImmutable.ImmutableCreateCustomerRequest;
+import ru.ncs.DemoShop.service.customer.immutable.ImmutableCreateCustomerRequest;
 
 @Component
 public class ImmutableCreateCustomerRequestToCustomerConverter implements Converter<ImmutableCreateCustomerRequest, Customer> {

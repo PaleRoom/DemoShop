@@ -2,13 +2,9 @@ package ru.ncs.DemoShop.service;
 
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
-import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.springframework.core.convert.ConversionService;
@@ -17,8 +13,9 @@ import ru.ncs.DemoShop.exception.productException.ProductNotFoundException;
 import ru.ncs.DemoShop.exception.productException.ProductNotUniqueException;
 import ru.ncs.DemoShop.model.Product;
 import ru.ncs.DemoShop.repository.ProductRepository;
-import ru.ncs.DemoShop.service.data.ProductDTO;
-import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableUpdateProductRequest;
+import ru.ncs.DemoShop.service.product.data.ProductDTO;
+import ru.ncs.DemoShop.service.product.immutable.ImmutableUpdateProductRequest;
+import ru.ncs.DemoShop.service.product.ProductServiceImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -41,8 +38,6 @@ public class ProductServiceImplTest extends AbstractUnitTest {
 
     @Mock
     private ConversionService conversionServiceMock;
-
-    @Mock SearchResultSaver searchResultSaverMock;
 
     private Product productStub;
 
@@ -75,7 +70,7 @@ public class ProductServiceImplTest extends AbstractUnitTest {
         when(productRepositoryMock.findById(any())).thenReturn(Optional.of(productStub));
         when(productRepositoryMock.findIdByName(any())).thenReturn(Optional.of(idStub));
 
-        underTest = new ProductServiceImpl(productRepositoryMock, conversionServiceMock,searchResultSaverMock);
+        underTest = new ProductServiceImpl(productRepositoryMock, conversionServiceMock);
     }
 
     @Test
@@ -139,17 +134,6 @@ public class ProductServiceImplTest extends AbstractUnitTest {
 
         assertAll(() -> assertNotNull(actual),
                 () -> assertThat(actual).isEqualTo(productDTOStub));
-    }
-
-    @ParameterizedTest
-    @MethodSource("nullEmptyBlankStrings")
-    @DisplayName("Given converter returns not proper ProductDto " +
-            "when call findOneByName " +
-            "then throw Exception")
-    void givenNotProperProductDto_whenFindOneByName_thenThrowException(String value) {
-        assertThatThrownBy(() -> underTest.findOneByName(value))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("name must not be blank");
     }
 
     @Test
@@ -524,13 +508,5 @@ public class ProductServiceImplTest extends AbstractUnitTest {
 
         assertAll(() -> assertNotNull(actual),
                 () -> assertThat(actual).isEqualTo(productDTOStub));
-    }
-
-    static Stream<String> nullEmptyBlankStrings() {
-        return Stream.of(null,
-                Strings.EMPTY,
-                "  ",
-                "\t",
-                "\n");
     }
 }

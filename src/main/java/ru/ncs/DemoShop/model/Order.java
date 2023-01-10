@@ -20,6 +20,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Getter
@@ -42,6 +43,7 @@ public class Order {
     @Column(name = "order_total", nullable = false)
     private double total;
 
+    @UpdateTimestamp
     @Column(name = "order_update", nullable = false)
     private LocalDateTime orderUpdatedAt;
 

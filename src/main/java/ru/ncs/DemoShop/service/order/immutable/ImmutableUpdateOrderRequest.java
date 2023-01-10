@@ -1,4 +1,4 @@
-package ru.ncs.DemoShop.service.immutable.orderImmutable;
+package ru.ncs.DemoShop.service.order.immutable;
 
 import java.util.UUID;
 import lombok.Builder;

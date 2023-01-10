@@ -7,7 +7,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ru.ncs.DemoShop.controller.response.GetFullOrderResponse;
 import ru.ncs.DemoShop.controller.response.ProductDetails;
-import ru.ncs.DemoShop.service.data.OrderDTO;
+import ru.ncs.DemoShop.service.order.data.OrderDTO;
 
 @Slf4j
 @Component

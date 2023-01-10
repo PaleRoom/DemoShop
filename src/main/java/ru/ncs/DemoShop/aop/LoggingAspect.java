@@ -1,4 +1,4 @@
-package ru.ncs.DemoShop.service.aop;
+package ru.ncs.DemoShop.aop;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 @Aspect
 public class LoggingAspect {
     private Logger logger = Logger.getLogger(LoggingAspect.class.getName());
-    @Around("@annotation(LogExecutionTime)")
+    @Around("@annotation(ru.ncs.DemoShop.aop.LogExecutionTime)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
         Object proceed = joinPoint.proceed();

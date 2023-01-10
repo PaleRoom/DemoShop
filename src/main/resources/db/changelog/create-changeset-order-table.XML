@@ -11,11 +11,11 @@
                         </not>
                 </preConditions>
                 <createTable tableName="orders">
-                        <column name="id" type="uuid">
+                        <column name="id" type="uuid" remarks="ID заказа">
                                 <constraints primaryKey="true" nullable="false" unique="true"/>
                         </column>
 
-                        <column name="customer_id" type="uuid">
+                        <column name="customer_id" type="uuid" remarks="ID заказчика">
                                 <constraints nullable="false"
                                              foreignKeyName="order_customer_id_fk"
                                              referencedTableName="customer"
@@ -23,16 +23,16 @@
                         </column>
 
 
-                        <column name="order_total" type="double">
+                        <column name="order_total" type="double" remarks="Общая стоимость заказа">
                         </column>
 
-                        <column name="order_status" type="varchar(64)">
+                        <column name="order_status" type="varchar(64)" remarks="Статус заказа">
                         </column>
 
-                        <column name="order_create" type="datetime">
+                        <column name="order_create" type="datetime"  remarks="Дата создания заказа">
                         </column>
 
-                        <column name="order_update" type="datetime">
+                        <column name="order_update" type="datetime" remarks="Дата обновления данных заказа">
                         </column>
                 </createTable>
 

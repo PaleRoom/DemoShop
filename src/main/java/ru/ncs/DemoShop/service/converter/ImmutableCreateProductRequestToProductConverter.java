@@ -3,7 +3,7 @@ package ru.ncs.DemoShop.service.converter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ru.ncs.DemoShop.model.Product;
-import ru.ncs.DemoShop.service.immutable.productImutable.ImmutableCreateProductRequest;
+import ru.ncs.DemoShop.service.product.immutable.ImmutableCreateProductRequest;
 
 @Component
 public class ImmutableCreateProductRequestToProductConverter implements Converter<ImmutableCreateProductRequest, Product> {

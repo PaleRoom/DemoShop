@@ -1,4 +1,4 @@
-package ru.ncs.DemoShop.service;
+package ru.ncs.DemoShop.utils;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
+import lombok.experimental.UtilityClass;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -16,15 +17,11 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.stereotype.Component;
 import ru.ncs.DemoShop.model.ProductCategoryEnum;
-import ru.ncs.DemoShop.service.data.ProductDTO;
+import ru.ncs.DemoShop.service.product.data.ProductDTO;
 
-@Component
+@UtilityClass
 public class SearchResultSaver {
-
-
-
     public void saveSearchedToPdf(List<ProductDTO> listResponse) throws IOException {
         int x = 20;
         int y = 750;

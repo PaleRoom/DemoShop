@@ -3,7 +3,7 @@ package ru.ncs.DemoShop.service.converter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ru.ncs.DemoShop.model.Order;
-import ru.ncs.DemoShop.service.data.OrderDTO;
+import ru.ncs.DemoShop.service.order.data.OrderDTO;
 
 @Component
 public class OrderToOrderDTOConverter implements Converter <Order, OrderDTO> {

@@ -1,11 +1,11 @@
-package ru.ncs.DemoShop.service.immutable.customerImmutable;
+package ru.ncs.DemoShop.service.customer.immutable;
 
 import lombok.Builder;
 import lombok.Value;
 
 @Value
 @Builder
-public class ImmutableUpdateCustomerRequest {
+public class ImmutableCreateCustomerRequest {
     String name;
     String surname;
     String patronymic;

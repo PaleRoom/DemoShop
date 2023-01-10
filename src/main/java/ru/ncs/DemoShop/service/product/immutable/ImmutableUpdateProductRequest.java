@@ -1,4 +1,4 @@
-package ru.ncs.DemoShop.service.immutable.productImutable;
+package ru.ncs.DemoShop.service.product.immutable;
 
 import lombok.Builder;
 import lombok.Value;

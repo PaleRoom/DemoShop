@@ -1,4 +1,4 @@
-package ru.ncs.DemoShop.service.aop;
+package ru.ncs.DemoShop.aop;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
