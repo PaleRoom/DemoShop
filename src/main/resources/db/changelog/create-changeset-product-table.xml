@@ -3,7 +3,7 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
-    <!-- Здесь мы позже напишем скрипт -->
+
     <changeSet id="create_table_products" author="Nicolas">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -11,28 +11,27 @@
             </not>
         </preConditions>
         <createTable tableName="products">
-            <column name="id" type="uuid">
+            <column name="id" type="uuid" remarks="ID товара">
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
 
-            <column name="product_name" type="varchar(64)">
+            <column name="product_name" type="varchar(64)" remarks="Название товара">
                 <constraints nullable="false" unique="true"/>
             </column>
 
-            <column name="product_description" type="varchar">
+            <column name="product_description" type="varchar" remarks="описание товара">
             </column>
 
-            <column name="product_category" type="varchar(64)">
+            <column name="product_category" type="varchar(64)" remarks="Категория товара">
             </column>
 
-            <column name="product_price" type="double">
+            <column name="product_price" type="double" remarks="Цена товара">
             </column>
 
-            <column name="product_amount" type="bigint">
+            <column name="product_amount" type="integer" remarks="Количество товара на складе">
             </column>
 
-            <column name="amount_update" type="datetime">
-
+            <column name="amount_update" type="datetime" remarks="дата обновления количества товара на складе">
             </column>
 
 

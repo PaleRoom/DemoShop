@@ -9,9 +9,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.core.convert.ConversionService;
 import ru.ncs.DemoShop.AbstractSpringBootTest;
-import ru.ncs.DemoShop.controller.request.CreateProductRequest;
-import ru.ncs.DemoShop.service.ProductServiceImpl;
-import ru.ncs.DemoShop.service.immutable.ImmutableCreateProductRequest;
+import ru.ncs.DemoShop.controller.request.productRequest.CreateProductRequest;
+import ru.ncs.DemoShop.service.product.ProductServiceImpl;
+import ru.ncs.DemoShop.service.product.immutable.ImmutableCreateProductRequest;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
@@ -50,7 +50,7 @@ class ProductControllerImplTest
                 .description(reqBodyStub.getDescription())
                 .name(reqBodyStub.getName())
                 .price(reqBodyStub.getPrice())
-                .availability(reqBodyStub.getAvailability())
+                .availability(reqBodyStub.isAvailability())
                 .build();
 
         idStub = UUID.randomUUID();

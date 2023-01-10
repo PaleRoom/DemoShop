@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <!-- Здесь мы позже напишем скрипт -->
+    <changeSet id="create_table_ordered_product" author="Nicolas">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ordered_product"/>
+            </not>
+        </preConditions>
+        <createTable tableName="ordered_product">
+            <column name="order_id" type="UUID">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="PK_ordered_id"
+                             foreignKeyName="order_ordered_id_fk"
+                             referencedTableName="orders"
+                             referencedColumnNames="id"/>
+            </column>
+
+            <column name="product_id" type="UUID">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="PK_ordered_id"
+                             foreignKeyName="product_ordered_id_fk"
+                             referencedTableName="products"
+                             referencedColumnNames="id"/>
+            </column>
+
+            <column name="quantity" type="integer">
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

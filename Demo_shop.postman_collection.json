@@ -7,532 +7,1157 @@
 	},
 	"item": [
 		{
-			"name": "Create a Product",
-			"event": [
+			"name": "Product requests",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var jsonData = pm.response.json();\r",
-							"pm.environment.set('id', jsonData);\r",
-							"pm.test(\"Status code is 201\", function () {\r",
-							"    pm.response.to.have.status(201);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "    {\r\n        \"name\": \"RAZR Mouse\",\r\n        \"description\": \"Yet another mouse\",\r\n        \"category\": \"PERIPHERY\",\r\n        \"price\": 110.0,\r\n        \"amount\": 150,\r\n        \"availability\": true\r\n    }",
-					"options": {
-						"raw": {
-							"language": "json"
+					"name": "Create a Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set('id', jsonData);\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
 						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:7070/products",
-					"protocol": "http",
-					"host": [
-						"localhost"
 					],
-					"port": "7070",
-					"path": [
-						"products"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Edit Product",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"id\": \"{{id}}\",\r\n    \"name\": \"RAZR Mouse\",\r\n    \"description\": \"Yet another mouse\",\r\n    \"category\": \"PERIPHERY\",\r\n    \"price\": 1100.0,\r\n    \"amount\": 150,\r\n    \"availability\": true,\r\n    \"amountUpdatedAt\": \"2022/ноября/15 15:59:51\"\r\n\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"name\": \"RAZR Mouse\",\r\n        \"description\": \"Yet another mouse\",\r\n        \"category\": \"PERIPHERY\",\r\n        \"price\": 110.0,\r\n        \"amount\": 150,\r\n        \"availability\": true\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7070/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"products"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:7070/products/{{id}}",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "7070",
-					"path": [
-						"products",
-						"{{id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create a Product (Exists)",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 400\", function () {\r",
-							"    pm.response.to.have.status(400);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "    {\r\n        \"name\": \"RAZR Mouse\",\r\n        \"description\": \"Yet another mouse\",\r\n        \"category\": \"PERIPHERY\",\r\n        \"price\": 110.0,\r\n        \"amount\": 150,\r\n        \"availability\": false\r\n    }\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
+					"name": "Edit Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
 						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:7070/products",
-					"protocol": "http",
-					"host": [
-						"localhost"
 					],
-					"port": "7070",
-					"path": [
-						"products"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create a Second Product",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var jsonData = pm.response.json();\r",
-							"pm.environment.set('id2', jsonData);\r",
-							"pm.test(\"Status code is 201\", function () {\r",
-							"    pm.response.to.have.status(201);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "    {\r\n        \"name\": \"Logitech G15\",\r\n        \"description\": \"Yet another keyboard\",\r\n        \"category\": \"PERIPHERY\",\r\n        \"price\": 95.0,\r\n        \"amount\": 1050,\r\n        \"availability\": false\r\n    }",
-					"options": {
-						"raw": {
-							"language": "json"
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{id}}\",\r\n    \"name\": \"RAZR Mouse1111\",\r\n    \"description\": \"Yet another mouse\",\r\n    \"category\": \"PERIPHERY\",\r\n    \"price\": 1100.0,\r\n    \"amount\": 15,\r\n    \"availability\": true,\r\n    \"amountUpdatedAt\": \"2022/ноября/15 15:59:51\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7070/products/{{id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"products",
+								"{{id}}"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:7070/products",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "7070",
-					"path": [
-						"products"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create a Third Product",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var jsonData = pm.response.json();\r",
-							"pm.environment.set('id3', jsonData);\r",
-							"pm.test(\"Status code is 201\", function () {\r",
-							"    pm.response.to.have.status(201);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "    {\r\n        \"name\": \"RAZR mouse 2\",\r\n        \"description\": \"Yet another mouse\",\r\n        \"category\": \"PERIPHERY\",\r\n        \"price\": 100.0,\r\n        \"amount\":560 ,\r\n        \"availability\": true\r\n    }",
-					"options": {
-						"raw": {
-							"language": "json"
+					"name": "Create a Product (Exists)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
 						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:7070/products",
-					"protocol": "http",
-					"host": [
-						"localhost"
 					],
-					"port": "7070",
-					"path": [
-						"products"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Edit Product (Excists)",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 400\", function () {\r",
-							"    pm.response.to.have.status(400);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"id\": \"{{id}}\",\r\n    \"name\": \"Logitech G15\",\r\n    \"description\": \"Yet another keyboard\",\r\n    \"category\": \"PERIPHERY\",\r\n    \"price\": 1250.0,\r\n    \"amount\": 140,\r\n    \"availability\": true\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"name\": \"RAZR Mouse\",\r\n        \"description\": \"Yet another mouse\",\r\n        \"category\": \"PERIPHERY\",\r\n        \"price\": 110.0,\r\n        \"amount\": 150,\r\n        \"availability\": false\r\n    }\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7070/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"products"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:7070/products/{{id}}",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "7070",
-					"path": [
-						"products",
-						"{{id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Search for Product",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var jsonData = pm.response.json();\r",
-							"pm.environment.set('id', jsonData);\r",
-							"pm.test(\"Status code is 201\", function () {\r",
-							"    pm.response.to.have.status(201);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "    {\r\n        \"name\": \"RAZR\",\r\n        \"price\": 110.0,\r\n        \"amount\": 150,\r\n        \"availability\": true\r\n    }",
-					"options": {
-						"raw": {
-							"language": "json"
+					"name": "Create a Second Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set('id2', jsonData);\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
 						}
-					}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"name\": \"Logitech G15\",\r\n        \"description\": \"Yet another keyboard\",\r\n        \"category\": \"PERIPHERY\",\r\n        \"price\": 95.0,\r\n        \"amount\": 1050,\r\n        \"availability\": false\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7070/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:7070/products/search",
-					"protocol": "http",
-					"host": [
-						"localhost"
+				{
+					"name": "Create a Third Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set('id3', jsonData);\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"port": "7070",
-					"path": [
-						"products",
-						"search"
-					]
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"name\": \"RAZR mouse 2\",\r\n        \"description\": \"Yet another mouse\",\r\n        \"category\": \"PERIPHERY\",\r\n        \"price\": 100.0,\r\n        \"amount\":560 ,\r\n        \"availability\": true\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7070/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Product (Excists)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{id}}\",\r\n    \"name\": \"Logitech G15\",\r\n    \"description\": \"Yet another keyboard\",\r\n    \"category\": \"PERIPHERY\",\r\n    \"price\": 1250.0,\r\n    \"amount\": 140,\r\n    \"availability\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7070/products/{{id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"products",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search for Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set('id', jsonData);\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"name\": \"RAZR\",\r\n        \"price\": 2000.0,\r\n        \"amount\": 15,\r\n        \"availability\": true\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7070/products/search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"products",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body contains proper Lists of products\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.products[0].id).to.eql(pm.variables.get('id'));\r",
+									"    pm.expect(jsonData.products[0].name).to.eql(\"RAZR Mouse\");\r",
+									"     pm.expect(jsonData.products[0].description).to.eql(\"Yet another mouse\");\r",
+									"      pm.expect(jsonData.products[0].category).to.eql(\"PERIPHERY\");\r",
+									"       pm.expect(jsonData.products[0].price).to.eql(1100.0);\r",
+									"        pm.expect(jsonData.products[0].amount).to.eql(15);\r",
+									"        pm.expect(jsonData.products[0].availability).to.eql(true);\r",
+									"    pm.expect(jsonData.products[1].id).to.eql(pm.variables.get('id2'));\r",
+									"    pm.expect(jsonData.products[1].name).to.eql(\"Logitech G15\");\r",
+									"     pm.expect(jsonData.products[1].description).to.eql(\"Yet another keyboard\");\r",
+									"      pm.expect(jsonData.products[1].category).to.eql(\"PERIPHERY\");\r",
+									"       pm.expect(jsonData.products[1].price).to.eql(95.0);\r",
+									"        pm.expect(jsonData.products[1].amount).to.eql(1050);\r",
+									"        pm.expect(jsonData.products[1].availability).to.eql(false);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product By ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.variables.get(\"variable_key\");\r",
+									"pm.collectionVariables.get(\"variable_key\");\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body contains proper product\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(pm.variables.get('id'));\r",
+									"    pm.expect(jsonData.name).to.eql(\"RAZR Mouse\");\r",
+									"     pm.expect(jsonData.description).to.eql(\"Yet another mouse\");\r",
+									"      pm.expect(jsonData.category).to.eql(\"PERIPHERY\");\r",
+									"       pm.expect(jsonData.price).to.eql(1100.0);\r",
+									"         pm.expect(jsonData.availability).to.eql(true);\r",
+									"        pm.expect(jsonData.amount).to.eql(15);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/products/{{id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"products",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/products/{{id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"products",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Second Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/products/{{id2}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"products",
+								"{{id2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Third Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/products/{{id3}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"products",
+								"{{id3}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Products (Empty)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"List of products is Clear\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.products).empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ExchangeService Get Rate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7071/exchangerate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7071",
+							"path": [
+								"exchangerate"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Get All Products",
-			"event": [
+			"name": "Customer requests",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"pm.test(\"Body contains proper Lists of products\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.products[0].id).to.eql(pm.variables.get('id'));\r",
-							"    pm.expect(jsonData.products[0].name).to.eql(\"RAZR Mouse\");\r",
-							"     pm.expect(jsonData.products[0].description).to.eql(\"Yet another mouse\");\r",
-							"      pm.expect(jsonData.products[0].category).to.eql(\"PERIPHERY\");\r",
-							"       pm.expect(jsonData.products[0].price).to.eql(1100.0);\r",
-							"        pm.expect(jsonData.products[0].amount).to.eql(15);\r",
-							"        pm.expect(jsonData.products[0].availability).to.eql(true);\r",
-							"    pm.expect(jsonData.products[1].id).to.eql(pm.variables.get('id2'));\r",
-							"    pm.expect(jsonData.products[1].name).to.eql(\"Logitech G15\");\r",
-							"     pm.expect(jsonData.products[1].description).to.eql(\"Yet another keyboard\");\r",
-							"      pm.expect(jsonData.products[1].category).to.eql(\"PERIPHERY\");\r",
-							"       pm.expect(jsonData.products[1].price).to.eql(95.0);\r",
-							"        pm.expect(jsonData.products[1].amount).to.eql(1050);\r",
-							"        pm.expect(jsonData.products[1].availability).to.eql(false);\r",
-							"});\r",
-							"\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:7070/products",
-					"protocol": "http",
-					"host": [
-						"localhost"
+					"name": "Create a Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set('c_id_1', jsonData);\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"port": "7070",
-					"path": [
-						"products"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Product By ID",
-			"event": [
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"name\": \"Ivan\",\r\n        \"surname\": \"Entov\",\r\n        \"patronymic\": \"Sergeevich\",\r\n        \"email\": \"HelloWorld@vk.com\",\r\n        \"phoneNumber\": \"896523342233\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7070/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"pm.test(\"Body contains proper product\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.id).to.eql(pm.variables.get('id'));\r",
-							"    pm.expect(jsonData.name).to.eql(\"RAZR Mouse\");\r",
-							"     pm.expect(jsonData.description).to.eql(\"Yet another mouse\");\r",
-							"      pm.expect(jsonData.category).to.eql(\"PERIPHERY\");\r",
-							"       pm.expect(jsonData.price).to.eql(1100.0);\r",
-							"         pm.expect(jsonData.availability).to.eql(true);\r",
-							"        pm.expect(jsonData.amount).to.eql(15);\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:7070/products/{{id}}",
-					"protocol": "http",
-					"host": [
-						"localhost"
+					"name": "Create a Customer 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set('c_id_2', jsonData);\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"port": "7070",
-					"path": [
-						"products",
-						"{{id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete Product",
-			"event": [
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"name\": \"Elena\",\r\n        \"surname\": \"Mercaeva\",\r\n        \"patronymic\": \"Evgenievna\",\r\n        \"email\": \"Zhenka@vk.com\",\r\n        \"phoneNumber\": \"8973423342233\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7070/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:7070/products/{{id}}",
-					"protocol": "http",
-					"host": [
-						"localhost"
+					"name": "Create a Customer Email Exists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"port": "7070",
-					"path": [
-						"products",
-						"{{id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete Second Product",
-			"event": [
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"name\": \"Ivan\",\r\n        \"surname\": \"Entov\",\r\n        \"patronymic\": \"Sergeevich\",\r\n        \"email\": \"HelloWorld@vk.com\",\r\n        \"phoneNumber\": \"896523342233\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7070/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:7070/products/{{id2}}",
-					"protocol": "http",
-					"host": [
-						"localhost"
+					"name": "Get Customer By ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.variables.get(\"variable_key\");\r",
+									"pm.collectionVariables.get(\"variable_key\");\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body contains proper customer\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(pm.variables.get('c_id_1'));\r",
+									"    pm.expect(jsonData.name).to.eql(\"Ivan\");\r",
+									"      pm.expect(jsonData.surname).to.eql(\"Entov\");\r",
+									"        pm.expect(jsonData.patronymic).to.eql(\"Sergeevich\");\r",
+									"         pm.expect(jsonData.email).to.eql(\"HelloWorld@vk.com\");\r",
+									"            pm.expect(jsonData.phoneNumber).to.eql(\"896523342233\");\r",
+									"     });\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"port": "7070",
-					"path": [
-						"products",
-						"{{id2}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete Third Product",
-			"event": [
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/customers/{{c_id_1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers",
+								"{{c_id_1}}"
+							]
+						}
+					},
+					"response": []
+				},
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:7070/products/{{id3}}",
-					"protocol": "http",
-					"host": [
-						"localhost"
+					"name": "Edit Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"port": "7070",
-					"path": [
-						"products",
-						"{{id3}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get All Products (Empty)",
-			"event": [
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{c_id_1}}\",\r\n    \"name\": \"Stas\",\r\n    \"surname\": \"Entov\",\r\n    \"patronymic\": \"Sergeevich\",\r\n    \"email\": \"HelloWorld@vk.com\",\r\n    \"phoneNumber\": \"896523342233\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7070/customers/{{c_id_1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers",
+								"{{c_id_1}}"
+							]
+						}
+					},
+					"response": []
+				},
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"pm.test(\"List of products is Clear\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.products).empty;\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:7070/products",
-					"protocol": "http",
-					"host": [
-						"localhost"
+					"name": "Get All Customers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body contains proper Lists of products\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.products[0].id).to.eql(pm.variables.get('id'));\r",
+									"    pm.expect(jsonData.products[0].name).to.eql(\"RAZR Mouse\");\r",
+									"     pm.expect(jsonData.products[0].description).to.eql(\"Yet another mouse\");\r",
+									"      pm.expect(jsonData.products[0].category).to.eql(\"PERIPHERY\");\r",
+									"       pm.expect(jsonData.products[0].price).to.eql(1100.0);\r",
+									"        pm.expect(jsonData.products[0].amount).to.eql(15);\r",
+									"        pm.expect(jsonData.products[0].availability).to.eql(true);\r",
+									"    pm.expect(jsonData.products[1].id).to.eql(pm.variables.get('id2'));\r",
+									"    pm.expect(jsonData.products[1].name).to.eql(\"Logitech G15\");\r",
+									"     pm.expect(jsonData.products[1].description).to.eql(\"Yet another keyboard\");\r",
+									"      pm.expect(jsonData.products[1].category).to.eql(\"PERIPHERY\");\r",
+									"       pm.expect(jsonData.products[1].price).to.eql(95.0);\r",
+									"        pm.expect(jsonData.products[1].amount).to.eql(1050);\r",
+									"        pm.expect(jsonData.products[1].availability).to.eql(false);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"port": "7070",
-					"path": [
-						"products"
-					]
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create  Empty Order for Customer 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set('o_id_1', jsonData);\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/customers/{{c_id_2}}/order",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers",
+								"{{c_id_2}}",
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n    \"productId\": \"{{id3}}\",\r\n     \"quantity\": 1\r\n    },\r\n    {\r\n    \"productId\": \"{{id2}}\",\r\n     \"quantity\": 2\r\n    }\r\n\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7070/orders/{{o_id_1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"orders",
+								"{{o_id_1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Close Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/orders/{{o_id_1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"orders",
+								"{{o_id_1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/orders/{{o_id_1}}/cancel",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"orders",
+								"{{o_id_1}}",
+								"cancel"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/orders/{{o_id_1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"orders",
+								"{{o_id_1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Customer 2 Orders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/customers/{{c_id_2}}/order",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers",
+								"{{c_id_2}}",
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Orders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body contains proper Lists of products\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.products[0].id).to.eql(pm.variables.get('id'));\r",
+									"    pm.expect(jsonData.products[0].name).to.eql(\"RAZR Mouse\");\r",
+									"     pm.expect(jsonData.products[0].description).to.eql(\"Yet another mouse\");\r",
+									"      pm.expect(jsonData.products[0].category).to.eql(\"PERIPHERY\");\r",
+									"       pm.expect(jsonData.products[0].price).to.eql(1100.0);\r",
+									"        pm.expect(jsonData.products[0].amount).to.eql(15);\r",
+									"        pm.expect(jsonData.products[0].availability).to.eql(true);\r",
+									"    pm.expect(jsonData.products[1].id).to.eql(pm.variables.get('id2'));\r",
+									"    pm.expect(jsonData.products[1].name).to.eql(\"Logitech G15\");\r",
+									"     pm.expect(jsonData.products[1].description).to.eql(\"Yet another keyboard\");\r",
+									"      pm.expect(jsonData.products[1].category).to.eql(\"PERIPHERY\");\r",
+									"       pm.expect(jsonData.products[1].price).to.eql(95.0);\r",
+									"        pm.expect(jsonData.products[1].amount).to.eql(1050);\r",
+									"        pm.expect(jsonData.products[1].availability).to.eql(false);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/customers/{{c_id_1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers",
+								"{{c_id_1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7070/customers/{{c_id_2}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"customers",
+								"{{c_id_2}}"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }

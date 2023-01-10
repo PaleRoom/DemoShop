@@ -1,15 +1,18 @@
 package ru.ncs.DemoShop.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,7 +36,7 @@ public class Product {
     private UUID id;
 
     @Column(name = "product_name", nullable = false)
-    @NotEmpty(message = "product name should be not Empty")
+    @NotBlank(message = "Поле name не должно быть пустым")
     private String name;
 
     @Column(name = "product_description", nullable = false)
@@ -44,11 +47,11 @@ public class Product {
     private ProductCategoryEnum category;
 
     @Column(name = "product_price", nullable = false)
-    @Positive(message = "Price should be at least 0 or higher")
+    @Positive(message = "Значение price должно быть от 0 и выше")
     private double price;
 
     @Column(name = "product_amount", nullable = false)
-    @Positive(message = "Amount should be at least 0 or higher")
+    @Positive(message = "Значение amount должно быть от 0 и выше")
     private int amount;
 
     @Column(name = "amount_update", nullable = false)
@@ -56,6 +59,4 @@ public class Product {
 
     @Column(name = "availability", nullable = false)
     private boolean availability;
-
-
 }
