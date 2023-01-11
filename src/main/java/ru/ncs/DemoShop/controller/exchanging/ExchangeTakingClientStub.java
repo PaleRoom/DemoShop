@@ -14,7 +14,7 @@ public class ExchangeTakingClientStub implements ExchangeTakingClient {
     private static final double MIN = 1.0;
 
     @Override
-    public Double takeRate() {
+    public Double takeRate(String currencyType) {
         log.info("STUB method " + Thread.currentThread().getStackTrace()[0].getMethodName() + " of class" +
                 this.getClass().getSimpleName() + " called");
 

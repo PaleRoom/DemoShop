@@ -19,13 +19,14 @@ public class ExchangeTakingClientImpl implements ExchangeTakingClient {
     String url;
 
     @Cacheable(cacheNames = "exchangeRates")
-    public Double takeRate() {
+    public Double takeRate(String currencyType) {
         RestTemplate restTemplate = new RestTemplate();
         ExchangeRate resp = restTemplate.getForObject(url, ExchangeRate.class);
         log.debug("Rate Entity taken from URL: {}", resp);
+        log.debug("////////Rate taken from URL: {}", resp.getExchangeRate().get(currencyType));
 
         return Optional.ofNullable(resp)
-                .map(r -> resp.getUsdExchangeRate())
+                .map(r -> resp.getExchangeRate().get(currencyType))
                 .orElseThrow(() -> new ExchangeInputException("Json from Service not valid"));
     }
 }

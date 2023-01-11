@@ -15,18 +15,20 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ExchangeTakingProvider {
+    private final CurrencyTypeProvider currencyTypeProvider;
     private final ExchangeTakingClient exchangeTakingClient;
 
+
     public Double takeExchangeRate() {
-        return Optional.ofNullable(getRemoteRate())
-                .or(() -> Optional.ofNullable(getLocalRate()))
+        return Optional.ofNullable(getRemoteRate(currencyTypeProvider.getCurrencyType()))
+                .or(() -> Optional.ofNullable(getLocalRate(currencyTypeProvider.getCurrencyType())))
                 .orElse(1.0);
     }
 
-    private @Nullable Double getRemoteRate() {
+    private @Nullable Double getRemoteRate(String currencyType) {
         log.info("getRemoteRate invoked");
         try {
-            Double rate = exchangeTakingClient.takeRate();
+            Double rate = exchangeTakingClient.takeRate(currencyType);
             log.debug("Exchange Service is running, Exchange rate has taken: {}", rate);
 
             return rate;
@@ -37,7 +39,7 @@ public class ExchangeTakingProvider {
         }
     }
 
-    private @Nullable Double getLocalRate() {
+    private @Nullable Double getLocalRate(String currencyType) {
         log.info("getLocalRate invoked");
         ObjectMapper objectMapper = new ObjectMapper();
         ClassLoader classLoader = getClass().getClassLoader();
@@ -45,7 +47,7 @@ public class ExchangeTakingProvider {
             if (classLoader.getResource("ExchangeRate.json") != null) {
                 File file = new File(classLoader.getResource("ExchangeRate.json").getFile());
                 ExchangeRate exchangeRate = objectMapper.readValue(file, ExchangeRate.class);
-                Double rate = exchangeRate.getUsdExchangeRate();
+                Double rate = exchangeRate.getExchangeRate().get(currencyType);
                 log.debug("Exchange rate has taken from JSON: {}", rate);
 
                 return rate;

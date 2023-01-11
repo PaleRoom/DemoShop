@@ -1,8 +1,9 @@
 package ru.ncs.DemoShop.controller.exchanging;
 
+import java.util.HashMap;
 import lombok.Data;
 
 @Data
 public class ExchangeRate {
-    private Double usdExchangeRate;
+    private HashMap<String,Double> exchangeRate;
 }
