@@ -5,5 +5,5 @@ public interface ExchangeTakingClient {
      * Метод, возвращающий обменный курс из удаленного сервиса
      * @return Double значение обменного курса
      */
-    Double takeRate();
+    Double takeRate(String currencyType);
 }
