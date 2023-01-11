@@ -29,7 +29,7 @@ public class CurrencyTypeFilter extends OncePerRequestFilter {
             log.info("Header does not contain proper currency type ");
         } else {
             log.info("Currency type using: {}", currencyType);
-            currencyTypeProvider.setCurrencyType(currencyType);
+            currencyTypeProvider.setCurrencyType(CurrencyEnum.valueOf(currencyType));
         }
         filterChain.doFilter(request, response);
     }
