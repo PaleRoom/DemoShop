@@ -33,7 +33,7 @@ public class GetProductAdvice implements ResponseBodyAdvice<GetProductResponse> 
                                               Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                               ServerHttpRequest request, ServerHttpResponse response) {
 
-        Double rate = exchangeTakingProvider.takeExchangeRate("USD");
+        Double rate = exchangeTakingProvider.takeExchangeRate();
         Optional.ofNullable(body).ifPresent(b->b.setPrice(body.getPrice() / rate));
 
         return body;

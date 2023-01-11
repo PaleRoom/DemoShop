@@ -2,6 +2,7 @@
   "exchangeRate": {
     "USD": 67.0,
     "EUR": 69.2,
-    "YEN": 0.5
+    "YEN": 0.5,
+    "RUB": 1.0
   }
 }

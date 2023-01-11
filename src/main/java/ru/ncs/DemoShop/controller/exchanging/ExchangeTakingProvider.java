@@ -15,11 +15,13 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ExchangeTakingProvider {
+    private final CurrencyTypeProvider currencyTypeProvider;
     private final ExchangeTakingClient exchangeTakingClient;
 
-    public Double takeExchangeRate(String currencyType) {
-        return Optional.ofNullable(getRemoteRate(currencyType))
-                .or(() -> Optional.ofNullable(getLocalRate(currencyType)))
+
+    public Double takeExchangeRate() {
+        return Optional.ofNullable(getRemoteRate(currencyTypeProvider.getCurrencyType()))
+                .or(() -> Optional.ofNullable(getLocalRate(currencyTypeProvider.getCurrencyType())))
                 .orElse(1.0);
     }
 
