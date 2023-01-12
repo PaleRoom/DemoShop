@@ -4,28 +4,37 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.RestController;
+import ru.ncs.DemoShop.repository.RedisRepository;
 import ru.ncs.DemoShop.web.request.orderRequest.UpdateOrderRequest;
 import ru.ncs.DemoShop.web.response.GetFullOrderResponse;
 import ru.ncs.DemoShop.web.response.GetOrderResponse;
 import ru.ncs.DemoShop.service.order.OrderService;
 import ru.ncs.DemoShop.service.order.immutable.ImmutableUpdateOrderRequest;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class OrderControllerImpl implements OrderController {
     private final OrderService orderService;
     private final ConversionService conversionService;
 
+    private final RedisRepository redisRepository;
+
     @Override
     public UUID createOrder(UUID id) {
+        redisRepository.addIdpKey("da1d2b7c-3eb6-4bbf-9463-fd87a1a669ab", id.toString());
+        log.info("/////////////// WE HAVE GOT A DATA!  {}",
+                redisRepository.getIdpKey("da1d2b7c-3eb6-4bbf-9463-fd87a1a669ab"));
         return orderService.save(id);
     }
 
     @Override
 
     public List<GetOrderResponse> getOrders() {
+
         return orderService.findAll().stream()
                 .map(dto -> conversionService.convert(dto, GetOrderResponse.class))
                 .collect(Collectors.toList());
