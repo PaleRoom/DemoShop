@@ -1,7 +1,6 @@
-package ru.ncs.DemoShop.web;
+package ru.ncs.DemoShop.web.local;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
@@ -10,34 +9,28 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.RestController;
-import ru.ncs.DemoShop.service.idempotence.IdempotenceService;
 import ru.ncs.DemoShop.service.order.OrderService;
 import ru.ncs.DemoShop.service.order.immutable.ImmutableUpdateOrderRequest;
+import ru.ncs.DemoShop.web.OrderController;
 import ru.ncs.DemoShop.web.request.orderRequest.UpdateOrderRequest;
 import ru.ncs.DemoShop.web.response.GetFullOrderResponse;
 import ru.ncs.DemoShop.web.response.GetOrderResponse;
 
 @Slf4j
-@Profile("default")
+@Profile("local")
 @RestController
 @RequiredArgsConstructor
-public class OrderControllerImpl implements OrderController {
+public class OrderControllerLocalImpl implements OrderController {
     private final OrderService orderService;
     private final ConversionService conversionService;
-    private final IdempotenceService idempotenceService;
 
     @Override
     public UUID createOrder(UUID id, HttpServletRequest request) {
-        String headerKey = request.getHeader("IdempotenceKey");
-        log.info("HEADER KEY: {}", headerKey);
-        if (Optional.ofNullable(idempotenceService.getIdpKey(headerKey)).isPresent()) {
-            return UUID.fromString(idempotenceService.getIdpKey(headerKey));
-        } else {
-            return UUID.fromString(idempotenceService.addIdpKey(headerKey, orderService.save(id).toString()));
-        }
+        return orderService.save(id);
     }
 
     @Override
+
     public List<GetOrderResponse> getOrders() {
 
         return orderService.findAll().stream()
@@ -79,3 +72,4 @@ public class OrderControllerImpl implements OrderController {
         orderService.cancelOrder(id);
     }
 }
+

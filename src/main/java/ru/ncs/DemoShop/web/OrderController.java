@@ -3,6 +3,7 @@ package ru.ncs.DemoShop.web;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.UUID;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,10 +27,11 @@ public interface OrderController {
      * Метод, создающий новый пустой заказ у заказчика
      *
      * @param id - ID заказчика, для которого будет создан новый заказ
+     * @param request параметр использующийся для получения содержимого хэдера
      * @return UUID - возвращает ID созданного заказа
      */
     @PostMapping("/customer/{id}")
-    UUID createOrder(@PathVariable("id") UUID id);
+    UUID createOrder(@PathVariable("id") UUID id, HttpServletRequest request);
 
     /**
      * Метод, возвращающий все заказы из БД

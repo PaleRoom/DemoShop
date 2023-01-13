@@ -1,6 +1,9 @@
-package ru.ncs.DemoShop.repository;
+package ru.ncs.DemoShop.service.idempotence;
 
-public interface RedisRepository {
+import org.springframework.stereotype.Service;
+
+@Service
+public interface IdempotenceService {
     /**
      * Метод добавления ключа идемпотентности
      *
@@ -16,5 +19,5 @@ public interface RedisRepository {
      * @param id хэш-ключ
      * @return возвращает значение хэша
      */
-    String getIdpValue(String id);
+    String getIdpKey(String id);
 }

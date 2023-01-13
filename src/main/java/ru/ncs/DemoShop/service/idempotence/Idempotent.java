@@ -1,4 +1,4 @@
-package ru.ncs.DemoShop.service;
+package ru.ncs.DemoShop.service.idempotence;
 
 import lombok.Data;
 
