@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path: /
-  port: ${SERV_PORT:8000}
+  port: ${SERV_PORT:7070}
 
 management:
   health:
@@ -45,7 +45,7 @@ springdoc:
     path: /api-docs
 
 app:
-  healthCheckMsg: ${HEALTH_MSG:OK_V2}
+  healthCheckMsg: ${HEALTH_MSG:OK}
   scheduling:
     period: 15000
     enabled: false

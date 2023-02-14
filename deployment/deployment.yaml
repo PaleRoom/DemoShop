@@ -20,7 +20,7 @@ spec:
         - name: demoshop
           image: inkgrey/demoshop
           ports:
-            - containerPort: 8000
+            - containerPort: 7070
               name: app
             - containerPort: 9090
               name: actuator
@@ -35,13 +35,13 @@ spec:
             periodSeconds: 10
           readinessProbe:
             httpGet:
-              port: 8000
+              port: 7070
               path: /healthcheck
             failureThreshold: 1
             periodSeconds: 10
           startupProbe:
             httpGet:
-              port: 8000
+              port: 7070
               path: /healthcheck
             failureThreshold: 30
             periodSeconds: 10
