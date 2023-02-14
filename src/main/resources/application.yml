@@ -6,6 +6,14 @@ spring:
     url: 'jdbc:postgresql://localhost:5432/Shop_db'
     username: postgres
     password: SQL13
+  kafka:
+    consumer:
+      properties:
+        spring:
+          json:
+            value:
+              default:
+                type: ru.ncs.DemoShop.interaction.ExchangeRate
 # Alternative configuration of caffeine
 #  cache:
 #    cache-names: exchangeRates
@@ -35,8 +43,26 @@ app:
   exchange:
     URL: "http://localhost:7071/exchangerate"
     remoteEnabled: true
+  healthCheckMsg: ${HEALTH_MSG:OK}
+
 logging:
     file.name: DemoShop.log
     level:
       org.springframework.web: DEBUG
       ru.ncs.DemoShop: DEBUG
+
+management:
+  health:
+    redis:
+      enabled: false
+
+  server:
+    port: 9090
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: health,prometheus
+
+appl:
+  groupId: groupExch1
