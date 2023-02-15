@@ -50,6 +50,9 @@ app:
     period: 15000
     enabled: false
     priceModificator: 1.1
+  exchange:
+    URL: "http://exchangeService.default.svc.cluster.local:8071/exchangerate"
+    remoteEnabled: true
 
 logging:
   file.name: DemoShop.log
