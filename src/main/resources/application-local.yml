@@ -51,7 +51,7 @@ app:
     enabled: false
     priceModificator: 1.1
   exchange:
-    URL: "http://exchangeService.default.svc.cluster.local:8071/exchangerate"
+    URL: "http://exchangeservice.default.svc.cluster.local:8071/exchangerate"
     remoteEnabled: true
 
 logging:

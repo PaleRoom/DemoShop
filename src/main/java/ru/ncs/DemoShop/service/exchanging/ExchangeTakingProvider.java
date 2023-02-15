@@ -3,9 +3,11 @@ package ru.ncs.DemoShop.service.exchanging;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -48,15 +50,15 @@ public class ExchangeTakingProvider {
     private @Nullable ExchangeRate getLocalRate() {
         log.info("getLocalRate invoked");
         ObjectMapper objectMapper = new ObjectMapper();
-        ClassLoader classLoader = getClass().getClassLoader();
-        try {
-            if (classLoader.getResource("ExchangeRate.json") != null) {
-                File file = new File(classLoader.getResource("ExchangeRate.json").getFile());
-                ExchangeRate exchangeRate = objectMapper.readValue(file, ExchangeRate.class);
-                log.debug("Exchange rate has taken from JSON: {}", exchangeRate);
 
-                return exchangeRate;
-            } else throw new IOException("Local JSON file not found");
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("ExchangeRate.json")) {
+            File file = new File("tempExchangingCurrency.txt");
+            FileUtils.copyInputStreamToFile(input, file);
+            ExchangeRate exchangeRate = objectMapper.readValue(file, ExchangeRate.class);
+            log.debug("Exchange rate has taken from JSON: {}", exchangeRate);
+            file.delete();
+
+            return exchangeRate;
         } catch (IOException e) {
             log.info("Cannot take rate from local JSON");
 
