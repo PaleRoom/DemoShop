@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kafka-manager
-  namespace: arch-gur
+#  namespace: arch-gur
 spec:
   replicas: 1
   selector:

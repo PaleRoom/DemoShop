@@ -4,7 +4,7 @@ metadata:
   labels:
     app: zookeeper
   name: zookeeper
-  namespace: arch-gur
+#  namespace: arch-gur
 spec:
   replicas: 1
   selector:

@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: kafka-manager
-  namespace: arch-gur
+#  namespace: arch-gur
 spec:
   type: NodePort
   selector:

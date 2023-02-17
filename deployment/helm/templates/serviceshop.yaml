@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: demoshopservice
+  labels:
+    app: demoshop-app
+spec:
+  type: NodePort
+  ports:
+    - port: 8070
+      targetPort: 7070
+      protocol: TCP
+      name: http
+      nodePort: 31235
+  selector:
+    app: demoshop-app

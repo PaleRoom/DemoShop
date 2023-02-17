@@ -15,7 +15,7 @@ import ru.ncs.DemoShop.interaction.ExchangeRate;
 
 @Configuration
 public class KafkaConfigConsumer {
-    private static final String SERVER = "localhost:9092";
+    private static final String SERVER = "kafka.default.svc.cluster.local:9094";
     @Value("${appl.groupId}")
     private String groupId;
 

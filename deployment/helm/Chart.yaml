@@ -1,7 +1,7 @@
 apiVersion: v2
 name: demok8s
 version: 1.0.0
-description: DemoK8s
+description: Demoshopchart
 type: application
 sources:
   - https://github.com/GUR-ok/arch-claim

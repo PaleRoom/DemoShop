@@ -16,7 +16,7 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 
 @Configuration
 public class KafkaConfig {
-    private final static String SERVER = "localhost:9092";
+    private final static String SERVER = "kafka.default.svc.cluster.local:9094";
 
     private ProducerFactory<String, String> producerFactoryString() {
         Map<String, Object> configProps = new HashMap<>();
