@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exchangerateapp-deployment
+  labels:
+    app: exchangerateapp-app
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exchangerateapp-app
+  template:
+    metadata:
+      labels:
+        app: exchangerateapp-app
+    spec:
+      containers:
+        - name: exchangerateapp
+          image: inkgrey/exchangerateapp
+          ports:
+            - containerPort: 7071
+              name: app
+            - containerPort: 9090
+              name: actuator
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "local"
+          livenessProbe:
+            httpGet:
+              port: 9090
+              path: /health
+            failureThreshold: 1
+            periodSeconds: 100
+          readinessProbe:
+            httpGet:
+              port: 7071
+              path: /healthcheck
+            failureThreshold: 1
+            periodSeconds: 100
+          startupProbe:
+            httpGet:
+              port: 7071
+              path: /healthcheck
+            failureThreshold: 30
+            periodSeconds: 100

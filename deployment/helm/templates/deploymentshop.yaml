@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demoshop-deployment
+  labels:
+    app: demoshop-app
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demoshop-app
+  template:
+    metadata:
+      labels:
+        app: demoshop-app
+    spec:
+      containers:
+        - name: demoshop
+          image: inkgrey/demoshop
+          ports:
+            - containerPort: 7070
+              name: app
+            - containerPort: 9090
+              name: actuator
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "local"
+          livenessProbe:
+            httpGet:
+              port: 9090
+              path: /health
+            failureThreshold: 1
+            periodSeconds: 100
+          readinessProbe:
+            httpGet:
+              port: 7070
+              path: /healthcheck
+            failureThreshold: 1
+            periodSeconds: 100
+          startupProbe:
+            httpGet:
+              port: 7070
+              path: /healthcheck
+            failureThreshold: 30
+            periodSeconds: 100

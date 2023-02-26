@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path: /
-  port: ${SERV_PORT:8000}
+  port: ${SERV_PORT:7070}
 
 management:
   health:
@@ -28,6 +28,15 @@ spring:
         path: /h2
         settings.trace: false
         settings.web-allow-others: false
+
+  kafka:
+    consumer:
+      properties:
+        spring:
+          json:
+            value:
+              default:
+                type: ru.ncs.DemoShop.interaction.ExchangeRate
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
@@ -45,11 +54,14 @@ springdoc:
     path: /api-docs
 
 app:
-  healthCheckMsg: ${HEALTH_MSG:OK_V2}
+  healthCheckMsg: ${HEALTH_MSG:OK}
   scheduling:
-    period: 15000
+    period: 15000  #15sec scheduler freq. period
     enabled: false
     priceModificator: 1.1
+  exchange:
+    URL: "http://exchangeservice.default.svc.cluster.local:8071/exchangerate"
+    remoteEnabled: true
 
 logging:
   file.name: DemoShop.log
@@ -57,3 +69,5 @@ logging:
     org.springframework.web: DEBUG
     ru.ncs.DemoShop: DEBUG
 
+appl:
+  groupId: groupExch1
