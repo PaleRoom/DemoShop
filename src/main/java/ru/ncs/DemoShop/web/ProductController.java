@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import ru.ncs.DemoShop.web.request.productRequest.CreateProductRequest;
 import ru.ncs.DemoShop.web.request.productRequest.SearchProductRequest;
 import ru.ncs.DemoShop.web.request.productRequest.UpdateProductRequest;
@@ -79,4 +81,8 @@ public interface ProductController {
      */
     @PostMapping("/search")
     List<GetProductResponse> searchProducts(SearchProductRequest searchProductRequest);
+
+
+    @PostMapping(value= "/csv", consumes = "multipart/form-data")
+    void addFromCSV(@RequestParam("file") MultipartFile csvFile);
 }

@@ -1,5 +1,7 @@
 package ru.ncs.DemoShop.service.product;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
@@ -7,6 +9,7 @@ import ru.ncs.DemoShop.service.product.data.ProductDTO;
 import ru.ncs.DemoShop.service.product.immutable.ImmutableCreateProductRequest;
 import ru.ncs.DemoShop.service.product.immutable.ImmutableSearchProductRequest;
 import ru.ncs.DemoShop.service.product.immutable.ImmutableUpdateProductRequest;
+import ru.ncs.DemoShop.web.request.productRequest.CreateProductRequest;
 
 @Service
 public interface ProductService {
@@ -77,4 +80,7 @@ public interface ProductService {
      * также результаты поиска сохраняются в файлы pdf и xls форматов
      */
     List<ProductDTO> searchProducts(ImmutableSearchProductRequest request);
+
+
+    <T> List<T> readCSV(Class<T> clazz, InputStream stream) throws IOException;
 }

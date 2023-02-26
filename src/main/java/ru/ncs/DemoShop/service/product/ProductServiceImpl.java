@@ -1,9 +1,12 @@
 package ru.ncs.DemoShop.service.product;
 
 
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,7 +25,6 @@ import ru.ncs.DemoShop.exception.productException.ProductNotUniqueException;
 import ru.ncs.DemoShop.model.Product;
 import ru.ncs.DemoShop.repository.ProductRepository;
 import ru.ncs.DemoShop.repository.specification.ProductSpecification;
-import ru.ncs.DemoShop.service.order.data.OrderDTO;
 import ru.ncs.DemoShop.utils.SearchResultSaver;
 import ru.ncs.DemoShop.aop.LogExecutionTime;
 import ru.ncs.DemoShop.service.product.data.ProductDTO;
@@ -37,6 +39,7 @@ import ru.ncs.DemoShop.service.product.immutable.ImmutableUpdateProductRequest;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ConversionService conversionService;
+    private static final CsvMapper mapper = new CsvMapper();
 
     @Override
     @LogExecutionTime
@@ -147,4 +150,14 @@ public class ProductServiceImpl implements ProductService {
 
         return searchedList;
     }
+
+
+    @Override
+    public  <T> List<T> readCSV(Class<T> clazz, InputStream stream) throws IOException {
+        CsvSchema schema = mapper.schemaFor(clazz).withHeader().withColumnReordering(true);
+        ObjectReader reader = mapper.readerFor(clazz).with(schema);
+        return reader.<T>readValues(stream).readAll();
+    }
+
+
 }
